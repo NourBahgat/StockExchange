@@ -1,5 +1,6 @@
 package com.example.demo2.Controllers.User;
 
+import com.example.demo2.StockExchangeManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,6 +37,7 @@ public class UserController {
         String username = usernameField.getText();
         String password = passwordField.getText();
         String credit = creditField.getText();
+//        StockExchangeManager userAdd= new StockExchangeManager();
 
         if (userExists(username)) {
             // Username already exists, display an error message or handle it as per your requirement
@@ -45,12 +47,20 @@ public class UserController {
 
             return; // Exit the method without proceeding further
         }
+
+//        userAdd.addUser(username);
+//        userAdd.listUsers();
         // Write user information to CSV file
             try (PrintWriter writer = new PrintWriter(new FileWriter("users.csv", true))) {
                 writer.println(username + "," + password + "," + credit);
                 label.setVisible(true);
                 label.setText("Signed Up successfully, Return to login page");
-                // Optionally, you can add a message to indicate successful sign-up
+
+                StockExchangeManager userAdd = new StockExchangeManager();
+                userAdd.updateUsersFromCSV("users.csv");
+                userAdd.addUser(username);
+                userAdd.listUsers();
+
             } catch (IOException e) {
                 e.printStackTrace();
                 // Handle IO exception
@@ -90,12 +100,12 @@ public class UserController {
     public void handleLogin(ActionEvent event) throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
+        StockExchangeManager storeName= new StockExchangeManager();
 
         if (validateLogin(username, password)) {
-            // Login successful
-            System.out.println("Login successful");
             label.setVisible(true);
             label.setText("Login successful");
+
             // Redirect to the main application or user dashboard
         } else {
             // Login failed

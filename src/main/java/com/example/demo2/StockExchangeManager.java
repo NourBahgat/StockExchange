@@ -1,5 +1,7 @@
 package com.example.demo2;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class StockExchangeManager {
-    private List<User> users;
+    private List<String> users;
     private Map<User, List<String>> userRequests;
     private List<Stock.Transaction> transactionHistory;
     private List<Stock> availableStocks;
@@ -24,9 +26,33 @@ public class StockExchangeManager {
         this.sessions = new ArrayList<>();
     }
 
-    public void addUser(User user) {
-        users.add(user);
-        userRequests.put(user, new ArrayList<>());
+//    public void addUser(User user) {
+//        users.add(user);
+//        userRequests.put(user, new ArrayList<>());
+//    }
+    public void addUser(String user) {
+        this.users.add(user);
+    }
+    public void listUsers() {
+        System.out.println("List of Users:");
+        for (String user : users) {
+            System.out.println(user);
+        }
+    }
+    public void updateUsersFromCSV(String filename) {
+        users.clear(); // Clear the current list of users
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] userData = line.split(",");
+                if (userData.length > 0) {
+                    users.add(userData[0]); // Add the username to the users list
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle IO exception
+        }
     }
 
     public void addUserRequest(User user, String request) {

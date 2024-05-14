@@ -27,9 +27,9 @@ public class Admin {
         this.adminPassword = "1234";
     }
     // Method to add a new user
-    public void addUser(User user, StockExchangeManager stockExchangeManager) {
-        stockExchangeManager.addUser(user);
-    }
+//  public void addUser(User user, StockExchangeManager stockExchangeManager) {
+//       stockExchangeManager.addUser(user);
+// }
 
     // Method to remove a user
     public void removeUser(User user, StockExchangeManager stockExchangeManager) {
