@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class StockExchangeManager {
-    private List<String> users;
+    private static List<String> users = new ArrayList<>();
     private Map<User, List<String>> userRequests;
     private List<Stock.Transaction> transactionHistory;
     private List<Stock> availableStocks;
@@ -24,8 +24,8 @@ public class StockExchangeManager {
 
 
 
+
     public StockExchangeManager() {
-        this.users = new ArrayList<>();
         this.userRequests = new HashMap<>();
         this.transactionHistory = new ArrayList<>();
         this.availableStocks = new ArrayList<>();
@@ -37,11 +37,14 @@ public class StockExchangeManager {
 //        users.add(user);
 //        userRequests.put(user, new ArrayList<>());
 //    }
+
     public void addUser(String user) {
         this.users.add(user);
     }
 
-    public List<String> getUsers() {
+    public static List<String> getUsers() {
+        updateUsersFromCSV("users.csv");
+        System.out.println(users);
         return users;
     }
 
@@ -55,7 +58,7 @@ public class StockExchangeManager {
             System.out.println(user);
         }
     }
-    public void updateUsersFromCSV(String filename) {
+    public static void updateUsersFromCSV(String filename) {
         users.clear(); // Clear the current list of users
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;

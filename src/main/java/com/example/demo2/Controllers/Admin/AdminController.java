@@ -1,6 +1,8 @@
 package com.example.demo2.Controllers.Admin;
 
 import com.example.demo2.Admin;
+import com.example.demo2.StockExchangeManager;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +14,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import java.util.List;
 
+
+import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -25,10 +33,7 @@ public class AdminController {
     @FXML
     private PasswordField passwordField;
     @FXML
-    private TextField creditField;
-    @FXML
     private Label label;
-    private Button button;
 
     public void handleLogIn(ActionEvent event) throws IOException {
         String username = usernameField.getText();
@@ -51,5 +56,4 @@ public class AdminController {
         scene = new Scene(root);
         stage.setScene(scene);
     }
-
 }

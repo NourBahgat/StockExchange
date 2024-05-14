@@ -5,11 +5,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.Controllers.Admin.AdminController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.Controllers.Admin.ManageUsers">
    <children>
-      <TableView prefHeight="450.0" prefWidth="243.0">
+      <TableView fx:id="userTableView" prefHeight="450.0" prefWidth="243.0">
         <columns>
-          <TableColumn fx:id="tableView" prefWidth="242.40001220703124" text="Users" />
+          <TableColumn fx:id="usernameColumn" prefWidth="242.40001220703124" text="Users" />
+            <TableColumn prefWidth="75.0" text="Column X" />
+            <TableColumn prefWidth="75.0" text="Column X" />
         </columns>
       </TableView>
    </children>

@@ -20,6 +20,7 @@ public class App extends Application {
             e.printStackTrace();
             // Handle the exception (e.g., show an error message dialog)
         }
+
     }
 
     public static void main(String[] args) {
