@@ -1,10 +1,15 @@
 package com.example.demo2;
 
+import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
+
 import java.io.IOException;
 
 public class Admin {
     private String adminName;
     private String adminPassword;
+    @FXML
+    private ListView<String> usernameListView;
 
     public void setAdminName(String adminName) {
         this.adminName = adminName;

@@ -7,6 +7,7 @@ module com.example.demo2 {
     requires net.synedra.validatorfx;
     requires org.kordamp.bootstrapfx.core;
     requires org.apache.poi.poi;
+    requires java.desktop;
 
     opens com.example.demo2 to javafx.fxml;
     opens com.example.demo2.Controllers.User to javafx.fxml;

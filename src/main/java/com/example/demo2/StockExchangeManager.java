@@ -1,5 +1,8 @@
 package com.example.demo2;
 
+import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -16,6 +19,10 @@ public class StockExchangeManager {
     private List<Stock> availableStocks;
     private List<Order> orders;
     private List<Session> sessions;
+    @FXML
+    private ListView<String> usernameListView;
+
+
 
     public StockExchangeManager() {
         this.users = new ArrayList<>();
@@ -33,6 +40,15 @@ public class StockExchangeManager {
     public void addUser(String user) {
         this.users.add(user);
     }
+
+    public List<String> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<String> users) {
+        this.users = users;
+    }
+
     public void listUsers() {
         System.out.println("List of Users:");
         for (String user : users) {
@@ -53,6 +69,18 @@ public class StockExchangeManager {
             e.printStackTrace();
             // Handle IO exception
         }
+    }
+    // Initialize the ListView with your ArrayList data
+    public void initialize() {
+        // Assuming usernamesList is populated elsewhere in your code
+        usernameListView.getItems().addAll(users);
+    }
+
+    // Method to update the ListView with new data
+    public void updateUsernamesList(ArrayList<String> newUsernameList) {
+        users = newUsernameList;
+        usernameListView.getItems().clear();
+        usernameListView.getItems().addAll(users);
     }
 
     public void addUserRequest(User user, String request) {

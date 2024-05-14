@@ -13,9 +13,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Objects;
 
 public class AdminController {
@@ -46,6 +44,12 @@ public class AdminController {
             label.setVisible(true);
             label.setText("Invalid username or password");
         }
+    }
+    public void switchToManageUsers (ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/ManageUsers.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
     }
 
 }
