@@ -18,7 +18,7 @@
                   <Font name="Century Gothic" size="15.0" />
                </font>
             </JFXButton>
-            <JFXButton prefHeight="55.0" prefWidth="202.0" text="Manage stocks" textFill="WHITE">
+            <JFXButton onAction="#switchToManageStocks" prefHeight="55.0" prefWidth="202.0" text="Manage stocks" textFill="WHITE">
                <font>
                   <Font name="Century Gothic" size="15.0" />
                </font>

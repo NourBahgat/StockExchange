@@ -15,7 +15,7 @@ import java.util.Map;
 public class StockExchangeManager {
     private static List<String> users = new ArrayList<>();
     private Map<User, List<String>> userRequests;
-    private List<Stock.Transaction> transactionHistory;
+//    private List<Stock.Transaction> transactionHistory;
     private List<Stock> availableStocks;
     private List<Order> orders;
     private List<Session> sessions;
@@ -27,7 +27,7 @@ public class StockExchangeManager {
 
     public StockExchangeManager() {
         this.userRequests = new HashMap<>();
-        this.transactionHistory = new ArrayList<>();
+//        this.transactionHistory = new ArrayList<>();
         this.availableStocks = new ArrayList<>();
         this.orders = new ArrayList<>();
         this.sessions = new ArrayList<>();
@@ -70,21 +70,13 @@ public class StockExchangeManager {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            // Handle IO exception
         }
     }
-    // Initialize the ListView with your ArrayList data
     public void initialize() {
         // Assuming usernamesList is populated elsewhere in your code
         usernameListView.getItems().addAll(users);
     }
 
-    // Method to update the ListView with new data
-    public void updateUsernamesList(ArrayList<String> newUsernameList) {
-        users = newUsernameList;
-        usernameListView.getItems().clear();
-        usernameListView.getItems().addAll(users);
-    }
 
     public void addUserRequest(User user, String request) {
         if (userRequests.containsKey(user)) {
@@ -107,31 +99,31 @@ public class StockExchangeManager {
         }
     }
 
-    public List<Stock.Transaction> getUserTransactionHistory(User user) {
-        List<Stock.Transaction> userTransactions = new ArrayList<>();
-        for (Stock.Transaction transaction : transactionHistory) {
-            if (transaction.getLabel().equals(user)) {
-                userTransactions.add(transaction);
-            }
-        }
-        return userTransactions;
-    }
+//    public List<Stock.Transaction> getUserTransactionHistory(User user) {
+//        List<Stock.Transaction> userTransactions = new ArrayList<>();
+//        for (Stock.Transaction transaction : transactionHistory) {
+//            if (transaction.getLabel().equals(user)) {
+//                userTransactions.add(transaction);
+//            }
+//        }
+//        return userTransactions;
+//    }
 
-    public void listStocksPriceHistory() {
-        for (Stock stock : availableStocks) {
-            System.out.println("Price history for " + stock.getLabel() + ": " + stock.getPriceHistory());
-        }
-    }
-
-    public void trackStocksPerformance() {
-        for (Stock stock : availableStocks) {
-            // Implement tracking stock performance based on requirements
-        }
-    }
-
-    public void addOrder(Order order) {
-        orders.add(order);
-    }
+//    public void listStocksPriceHistory() {
+//        for (Stock stock : availableStocks) {
+//            System.out.println("Price history for " + stock.getLabel() + ": " + stock.getPriceHistory());
+//        }
+//    }
+//
+//    public void trackStocksPerformance() {
+//        for (Stock stock : availableStocks) {
+//            // Implement tracking stock performance based on requirements
+//        }
+//    }
+//
+//    public void addOrder(Order order) {
+//        orders.add(order);
+//    }
 
     public void deleteOrder(Order order) {
         orders.remove(order);

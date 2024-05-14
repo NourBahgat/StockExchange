@@ -3,7 +3,7 @@ package com.example.demo2;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 
-import java.io.IOException;
+import java.io.*;
 
 public class Admin {
     private String adminName;
@@ -31,15 +31,65 @@ public class Admin {
         this.adminName = "soso";
         this.adminPassword = "1234";
     }
+
+    public static String[] searchUserInCSV(String username) {
+        String csvFile = "users.csv"; // Replace with the path to your CSV file
+        String line;
+        String cvsSplitBy = ",";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(cvsSplitBy);
+                if (data.length >= 3 && data[0].equals(username)) {
+                    return new String[]{data[1], data[2]};
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     // Method to add a new user
 //  public void addUser(User user, StockExchangeManager stockExchangeManager) {
 //       stockExchangeManager.addUser(user);
 // }
+public void removeUser(String username)
+{
+    String csvFile = "users.csv"; // Replace with the path to your CSV file
+    String tempFile = "temp.csv"; // Replace with the path to a temporary file
 
-    // Method to remove a user
-    public void removeUser(User user, StockExchangeManager stockExchangeManager) {
-        stockExchangeManager.removeUser(user);
+    File inputFile = new File(csvFile);
+    File tempOutputFile = new File(tempFile);
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+         BufferedWriter writer = new BufferedWriter(new FileWriter(tempOutputFile))) {
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] data = line.split(",");
+            if (data.length >= 3 && data[0].equals(username)) {
+                continue;
+            }
+            writer.write(line + System.getProperty("line.separator"));
+        }
+
+    } catch (IOException e) {
+        e.printStackTrace();
     }
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(tempOutputFile));
+         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] data = line.split(",");
+            writer.write(line + System.getProperty("line.separator"));
+        }
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
 
     // Method to add a new stock
     public void addStock(Stock stock, StockExchangeManager stockExchangeManager) {
@@ -52,13 +102,13 @@ public class Admin {
     }
 
     // Method to update stock information
-    public void updateStockInfo(Stock stock, String label, double initialPrice, double currentPrice, int availableStocks, double profit) {
-        stock.setLabel(label);
-        stock.setInitialPrice(initialPrice);
-        stock.setCurrentPrice(currentPrice);
-        stock.setAvailableStocks(availableStocks);
-        stock.setProfit(profit);
-    }
+//    public void updateStockInfo(Stock stock, String label, double initialPrice, double currentPrice, int availableStocks, double profit) {
+//        stock.setLabel(label);
+//        stock.setInitialPrice(initialPrice);
+//        stock.setCurrentPrice(currentPrice);
+//        stock.setAvailableStocks(availableStocks);
+//        stock.setProfit(profit);
+//    }
 
     // Method to list orders by label
     public void listOrdersByLabel(String label, StockExchangeManager stockExchangeManager) {
@@ -66,9 +116,9 @@ public class Admin {
     }
 
     // Method to get stock price history
-    public void getStockPriceHistory(Stock stock) {
-        System.out.println("Price history for " + stock.getLabel() + ": " + stock.getPriceHistory());
-    }
+//    public void getStockPriceHistory(Stock stock) {
+//        System.out.println("Price history for " + stock.getLabel() + ": " + stock.getPriceHistory());
+//    }
 
     // Method to list user requests
     public void listUserRequests(StockExchangeManager stockExchangeManager) {
