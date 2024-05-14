@@ -87,4 +87,38 @@ public class UserController {
         stage.setScene(scene);
         stage.show();
     }
+    public void handleLogin(ActionEvent event) throws IOException {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+
+        if (validateLogin(username, password)) {
+            // Login successful
+            System.out.println("Login successful");
+            label.setVisible(true);
+            label.setText("Login successful");
+            // Redirect to the main application or user dashboard
+        } else {
+            // Login failed
+            System.out.println("Invalid username or password");
+            label.setVisible(true);
+            label.setText("Invalid username or password");
+        }
     }
+
+    private boolean validateLogin(String username, String password) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("users.csv"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] userData = line.split(",");
+                if (userData.length >= 2 && userData[0].equals(username) && userData[1].equals(password)) {
+                    return true; // Username and password match
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle IO exception
+        }
+        return false; // Username and password do not match
+    }
+
+}

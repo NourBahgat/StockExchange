@@ -20,18 +20,19 @@
             <Font size="27.0" />
          </font>
       </Label>
-      <TextField layoutX="35.0" layoutY="118.0" prefHeight="30.0" prefWidth="402.0" />
+      <TextField fx:id="usernameField" layoutX="35.0" layoutY="118.0" prefHeight="30.0" prefWidth="402.0" />
       <Label layoutX="35.0" layoutY="212.0" text="Enter Password">
          <font>
             <Font size="27.0" />
          </font>
       </Label>
-      <PasswordField layoutX="35.0" layoutY="252.0" prefHeight="30.0" prefWidth="402.0" />
-      <Button layoutX="279.0" layoutY="332.0" mnemonicParsing="false" text="Log in">
+      <PasswordField fx:id="passwordField" layoutX="35.0" layoutY="252.0" prefHeight="30.0" prefWidth="402.0" />
+      <Button layoutX="265.0" layoutY="332.0" mnemonicParsing="false" onAction="#handleLogin" text="Log in">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
       <Button layoutX="454.0" layoutY="397.0" mnemonicParsing="false" onAction="#switchToSignUp" text="New User? click to sign up" />
+      <Label fx:id="label" layoutX="212.0" layoutY="389.0" prefHeight="31.0" prefWidth="190.0" style="visibility: false;" text="Label" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="212.0" AnchorPane.rightAnchor="238.0" AnchorPane.topAnchor="389.0" />
    </children>
 </AnchorPane>

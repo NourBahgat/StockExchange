@@ -9,15 +9,15 @@
    <children>
       <Label layoutX="115.0" layoutY="52.0" text="Please Select Type Of User">
          <font>
-            <Font size="35.0" />
+            <Font name="Century Gothic" size="35.0" />
          </font>
       </Label>
-      <Button layoutX="224.0" layoutY="157.0" mnemonicParsing="false" onAction="#switchToSignIn" text="StandardUser">
+      <Button layoutX="224.0" layoutY="157.0" mnemonicParsing="false" onAction="#switchToSignIn" style="-fx-background-color: #007BA7;" text="Standard User" textFill="WHITE">
          <font>
             <Font size="26.0" />
          </font>
       </Button>
-      <Button layoutX="263.0" layoutY="238.0" mnemonicParsing="false" onAction="#switchToAdmin" text="Admin">
+      <Button layoutX="263.0" layoutY="238.0" mnemonicParsing="false" onAction="#switchToAdmin" style="-fx-background-color: #007BA7;" text="Admin" textFill="#fcfbfb">
          <font>
             <Font size="26.0" />
          </font>
