@@ -10,6 +10,7 @@ module com.example.demo2 {
 
     opens com.example.demo2 to javafx.fxml;
     opens com.example.demo2.Controllers.User to javafx.fxml;
+    opens com.example.demo2.Controllers.Admin to javafx.fxml;
     exports com.example.demo2;
     exports com.example.demo2.Controllers;
     exports com.example.demo2.Controllers.Admin;
