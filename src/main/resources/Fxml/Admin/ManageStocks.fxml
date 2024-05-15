@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.Controllers.Admin.ManageStocks">
+   <children>
+      <TableView fx:id="stockTableView" prefHeight="400.0" prefWidth="600.0">
+        <columns>
+          <TableColumn fx:id="labelColumn" prefWidth="122.39996337890625" text="C1" />
+          <TableColumn fx:id="initialPriceColumn" prefWidth="113.5999755859375" text="C2" />
+            <TableColumn fx:id="currentPriceColumn" prefWidth="113.5999755859375" text="C2" />
+            <TableColumn fx:id="availableStocksColumn" prefWidth="113.5999755859375" text="C2" />
+            <TableColumn fx:id="profitsColumn" prefWidth="113.5999755859375" text="C2" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
