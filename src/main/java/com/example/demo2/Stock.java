@@ -30,12 +30,13 @@ public class Stock {
     private IntegerProperty availableStocks;
     private DoubleProperty profit;
 
-    public Stock(String labelss, double initialPricess, int availableStocks, double profit) {
+    public Stock(String labelss, double initialPricess, double
+                 currentPrice, int availableStocks, double profit) {
         this.labelss = labelss;
         this.initialPricess = new SimpleDoubleProperty(initialPricess);
-        this.currentPrice = new SimpleDoubleProperty(initialPricess); // Assuming initialPrice is also the currentPrice initially
+        this.currentPrice = new SimpleDoubleProperty(currentPrice);
         this.availableStocks = new SimpleIntegerProperty(availableStocks);
-        this.profit = new SimpleDoubleProperty(profit); // Assuming profit starts at 0 initially
+        this.profit = new SimpleDoubleProperty(profit);
     }
     // Getter methods for JavaFX properties
     public String getLabel() {
