@@ -28,6 +28,7 @@ public class LoginController {
             adminStage = new Stage();
             adminStage.setScene(new Scene(root));
             // Add a listener to handle the admin stage close event
+            adminStage.setTitle("admin");
             adminStage.setOnCloseRequest(event1 -> adminPageOpened = false);
             // Show the admin stage
             adminStage.show();
