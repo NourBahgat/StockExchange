@@ -21,7 +21,7 @@ public class Stock {
     private ArrayList<Double> priceHistory;
     public static List<String> labels = new ArrayList<>();
     public static List<Double> initialPrices = new ArrayList<>();
-    static List<Double> currentPrices = new ArrayList<>();
+    public static List<Double> currentPrices = new ArrayList<>();
     public static List<Integer> availableStock = new ArrayList<>();
     public static List<Double> profits =new ArrayList<>();
     private String labelss;
