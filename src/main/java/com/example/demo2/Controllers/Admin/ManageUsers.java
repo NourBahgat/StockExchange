@@ -36,7 +36,6 @@ public class ManageUsers {
             userTableView.getItems().add(username);
         }
 
-        // Set up column to display usernames
         usernameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         userTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {

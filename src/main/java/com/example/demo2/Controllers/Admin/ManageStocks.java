@@ -37,11 +37,10 @@ public class ManageStocks {
         availableStocksColumn.setCellValueFactory(cellData -> cellData.getValue().availableStocksProperty().asObject());
         profitsColumn.setCellValueFactory(cellData -> cellData.getValue().profitProperty().asObject());
 
-        // Add data to the TableView
+
         stockTableView.setItems(stocksData);
         Stock.readCSV();
 
-        // Add read data to the TableView
         stocksData.addAll(Stock.labels.stream().map(label -> new Stock(label, Stock.initialPrices.get(Stock.labels.indexOf(label)), Stock.currentPrices.get(Stock.labels.indexOf(label)), Stock.availableStock.get(Stock.labels.indexOf(label)), Stock.profits.get(Stock.labels.indexOf(label)))).toList());
 
 

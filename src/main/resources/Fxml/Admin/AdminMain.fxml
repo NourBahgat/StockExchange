@@ -23,7 +23,7 @@
                   <Font name="Century Gothic" size="15.0" />
                </font>
             </JFXButton>
-            <JFXButton prefHeight="55.0" prefWidth="202.0" text="Manage trading sessions" textFill="WHITE">
+            <JFXButton onAction="#switchToManageSessions" prefHeight="55.0" prefWidth="202.0" text="Manage trading sessions" textFill="WHITE">
                <font>
                   <Font name="Century Gothic" size="15.0" />
                </font>
@@ -40,7 +40,7 @@
             </JFXButton>
          </children>
       </VBox>
-      <Pane layoutX="14.0" layoutY="-130.0" prefHeight="38.0" prefWidth="640.0" style="-fx-background-color: #007ba7;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Pane layoutX="14.0" layoutY="-130.0" prefHeight="38.0" prefWidth="640.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <JFXBadge layoutX="235.0" layoutY="78.0" prefHeight="95.0" prefWidth="0.0" />
       <Pane layoutX="200.0" layoutY="38.0" prefHeight="200.0" prefWidth="442.0" style="-fx-background-color: #d3d3d3;">
          <children>
