@@ -8,11 +8,11 @@
    <children>
       <TableView fx:id="stockTableView" prefHeight="400.0" prefWidth="600.0">
         <columns>
-          <TableColumn fx:id="labelColumn" prefWidth="122.39996337890625" text="C1" />
-          <TableColumn fx:id="initialPriceColumn" prefWidth="113.5999755859375" text="C2" />
-            <TableColumn fx:id="currentPriceColumn" prefWidth="113.5999755859375" text="C2" />
-            <TableColumn fx:id="availableStocksColumn" prefWidth="113.5999755859375" text="C2" />
-            <TableColumn fx:id="profitsColumn" prefWidth="113.5999755859375" text="C2" />
+          <TableColumn fx:id="labelColumn" prefWidth="137.5999755859375" text="Labels" />
+          <TableColumn fx:id="initialPriceColumn" prefWidth="98.4000244140625" text="Initial Price" />
+            <TableColumn fx:id="currentPriceColumn" prefWidth="132.0" text="Current Price" />
+            <TableColumn fx:id="availableStocksColumn" prefWidth="126.4000244140625" text="Available Stocks" />
+            <TableColumn fx:id="profitsColumn" prefWidth="103.99993896484375" text="Profits" />
         </columns>
       </TableView>
    </children>
