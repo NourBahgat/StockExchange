@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.Controllers.User.UserController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.Controllers.User.UserController">
    <children>
       <Label layoutX="35.0" layoutY="78.0" text="Enter Username">
          <font>
@@ -33,5 +33,10 @@
       </Button>
       <Button layoutX="454.0" layoutY="397.0" mnemonicParsing="false" onAction="#switchToSignUp" text="New User? click to sign up" />
       <Label fx:id="label" layoutX="212.0" layoutY="389.0" prefHeight="31.0" prefWidth="190.0" style="visibility: false;" text="Label" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="212.0" AnchorPane.rightAnchor="238.0" AnchorPane.topAnchor="389.0" />
+      <Label fx:id="ExpiredLabel" alignment="CENTER" layoutY="287.0" prefHeight="17.0" prefWidth="640.0" textFill="#d21515">
+         <font>
+            <Font size="27.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

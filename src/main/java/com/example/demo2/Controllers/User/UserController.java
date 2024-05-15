@@ -1,5 +1,6 @@
 package com.example.demo2.Controllers.User;
 
+import com.example.demo2.Controllers.Admin.AdminController;
 import com.example.demo2.StockExchangeManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,7 +32,8 @@ public class UserController {
     private Label label;
     private Button button;
 
-
+    @FXML
+    private Label ExpiredLabel;
 
     public void handleSignUp(ActionEvent event) throws IOException {
         String username = usernameField.getText();
@@ -98,28 +100,27 @@ public class UserController {
         stage.show();
     }
 
-
+   // AdminController admin = new AdminController();
     public void handleLogin(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
         String username = usernameField.getText();
         String password = passwordField.getText();
-        StockExchangeManager storeName= new StockExchangeManager();
-
-        if (validateLogin(username, password)) {
-            label.setVisible(true);
-            label.setText("Login successful");
-
-            // Redirect to the main application or user dashboard
-        } else {
-            // Login failed
+      if(AdminController.StartSession && validateLogin(username, password)) {
+          Parent root = FXMLLoader.load(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
+          stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+          scene = new Scene(root);
+          stage.setScene(scene);
+          stage.show();
+          // Redirect to the main application or user dashboard
+        }
+      if (!validateLogin(username, password)) {
+            ExpiredLabel.setVisible(false);
             System.out.println("Invalid username or password");
             label.setVisible(true);
             label.setText("Invalid username or password");
         }
+      if (!AdminController.StartSession){
+          ExpiredLabel.setText("Session Expired");
+      }
     }
 
     private boolean validateLogin(String username, String password) {

@@ -34,7 +34,8 @@ public class AdminController {
     private PasswordField passwordField;
     @FXML
     private Label label;
-    public boolean StartSession ;
+    public static boolean StartSession = true;
+
     public void handleLogIn(ActionEvent event) throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
