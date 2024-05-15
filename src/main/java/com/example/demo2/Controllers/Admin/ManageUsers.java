@@ -4,11 +4,18 @@ import com.example.demo2.StockExchangeManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import static com.example.demo2.Admin.searchUserInCSV;
 
@@ -25,6 +32,9 @@ public class ManageUsers {
     @FXML
     private TextField creditTextField;
     private StockExchangeManager stockExchangeManager;
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
 
     @FXML
     public void initialize() {
@@ -49,6 +59,7 @@ public class ManageUsers {
             }
         });
     }
+
     public void handleDeleteButton(ActionEvent event) throws IOException {
         String selected = userTableView.getSelectionModel().selectedItemProperty().getValue();
         Admin delete = new Admin();
@@ -61,5 +72,11 @@ public class ManageUsers {
             userTableView.getItems().add(username);
         }
     }
-}
 
+    public void BackToMainAdmin(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/AdminMain.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+    }
+}

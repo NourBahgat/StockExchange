@@ -34,7 +34,7 @@ public class AdminController {
     private PasswordField passwordField;
     @FXML
     private Label label;
-
+    public boolean StartSession ;
     public void handleLogIn(ActionEvent event) throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -67,5 +67,17 @@ public class AdminController {
     stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     scene = new Scene(root);
     stage.setScene(scene);
+    }
+    public void StartSession(ActionEvent event) throws IOException {
+        StartSession =true;
+    }
+    public void EndSession(ActionEvent event) throws IOException {
+        StartSession =false;
+    }
+    public void BackToMain(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/AdminMain.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
     }
 }

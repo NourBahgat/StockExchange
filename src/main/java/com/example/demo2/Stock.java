@@ -4,6 +4,13 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,6 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Stock {
 //    private String label;
@@ -29,7 +37,6 @@ public class Stock {
     private DoubleProperty currentPrice;
     private IntegerProperty availableStocks;
     private DoubleProperty profit;
-
     public Stock(String labelss, double initialPricess, double
                  currentPrice, int availableStocks, double profit) {
         this.labelss = labelss;
