@@ -62,4 +62,10 @@ public class AdminController {
         scene = new Scene(root);
         stage.setScene(scene);
     }
+    public void switchToManageSessions(ActionEvent event) throws IOException{
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/trading session.fxml")));
+    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    scene = new Scene(root);
+    stage.setScene(scene);
+    }
 }
