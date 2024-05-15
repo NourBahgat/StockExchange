@@ -1,6 +1,7 @@
 package com.example.demo2.Controllers.User;
 
 import com.example.demo2.StockExchangeManager;
+import com.example.demo2.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,8 +37,8 @@ public class UserController {
     public void handleSignUp(ActionEvent event) throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        String credit = creditField.getText();
-//        StockExchangeManager userAdd= new StockExchangeManager();
+        double credit = Double.parseDouble(creditField.getText());
+//        StockExchangeManapager userAdd= new StockExchangeManager();
 
         if (userExists(username)) {
             // Username already exists, display an error message or handle it as per your requirement
@@ -58,7 +59,8 @@ public class UserController {
 
                 StockExchangeManager userAdd = new StockExchangeManager();
                 userAdd.updateUsersFromCSV("users.csv");
-                userAdd.addUser(username);
+                User newUser = new User(username, password, credit);
+                userAdd.addUser(newUser);
                 userAdd.listUsers();
 
             } catch (IOException e) {

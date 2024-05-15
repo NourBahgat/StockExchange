@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class StockExchangeManager {
-    private static List<String> users = new ArrayList<>();
+    private static List<User> users = new ArrayList<>();
     private Map<User, List<String>> userRequests;
 //    private List<Stock.Transaction> transactionHistory;
     private List<Stock> availableStocks;
@@ -38,23 +38,23 @@ public class StockExchangeManager {
 //        userRequests.put(user, new ArrayList<>());
 //    }
 
-    public void addUser(String user) {
+    public void addUser(User user) {
         this.users.add(user);
     }
 
-    public static List<String> getUsers() {
+    public static List<User> getUsers() {
         updateUsersFromCSV("users.csv");
         System.out.println(users);
         return users;
     }
 
-    public void setUsers(List<String> users) {
+    public void setUsers(List<User> users) {
         this.users = users;
     }
 
     public void listUsers() {
         System.out.println("List of Users:");
-        for (String user : users) {
+        for (User user : users) {
             System.out.println(user);
         }
     }
@@ -62,19 +62,33 @@ public class StockExchangeManager {
         users.clear(); // Clear the current list of users
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
+            int idx = 0;
             while ((line = reader.readLine()) != null) {
                 String[] userData = line.split(",");
-                if (userData.length > 0) {
-                    users.add(userData[0]); // Add the username to the users list
+                if (userData.length > 0 && idx != 0) {
+                    User loadedUser = new User(userData[0], userData[1], Double.parseDouble(userData[2]));
+                    users.add(loadedUser); // Add the username to the users list
                 }
+                idx++;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    private static ArrayList<String> getUsernameList() {
+        ArrayList<String> usernames = new ArrayList<>();
+
+        for (User user : users) {
+            usernames.add(user.getUsername());
+        }
+
+        return usernames;
+    }
+
     public void initialize() {
-        // Assuming usernamesList is populated elsewhere in your code
-        usernameListView.getItems().addAll(users);
+
+        usernameListView.getItems().addAll(StockExchangeManager.getUsernameList());
     }
 
 
@@ -89,6 +103,7 @@ public class StockExchangeManager {
     }
 
     public void exportUserRequestsToCSV(String filename) throws IOException {
+        Stock.getStockList();
         try (FileWriter writer = new FileWriter(filename)) {
             writer.write("User,Request\n");
             for (Map.Entry<User, List<String>> entry : userRequests.entrySet()) {
@@ -98,7 +113,28 @@ public class StockExchangeManager {
             }
         }
     }
+    public static void saveCSV(){
 
+        String csvFile = "stocks.csv";
+        String line;
+        String cvsSplitBy = ",";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(cvsSplitBy);
+                String labelSlot=data[0];
+                double initialPricesSlot=Double.parseDouble(data[1]);
+                double currentPriceSlot=Double.parseDouble(data[2]);
+                int availableStockSlot=Integer.parseInt(data[3]);
+                double profitsSlot= Double.parseDouble(data[4]);
+                Stock loadstock=new Stock(labelSlot, initialPricesSlot,currentPriceSlot,availableStockSlot, profitsSlot);
+                Stock.getStockList().add(loadstock);
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 //    public List<Stock.Transaction> getUserTransactionHistory(User user) {
 //        List<Stock.Transaction> userTransactions = new ArrayList<>();
 //        for (Stock.Transaction transaction : transactionHistory) {
