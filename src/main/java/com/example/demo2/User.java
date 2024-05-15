@@ -81,4 +81,8 @@ public class User {
                 ", accountBalance=" + accountBalance +
                 '}';
     }
+
+    public void save() {
+
+    }
 }

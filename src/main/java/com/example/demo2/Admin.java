@@ -98,9 +98,41 @@ public void removeUser(String username)
 
     // Method to remove a stock
     public void removeStock(Stock stock, StockExchangeManager stockExchangeManager) {
-        stockExchangeManager.removeStock(stock);
-    }
+        String csvFile = "stocks.csv"; // Replace with the path to your CSV file
+        String tempFile = "temp2.csv"; // Replace with the path to a temporary file
 
+        File inputFile = new File(csvFile);
+        File tempOutputFile = new File(tempFile);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(tempOutputFile))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length >= 3 && data[0].equals(stock.getLabel())) {
+                    continue;
+                }
+                writer.write(line + System.getProperty("line.separator"));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(tempOutputFile));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                writer.write(line + System.getProperty("line.separator"));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     // Method to update stock information
 //    public void updateStockInfo(Stock stock, String label, double initialPrice, double currentPrice, int availableStocks, double profit) {
 //        stock.setLabel(label);

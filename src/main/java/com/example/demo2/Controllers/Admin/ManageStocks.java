@@ -1,6 +1,7 @@
 package com.example.demo2.Controllers.Admin;
 
 import com.example.demo2.Stock;
+import com.example.demo2.StockExchangeManager;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -51,11 +52,9 @@ public class ManageStocks {
 
 
         stockTableView.setItems(stocksData);
-        Stock.readCSV();
+        StockExchangeManager.saveCSV();
 
-        stocksData.addAll(Stock.labels.stream().map(label -> new Stock(label, Stock.initialPrices.get(Stock.labels.indexOf(label)), Stock.currentPrices.get(Stock.labels.indexOf(label)), Stock.availableStock.get(Stock.labels.indexOf(label)), Stock.profits.get(Stock.labels.indexOf(label)))).toList());
-
-
+        stocksData.addAll(Stock.getStockList());
     }
     public void BackToAdminMain(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/AdminMain.fxml")));

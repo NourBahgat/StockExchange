@@ -4,21 +4,10 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 public class Stock {
 //    private String label;
@@ -27,31 +16,27 @@ public class Stock {
 //    private int availableStocks;
 //    private double profit;
     private ArrayList<Double> priceHistory;
-    public static List<String> labels = new ArrayList<>();
-    public static List<Double> initialPrices = new ArrayList<>();
-    public static List<Double> currentPrices = new ArrayList<>();
-    public static List<Integer> availableStock = new ArrayList<>();
-    public static List<Double> profits =new ArrayList<>();
-    private String labelss;
-    private DoubleProperty initialPricess;
+    public static ArrayList<Stock> stockList;
+    private String label;
+    private DoubleProperty initialPrice;
     private DoubleProperty currentPrice;
     private IntegerProperty availableStocks;
     private DoubleProperty profit;
-    public Stock(String labelss, double initialPricess, double
+    public Stock(String label, double initialPricess, double
                  currentPrice, int availableStocks, double profit) {
-        this.labelss = labelss;
-        this.initialPricess = new SimpleDoubleProperty(initialPricess);
+        this.label = label;
+        this.initialPrice= new SimpleDoubleProperty(initialPricess);
         this.currentPrice = new SimpleDoubleProperty(currentPrice);
         this.availableStocks = new SimpleIntegerProperty(availableStocks);
         this.profit = new SimpleDoubleProperty(profit);
     }
     // Getter methods for JavaFX properties
     public String getLabel() {
-        return labelss;
+        return label;
     }
 
     public DoubleProperty initialPriceProperty() {
-        return initialPricess;
+        return initialPrice;
     }
 
     public DoubleProperty currentPriceProperty() {
@@ -66,26 +51,9 @@ public class Stock {
         return profit;
     }
 
-        public static void readCSV(){
-
-            String csvFile = "stocks.csv";
-            String line;
-            String cvsSplitBy = ",";
-
-            try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-                while ((line = br.readLine()) != null) {
-                    String[] data = line.split(cvsSplitBy);
-                    labels.add(data[0]);
-                    initialPrices.add(Double.parseDouble(data[1]));
-                    currentPrices.add(Double.parseDouble(data[2]));
-                    availableStock.add(Integer.parseInt(data[3]));
-                    profits.add(Double.parseDouble(data[4]));
-
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public static ArrayList<Stock> getStockList() {
+        return stockList;
+    }
 
 //    public Stock(String label, double initialPrice, int availableStocks) {
 //        this.label = label;

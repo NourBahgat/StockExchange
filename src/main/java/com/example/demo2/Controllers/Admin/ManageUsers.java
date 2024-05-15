@@ -1,6 +1,7 @@
 package com.example.demo2.Controllers.Admin;
 import com.example.demo2.Admin;
 import com.example.demo2.StockExchangeManager;
+import com.example.demo2.User;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,11 +40,11 @@ public class ManageUsers {
     @FXML
     public void initialize() {
         // Get the list of usernames from UserManager
-        List<String> usernames = stockExchangeManager.getUsers();
+        List<User> users = stockExchangeManager.getUsers();
 
         // Populate the TableView
-        for (String username : usernames) {
-            userTableView.getItems().add(username);
+        for (User user : users) {
+            userTableView.getItems().add(user.getUsername());
         }
 
         usernameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
@@ -67,9 +68,9 @@ public class ManageUsers {
         System.out.println(selected);
         StockExchangeManager.updateUsersFromCSV("users.csv");
         userTableView.getItems().clear();
-        List<String> updatedUsernames = stockExchangeManager.getUsers();
-        for (String username : updatedUsernames) {
-            userTableView.getItems().add(username);
+        List<User> updatedUsernames = stockExchangeManager.getUsers();
+        for (User user : updatedUsernames) {
+            userTableView.getItems().add(user.getUsername());
         }
     }
 
