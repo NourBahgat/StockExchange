@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="485.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.Controllers.Admin.AdminController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="485.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.Controllers.Admin.AdminController">
    <children>
       <Label layoutX="30.0" layoutY="69.0" text="Enter Username">
          <font>
@@ -15,7 +15,7 @@
          </font>
       </Label>
       <TextField fx:id="usernameField" layoutX="31.0" layoutY="128.0" prefHeight="34.0" prefWidth="386.0" />
-      <Label layoutX="30.0" layoutY="201.0" text="Enter Passwod">
+      <Label layoutX="30.0" layoutY="201.0" text="Enter Password">
          <font>
             <Font name="Century Gothic" size="32.0" />
          </font>
