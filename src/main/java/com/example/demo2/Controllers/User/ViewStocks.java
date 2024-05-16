@@ -30,17 +30,14 @@ public class ViewStocks {
     private TextField labelField;
     @FXML
     private TextField profitField;
-    private boolean isPopulated= false;
 
 
     private ObservableList<Stock> stocksData = FXCollections.observableArrayList();
 
     public void initialize() {
-        if (!isPopulated) {
             labelColumn.setCellValueFactory(cellData -> cellData.getValue().getLabel());
             loadStocksData();
-            isPopulated=true;
-        }
+
     }
 
     private void loadStocksData() {
