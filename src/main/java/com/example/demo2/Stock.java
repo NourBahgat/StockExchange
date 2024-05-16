@@ -50,6 +50,21 @@ public class Stock {
     public DoubleProperty profitProperty() {
         return profit;
     }
+    public double getActualInitialPrice() {
+        return initialPrice.get();
+    }
+
+    public double getActualCurrentPrice() {
+        return currentPrice.get();
+    }
+
+    public int getActualAvailableStocks() {
+        return availableStocks.get();
+    }
+
+    public double getActualProfit() {
+        return profit.get();
+    }
 
 //    public static ArrayList<Stock> getStockList() {
 //        return stockList;
