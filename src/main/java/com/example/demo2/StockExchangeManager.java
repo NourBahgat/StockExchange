@@ -114,11 +114,12 @@ public class StockExchangeManager {
             }
         }
     }
-    public static void saveCSV(){
+    public static void saveFromCSVtoList(){
 
         String csvFile = "stocks.csv";
         String line;
         String cvsSplitBy = ",";
+        stockList.clear();
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             while ((line = br.readLine()) != null) {
@@ -136,6 +137,23 @@ public class StockExchangeManager {
             e.printStackTrace();
         }
     }
+    public static void updateCSV() {
+        String csvFile = "stocks.csv";
+
+        try (FileWriter writer = new FileWriter(csvFile)) {
+            for (Stock stock : stockList) {
+                String line = stock.getLabel() + "," +
+                        stock.getActualInitialPrice() + "," +
+                        stock.getActualCurrentPrice() + "," +
+                        stock.getActualAvailableStocks() + "," +
+                        stock.getActualProfit();
+                writer.write(line + System.getProperty("line.separator"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 //    public List<Stock.Transaction> getUserTransactionHistory(User user) {
 //        List<Stock.Transaction> userTransactions = new ArrayList<>();
 //        for (Stock.Transaction transaction : transactionHistory) {
