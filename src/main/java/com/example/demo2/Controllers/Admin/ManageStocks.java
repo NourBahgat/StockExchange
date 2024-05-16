@@ -49,12 +49,12 @@ public class ManageStocks {
         currentPriceColumn.setCellValueFactory(cellData -> cellData.getValue().currentPriceProperty().asObject());
         availableStocksColumn.setCellValueFactory(cellData -> cellData.getValue().availableStocksProperty().asObject());
         profitsColumn.setCellValueFactory(cellData -> cellData.getValue().profitProperty().asObject());
-
-
+        loadStocksData();
+    }
+    private void loadStocksData() {
+        StockExchangeManager.saveCSV(); // Ensure stockList is populated
+        stocksData.addAll(StockExchangeManager.stockList);
         stockTableView.setItems(stocksData);
-        StockExchangeManager.saveCSV();
-
-        stocksData.addAll(Stock.getStockList());
     }
     public void BackToAdminMain(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/AdminMain.fxml")));

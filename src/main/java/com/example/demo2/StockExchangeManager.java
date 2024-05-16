@@ -16,6 +16,7 @@ public class StockExchangeManager {
     private static List<User> users = new ArrayList<>();
     private Map<User, List<String>> userRequests;
 //    private List<Stock.Transaction> transactionHistory;
+    public static ArrayList<Stock> stockList = new ArrayList<>();
     private List<Stock> availableStocks;
     private List<Order> orders;
     private List<Session> sessions;
@@ -103,7 +104,7 @@ public class StockExchangeManager {
     }
 
     public void exportUserRequestsToCSV(String filename) throws IOException {
-        Stock.getStockList();
+//        Stock.getStockList();
         try (FileWriter writer = new FileWriter(filename)) {
             writer.write("User,Request\n");
             for (Map.Entry<User, List<String>> entry : userRequests.entrySet()) {
@@ -128,7 +129,7 @@ public class StockExchangeManager {
                 int availableStockSlot=Integer.parseInt(data[3]);
                 double profitsSlot= Double.parseDouble(data[4]);
                 Stock loadstock=new Stock(labelSlot, initialPricesSlot,currentPriceSlot,availableStockSlot, profitsSlot);
-                Stock.getStockList().add(loadstock);
+                stockList.add(loadstock);
 
             }
         } catch (IOException e) {

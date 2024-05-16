@@ -16,7 +16,7 @@ public class Stock {
 //    private int availableStocks;
 //    private double profit;
     private ArrayList<Double> priceHistory;
-    public static ArrayList<Stock> stockList;
+//    public static ArrayList<Stock> stockList;
     private String label;
     private DoubleProperty initialPrice;
     private DoubleProperty currentPrice;
@@ -51,9 +51,9 @@ public class Stock {
         return profit;
     }
 
-    public static ArrayList<Stock> getStockList() {
-        return stockList;
-    }
+//    public static ArrayList<Stock> getStockList() {
+//        return stockList;
+//    }
 
 //    public Stock(String label, double initialPrice, int availableStocks) {
 //        this.label = label;
