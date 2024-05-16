@@ -20,6 +20,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.example.demo2.StockExchangeManager.stockList;
+import static com.example.demo2.StockExchangeManager.updateCSV;
 
 public class ManageStocks {
 
@@ -43,6 +44,7 @@ public class ManageStocks {
     private TextField availableStocksField;
     @FXML
     private TextField profitField;
+    private boolean isPopulated= false;
 
     private Stage stage;
     private Scene scene;
@@ -53,19 +55,22 @@ public class ManageStocks {
     public void initialize() {
         // Set cell value factories to retrieve data from Stock objects
 //        labelColumn.setCellValueFactory(cellData -> cellData.getValue().getLabel());
-        labelColumn.setCellValueFactory(cellData -> {
-            String label = cellData.getValue().getLabel();
-            return Bindings.createStringBinding(() -> label);
-        });
-        initialPriceColumn.setCellValueFactory(cellData -> cellData.getValue().initialPriceProperty().asObject());
-        currentPriceColumn.setCellValueFactory(cellData -> cellData.getValue().currentPriceProperty().asObject());
-        availableStocksColumn.setCellValueFactory(cellData -> cellData.getValue().availableStocksProperty().asObject());
-        profitsColumn.setCellValueFactory(cellData -> cellData.getValue().profitProperty().asObject());
-        loadStocksData();
+        if (!isPopulated) {
+            labelColumn.setCellValueFactory(cellData -> cellData.getValue().getLabel());
+            initialPriceColumn.setCellValueFactory(cellData -> cellData.getValue().initialPriceProperty().asObject());
+            currentPriceColumn.setCellValueFactory(cellData -> cellData.getValue().currentPriceProperty().asObject());
+            availableStocksColumn.setCellValueFactory(cellData -> cellData.getValue().availableStocksProperty().asObject());
+            profitsColumn.setCellValueFactory(cellData -> cellData.getValue().profitProperty().asObject());
+            loadStocksData();
+            isPopulated=true;
+        }
+
     }
 
     private void loadStocksData() {
-        StockExchangeManager.saveCSV(); // Ensure stockList is populated
+      StockExchangeManager.saveFromCSVtoList();
+//        stocksData.clear();
+//        stockTableView.getItems().clear();
         stocksData.addAll(stockList);
         stockTableView.setItems(stocksData);
     }
@@ -94,6 +99,8 @@ public class ManageStocks {
                 Admin admin = new Admin();
                 admin.removeStock(selectedStock);
                 stocksData.remove(selectedStock);
+                stockList.remove(selectedStock);
+               updateCSV();
             }
         }
     }
@@ -107,6 +114,7 @@ public class ManageStocks {
 
         stockList.add(newStock);
         stocksData.add(newStock);
+        updateCSV();
 
         // Clear input fields
         labelField.clear();

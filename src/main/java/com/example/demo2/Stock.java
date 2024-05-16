@@ -1,12 +1,7 @@
 package com.example.demo2;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import javafx.beans.property.*;
+
 import java.util.ArrayList;
 
 public class Stock {
@@ -17,21 +12,26 @@ public class Stock {
 //    private double profit;
     private ArrayList<Double> priceHistory;
 //    public static ArrayList<Stock> stockList;
-    private String label;
+    private StringProperty label;
     private DoubleProperty initialPrice;
     private DoubleProperty currentPrice;
     private IntegerProperty availableStocks;
     private DoubleProperty profit;
     public Stock(String label, double initialPricess, double
                  currentPrice, int availableStocks, double profit) {
-        this.label = label;
+        this.label = new SimpleStringProperty(label);
         this.initialPrice= new SimpleDoubleProperty(initialPricess);
         this.currentPrice = new SimpleDoubleProperty(currentPrice);
         this.availableStocks = new SimpleIntegerProperty(availableStocks);
         this.profit = new SimpleDoubleProperty(profit);
     }
+
+    public Stock(String label) {
+        this.label = new SimpleStringProperty(label);
+    }
+
     // Getter methods for JavaFX properties
-    public String getLabel() {
+    public StringProperty getLabel() {
         return label;
     }
 
@@ -49,6 +49,21 @@ public class Stock {
 
     public DoubleProperty profitProperty() {
         return profit;
+    }
+    public double getActualInitialPrice() {
+        return initialPrice.get();
+    }
+
+    public double getActualCurrentPrice() {
+        return currentPrice.get();
+    }
+
+    public int getActualAvailableStocks() {
+        return availableStocks.get();
+    }
+
+    public double getActualProfit() {
+        return profit.get();
     }
 
 //    public static ArrayList<Stock> getStockList() {
