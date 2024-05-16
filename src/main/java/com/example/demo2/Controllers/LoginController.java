@@ -2,6 +2,8 @@ package com.example.demo2.Controllers;
 
 
 import java.io.IOException;
+import java.util.Objects;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -51,4 +53,11 @@ public class LoginController {
         signInStage.show();
     }
 
+    public void switchToSignInPremium(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/PremiumUser/PremiumSignIn.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+
+    }
 }
