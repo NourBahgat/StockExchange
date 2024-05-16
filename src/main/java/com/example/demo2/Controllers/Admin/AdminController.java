@@ -1,6 +1,7 @@
 package com.example.demo2.Controllers.Admin;
 
 import com.example.demo2.Admin;
+import com.example.demo2.App;
 import com.example.demo2.StockExchangeManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -74,6 +75,12 @@ public class AdminController {
     }
     public void EndSession(ActionEvent event) throws IOException {
         StartSession =false;
+    }
+    public void SwitchToMainBage(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/FXML/Login.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
     }
     public void BackToMain(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/AdminMain.fxml")));
