@@ -1,9 +1,7 @@
 package com.example.demo2;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,21 +15,21 @@ public class Stock {
 //    private double profit;
     private ArrayList<Double> priceHistory;
 //    public static ArrayList<Stock> stockList;
-    private String label;
+    private StringProperty label;
     private DoubleProperty initialPrice;
     private DoubleProperty currentPrice;
     private IntegerProperty availableStocks;
     private DoubleProperty profit;
     public Stock(String label, double initialPricess, double
                  currentPrice, int availableStocks, double profit) {
-        this.label = label;
+        this.label =new SimpleStringProperty(label);
         this.initialPrice= new SimpleDoubleProperty(initialPricess);
         this.currentPrice = new SimpleDoubleProperty(currentPrice);
         this.availableStocks = new SimpleIntegerProperty(availableStocks);
         this.profit = new SimpleDoubleProperty(profit);
     }
     // Getter methods for JavaFX properties
-    public String getLabel() {
+    public StringProperty getLabel() {
         return label;
     }
 
@@ -49,6 +47,9 @@ public class Stock {
 
     public DoubleProperty profitProperty() {
         return profit;
+    }
+    public String getActualLabel() {
+        return label.get();
     }
     public double getActualInitialPrice() {
         return initialPrice.get();

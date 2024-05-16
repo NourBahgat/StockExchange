@@ -142,7 +142,7 @@ public class StockExchangeManager {
 
         try (FileWriter writer = new FileWriter(csvFile)) {
             for (Stock stock : stockList) {
-                String line = stock.getLabel() + "," +
+                String line = stock.getActualLabel() + "," +
                         stock.getActualInitialPrice() + "," +
                         stock.getActualCurrentPrice() + "," +
                         stock.getActualAvailableStocks() + "," +

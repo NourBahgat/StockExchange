@@ -56,10 +56,7 @@ public class ManageStocks {
         // Set cell value factories to retrieve data from Stock objects
 //        labelColumn.setCellValueFactory(cellData -> cellData.getValue().getLabel());
         if (!isPopulated) {
-            labelColumn.setCellValueFactory(cellData -> {
-                String label = cellData.getValue().getLabel();
-                return Bindings.createStringBinding(() -> label);
-            });
+            labelColumn.setCellValueFactory(cellData -> cellData.getValue().getLabel());
             initialPriceColumn.setCellValueFactory(cellData -> cellData.getValue().initialPriceProperty().asObject());
             currentPriceColumn.setCellValueFactory(cellData -> cellData.getValue().currentPriceProperty().asObject());
             availableStocksColumn.setCellValueFactory(cellData -> cellData.getValue().availableStocksProperty().asObject());
