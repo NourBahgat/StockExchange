@@ -71,13 +71,13 @@ public class UserController {
             }
     }
 
-        public void switchToSignUp (ActionEvent event) throws IOException {
+    public void switchToSignUp (ActionEvent event) throws IOException {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/SignUp.fxml")));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
 
-        }
+    }
 
     private boolean userExists(String username) {
         try (BufferedReader reader = new BufferedReader(new FileReader("users.csv"))) {

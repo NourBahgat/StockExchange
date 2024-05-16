@@ -23,19 +23,19 @@
                         <Font name="Century Gothic" size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="usernameTextField" layoutX="134.0" layoutY="17.0" />
+                <TextField fx:id="labelTextField" layoutX="134.0" layoutY="17.0" />
                 <Label layoutX="14.0" layoutY="68.0" prefHeight="31.0" prefWidth="92.0" text="Initial Price" textFill="WHITE">
                     <font>
                         <Font name="Century Gothic" size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="passwordTextField" layoutX="134.0" layoutY="71.0" />
+                <TextField fx:id="initialpriceTextField" layoutX="134.0" layoutY="71.0" />
                 <Label layoutX="14.0" layoutY="126.0" prefHeight="31.0" prefWidth="92.0" text="Current Price" textFill="WHITE">
                     <font>
                         <Font name="Century Gothic" size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="creditTextField" layoutX="134.0" layoutY="129.0" />
+                <TextField fx:id="currentpriceTextField" layoutX="134.0" layoutY="129.0" />
                 <Label layoutX="296.0" layoutY="126.0" prefHeight="31.0" prefWidth="38.0" text="EGP" textFill="WHITE">
                     <font>
                         <Font name="Century Gothic" size="18.0" />
@@ -46,9 +46,9 @@
                         <Font name="Century Gothic" size="18.0" />
                     </font>
                 </Label>
-                <Button layoutX="155.0" layoutY="196.0" mnemonicParsing="false" text="view price history" />
                 <Button layoutX="169.0" layoutY="249.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Buy Stock" />
-            <Button layoutX="169.0" layoutY="295.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Sell Stock" />
+            <Button layoutX="304.0" layoutY="347.0" mnemonicParsing="false" onAction="#BackToUserMain" prefHeight="26.0" prefWidth="58.0" text="back" />
+            <Button fx:id="ViewPriceHistoryButton" layoutX="139.0" layoutY="196.0" mnemonicParsing="false" onAction="#handleViewPriceHistoryButtonClick" prefHeight="26.0" prefWidth="136.0" text="View price history" />
             </children>
         </AnchorPane>
     </children>

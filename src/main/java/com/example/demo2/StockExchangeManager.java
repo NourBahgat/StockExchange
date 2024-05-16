@@ -137,6 +137,11 @@ public class StockExchangeManager {
             e.printStackTrace();
         }
     }
+
+
+
+
+
     public static void updateCSV() {
         String csvFile = "stocks.csv";
 
