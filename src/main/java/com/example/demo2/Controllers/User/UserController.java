@@ -117,10 +117,12 @@ public class UserController {
       if (!validateLogin(username, password)) {
             ExpiredLabel.setVisible(false);
             System.out.println("Invalid username or password");
-            label.setVisible(true);
+          label.setVisible(true);
             label.setText("Invalid username or password");
         }
-      if (!AdminController.StartSession){
+      if (!AdminController.StartSession&&validateLogin(username, password)){
+          label.setVisible(false);
+          ExpiredLabel.setVisible(true);
           ExpiredLabel.setText("Session Expired");
       }
     }
