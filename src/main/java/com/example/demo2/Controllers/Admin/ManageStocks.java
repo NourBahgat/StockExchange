@@ -1,5 +1,6 @@
 package com.example.demo2.Controllers.Admin;
 
+import com.example.demo2.Admin;
 import com.example.demo2.Stock;
 import com.example.demo2.StockExchangeManager;
 import javafx.beans.binding.Bindings;
@@ -11,12 +12,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
+
+import static com.example.demo2.StockExchangeManager.stockList;
 
 public class ManageStocks {
 
@@ -32,6 +35,15 @@ public class ManageStocks {
     private TableColumn<Stock, Integer> availableStocksColumn;
     @FXML
     private TableColumn<Stock, Double> profitsColumn;
+    @FXML
+    private TextField labelField;
+    @FXML
+    private TextField initialPriceField;
+    @FXML
+    private TextField availableStocksField;
+    @FXML
+    private TextField profitField;
+
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -51,9 +63,10 @@ public class ManageStocks {
         profitsColumn.setCellValueFactory(cellData -> cellData.getValue().profitProperty().asObject());
         loadStocksData();
     }
+
     private void loadStocksData() {
         StockExchangeManager.saveCSV(); // Ensure stockList is populated
-        stocksData.addAll(StockExchangeManager.stockList);
+        stocksData.addAll(stockList);
         stockTableView.setItems(stocksData);
     }
     public void BackToAdminMain(ActionEvent event) throws IOException {
@@ -61,5 +74,44 @@ public class ManageStocks {
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
+    }
+    @FXML
+    public void handleDeleteButton(){
+        Stock selectedStock = stockTableView.getSelectionModel().getSelectedItem();
+        if (selectedStock == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Stock Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a stock to delete.");
+            alert.showAndWait();
+        } else {
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Confirm Deletion");
+            confirmationAlert.setHeaderText(null);
+            confirmationAlert.setContentText("Are you sure you want to delete the selected stock?");
+            Optional<ButtonType> result = confirmationAlert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                Admin admin = new Admin();
+                admin.removeStock(selectedStock);
+                stocksData.remove(selectedStock);
+            }
+        }
+    }
+    public void addStock(ActionEvent event) {
+        String label = labelField.getText();
+        double initialPrice = Double.parseDouble(initialPriceField.getText());
+        int availableStocks = Integer.parseInt(availableStocksField.getText());
+        double profit = Double.parseDouble(profitField.getText());
+
+        Stock newStock = new Stock(label, initialPrice, initialPrice, availableStocks, profit);
+
+        stockList.add(newStock);
+        stocksData.add(newStock);
+
+        // Clear input fields
+        labelField.clear();
+        initialPriceField.clear();
+        availableStocksField.clear();
+        profitField.clear();
     }
 }
