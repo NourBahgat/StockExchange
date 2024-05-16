@@ -97,7 +97,7 @@ public void removeUser(String username)
     }
 
     // Method to remove a stock
-    public void removeStock(Stock stock, StockExchangeManager stockExchangeManager) {
+    public void removeStock(Stock stock) {
         String csvFile = "stocks.csv"; // Replace with the path to your CSV file
         String tempFile = "temp2.csv"; // Replace with the path to a temporary file
 
