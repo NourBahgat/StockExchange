@@ -12,17 +12,12 @@
             <Font name="Century Gothic" size="35.0" />
          </font>
       </Label>
-      <Button layoutX="224.0" layoutY="157.0" mnemonicParsing="false" onAction="#switchToSignIn" style="-fx-background-color: #007BA7;" text="Standard User" textFill="WHITE">
+      <Button layoutX="260.0" layoutY="158.0" mnemonicParsing="false" onAction="#switchToSignIn" prefHeight="56.0" prefWidth="122.0" style="-fx-background-color: #007BA7;" text="User" textFill="WHITE">
          <font>
             <Font size="26.0" />
          </font>
       </Button>
-      <Button layoutX="263.0" layoutY="337.0" mnemonicParsing="false" onAction="#switchToAdmin" style="-fx-background-color: #007BA7;" text="Admin" textFill="#fcfbfb">
-         <font>
-            <Font size="26.0" />
-         </font>
-      </Button>
-      <Button layoutX="224.0" layoutY="245.0" mnemonicParsing="false" onAction="#switchToSignInPremium" style="-fx-background-color: #007BA7;" text="Premium User" textFill="WHITE">
+      <Button layoutX="260.0" layoutY="267.0" mnemonicParsing="false" onAction="#switchToAdmin" prefHeight="56.0" prefWidth="122.0" style="-fx-background-color: #007BA7;" text="Admin" textFill="#fcfbfb">
          <font>
             <Font size="26.0" />
          </font>
