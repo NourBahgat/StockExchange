@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -28,8 +29,12 @@ public class UserMainController {
     private Label numStocks;
     @FXML
     private Label userName;
-
-
+    @FXML
+    private Label smallamount;
+    @FXML
+    private TextField MoneyTextField;
+    private double depositedMoney;
+    private double Subscriptionprice =100;
 
 //    public void initialize(){
 //
@@ -70,5 +75,27 @@ public class UserMainController {
         numStocks.setText(String.valueOf(loggedInUser.getNumOfStocks()));
         Balance.setText(String.valueOf(loggedInUser.getAccountBalance()));
 
+    }
+    public void BackToLogin (ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Login.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);}
+    public void GoToSubscribe (ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/Subscription.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+    }
+    public void deposit(ActionEvent event) throws IOException {
+        depositedMoney =Double.parseDouble( MoneyTextField.getText());
+    }
+    public void Subscripe(ActionEvent event) throws IOException {
+     if(depositedMoney<Subscriptionprice){
+         smallamount.setText("Insufficient Amount");
+     }
+     else{
+
+     }
     }
 }

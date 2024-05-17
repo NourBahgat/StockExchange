@@ -88,4 +88,5 @@ public class AdminController {
         scene = new Scene(root);
         stage.setScene(scene);
     }
+
 }
