@@ -57,7 +57,7 @@
                   <Font name="Century Gothic Bold" size="29.0" />
                </font>
             </Label>
-            <Label fx:id="Balance" layoutX="24.0" layoutY="126.0" prefHeight="32.0" prefWidth="107.0" text="Account Balance">
+            <Label fx:id="Balance" layoutX="34.0" layoutY="125.0" prefHeight="32.0" prefWidth="82.0" text="Account Balance">
                <font>
                   <Font name="Century Gothic" size="24.0" />
                </font>
