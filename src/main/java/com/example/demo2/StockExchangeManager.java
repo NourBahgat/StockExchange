@@ -1,9 +1,11 @@
 package com.example.demo2;
 
+import com.example.demo2.Controllers.User.TrackStocksController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
+import javafx.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,7 +15,7 @@ import java.util.*;
 
 public class StockExchangeManager {
     private static List<User> users = new ArrayList<>();
-    private Map<User, List<String>> userRequests;
+    private static Map<User, List<String>> userRequests;
 //    private List<Stock.Transaction> transactionHistory;
     public static ArrayList<Stock> stockList = new ArrayList<>();
     private List<Stock> availableStocks;
@@ -21,11 +23,7 @@ public class StockExchangeManager {
     private List<Session> sessions;
     @FXML
     private ListView<String> usernameListView;
-    private static HashMap<String, List<Double>> boughtStocks = new HashMap<>();
-
-
-
-
+    public static HashMap<String, List<Double>> boughtStocks = new HashMap<>();
 
     public StockExchangeManager() {
         this.userRequests = new HashMap<>();
@@ -93,6 +91,16 @@ public class StockExchangeManager {
         usernameListView.getItems().addAll(StockExchangeManager.getUsernameList());
     }
 
+    public static User getUserFromUsername(String username) {
+        for (User user : users) if (user.getUsername().equals(username)) return user;
+        return null;
+    }
+
+    public static Stock getStockFromLabel(String label) {
+        for (Stock stock : stockList) if (stock.getActualLabel().equals(label)) return stock;
+        return null;
+    }
+
 //    public static User getLoggedInUser(String username, String password) {
 //        for (User user : users) {
 //            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
@@ -110,7 +118,7 @@ public static User getLoggedInUser(String username, String password) {
     return null;
 }
 
-    public void addUserRequest(User user, String request) {
+    public static void addUserRequest(User user, String request) {
         if (userRequests.containsKey(user)) {
             userRequests.get(user).add(request);
         } else {
@@ -178,7 +186,24 @@ public static User getLoggedInUser(String username, String password) {
         }
     }
 
-
+    public static void loadUserBoughtStocksList(String filePath) {
+        String line;
+        String cvsSplitBy = ",";
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            line = br.readLine();   // Skips header from file
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(cvsSplitBy);
+                User user = getUserFromUsername(data[0]);
+                Stock stock = getStockFromLabel(data[1]);
+                if (user == null || stock == null) continue;
+                for (int i = 2; i < data.length; i++) {
+                    stock.addBuyer(user, Double.parseDouble(data[i]));
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error occurred while loading BoughtStocks CSV file: " + e.getMessage());
+        }
+    }
 
 
 
@@ -236,13 +261,10 @@ public static User getLoggedInUser(String username, String password) {
                 user.setAccountBalance(userCredit - price);
                 int availableStocks = stock.getActualAvailableStocks();
                 stock.setAvailableStocks(availableStocks - 1);
-                stock.setBoughtByUser(user);
+                stock.addBuyer(user, price);
                 user.setNumOfStocks(user.getNumOfStocks() + 1);
 
-                List<Double> prices = Arrays.asList(price, stock.getActualCurrentPrice());
-                boughtStocks.put(stock.getActualLabel(), prices);
-
-                saveUserBoughtStocksToCSV(user, filePath);
+                //saveUserBoughtStocksToCSV(user, filePath);
 
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle("Success");
@@ -265,29 +287,61 @@ public static User getLoggedInUser(String username, String password) {
         }
     }
 
-    public static List<Stock> getUserBoughtStocks(User user) {
-        List<Stock> boughtStocksList = new ArrayList<>();
+    public static List<Pair<Stock, List<Double>>> getUserBoughtStocks(User user) {
+        List<Pair<Stock, List<Double>>> boughtStocksList = new ArrayList<>();
         for (Stock stock : stockList) {
-            if (stock.getBoughtByUser() != null && stock.getBoughtByUser().equals(user)) {
-                boughtStocksList.add(stock);
+            List<Double> orderCosts = stock.getBuyerOrderCosts(user);
+            if (orderCosts != null) {
+                Pair<Stock, List<Double>> stockCosts = new Pair<>(stock, orderCosts);
+                boughtStocksList.add(stockCosts);
             }
         }
         return boughtStocksList;
     }
+    public static void updateBoughtStocksCSV() {
+        String filePath = "boughtStocks.csv";
+        try (FileWriter writer = new FileWriter(filePath)) {
+            writer.append("Username,Stock Name,Bought Prices\n");
+            for (User user : users) {
+                List<Pair<Stock, List<Double>>> boughtStocksList = getUserBoughtStocks(user);
+                for (Pair<Stock, List<Double>> stockCosts : boughtStocksList) {
+                    Stock stock = stockCosts.getKey();
+                    List<Double> prices = stockCosts.getValue();
+                    writer.append(user.getUsername()).append(",").append(stock.getActualLabel());
+                    for (Double price : prices) {
+                        writer.append(",").append(String.valueOf(price));
+                    }
+                    writer.append("\n");
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error occurred while updating BoughtStocks CSV file: " + e.getMessage());
+        }
+    }
+    public static void removeStockFromUser(User user, String stockLabel, double purchasePrice) {
+        Stock stock = getStockFromLabel(stockLabel);
+        if (stock != null) {
+            stock.removeBuyer(user, purchasePrice);
+            updateBoughtStocksCSV();
+            updateStockCSV();
+        }
+    }
 
-    public static void saveUserBoughtStocksToCSV(User user, String filePath) {
-        List<Stock> boughtStocksList = getUserBoughtStocks(user);
+    public static void saveUserBoughtStocksToCSV(String filePath) {
         try {
             FileWriter writer = new FileWriter(filePath);
-            writer.append("Stock Name,Initial Price,Current Price\n");
-            for (Stock stock : boughtStocksList) {
-                List<Double> prices = boughtStocks.get(stock.getActualLabel());
-                writer.append(stock.getActualLabel())
-                        .append(",")
-                        .append(String.valueOf(prices.get(0)))
-                        .append(",")
-                        .append(String.valueOf(prices.get(1)))
-                        .append("\n");
+            writer.append("Username, Stock Name, Bought Prices\n");
+            for (User user : users) {
+                List<Pair<Stock, List<Double>>> boughtStocksList = getUserBoughtStocks(user);
+                for (Pair<Stock, List<Double>> stockCosts : boughtStocksList) {
+                    Stock stock = stockCosts.getKey();
+                    List<Double> prices = stockCosts.getValue();
+                    writer.append(user.getUsername()).append(",").append(stock.getActualLabel());
+                    for (Double price : prices) {
+                        writer.append(",").append(String.valueOf(price));
+                    }
+                    writer.append("\n");
+                }
             }
             writer.flush();
             writer.close();
@@ -295,7 +349,10 @@ public static User getLoggedInUser(String username, String password) {
         } catch (IOException e) {
             System.err.println("Error occurred while saving CSV file: " + e.getMessage());
         }
+
     }
+
+
 
 
 
@@ -365,12 +422,14 @@ public static User getLoggedInUser(String username, String password) {
     public static void saveSystem() {
         updateUserCSV();
         updateStockCSV();
+        saveUserBoughtStocksToCSV("boughtStocks.csv");
         //updateRequestCSV();
     }
 
     public static void loadSystem() {
         loadUserList();
         loadStockList();
+        loadUserBoughtStocksList("boughtStocks.csv");
     }
 
 

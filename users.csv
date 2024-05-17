@@ -1,5 +1,5 @@
 username,password,initial credit,numOfStocks,isPremium
-nour,bahgat,3800.0,12,false
+nour,bahgat,3000.0,15,false
 Omar,123,123.0,0,false
 Nour Bahgat,4567,400.0,0,false
 sawsan badr,3456,9000.0,0,false
@@ -10,6 +10,7 @@ yasmeen,3456,400.0,0,false
 waleed,4876,344.0,0,false
 shaimaa,4567,300.0,0,false
 nader,4567,10.0,0,false
-soso,56789,1000.0,0,false
 manar,1234,500000.0,0,false
 yalahwy,yahyahyaah,400.0,0,false
+soso,56789,1100.0,1,false
+dodza,zzzzz,2100.0,2,false

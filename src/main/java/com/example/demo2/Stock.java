@@ -6,6 +6,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Stock {
 //    private String label;
@@ -13,6 +16,7 @@ public class Stock {
 //    private double currentPrice;
 //    private int availableStocks;
 //    private double profit;
+private Map<User, Double> buyerOrderCosts = new HashMap<>();
     private ArrayList<Double> priceHistory;
 //    public static ArrayList<Stock> stockList;
     private StringProperty label;
@@ -20,7 +24,7 @@ public class Stock {
     private DoubleProperty currentPrice;
     private IntegerProperty availableStocks;
     private DoubleProperty profit;
-    private User boughtByUser;
+    private HashMap<User, List<Double>> buyers;
     public Stock(String label, double initialPricess, double
                  currentPrice, int availableStocks, double profit) {
         this.label =new SimpleStringProperty(label);
@@ -28,8 +32,11 @@ public class Stock {
         this.currentPrice = new SimpleDoubleProperty(currentPrice);
         this.availableStocks = new SimpleIntegerProperty(availableStocks);
         this.profit = new SimpleDoubleProperty(profit);
+        this.buyers = new HashMap<>();
     }
     // Getter methods for JavaFX properties
+    public HashMap<User, List<Double>> getBuyersList() { return buyers; }
+
     public StringProperty getLabel() {
         return label;
     }
@@ -71,13 +78,25 @@ public class Stock {
     public void setAvailableStocks(int availableStocks) {
         this.availableStocks.set(availableStocks);
     }
-    public User getBoughtByUser() {
-        return boughtByUser;
+    public List<Double> getBuyerOrderCosts(User user) {
+        if (buyers.containsKey(user))   return buyers.get(user);
+        return null;
     }
 
-    public void setBoughtByUser(User user) {
-        boughtByUser = user;
+    public void addBuyer(User user, Double currentPrice) {
+        if (buyers.containsKey(user)) {
+            List<Double> buyPrice = buyers.get(user);
+            buyPrice.add(currentPrice);
+        } else {
+            List<Double> buyPrice = new ArrayList<Double>();
+            buyPrice.add(currentPrice);
+            buyers.put(user, buyPrice);
+        }
     }
+    public void removeBuyer(User user, double purchasePrice) {
+        buyerOrderCosts.remove(user);
+    }
+
     //    public void setActualAvailableStocks(){this.availableStocks.get()=availableStocks.get();}
 
 //    public static ArrayList<Stock> getStockList() {
