@@ -239,7 +239,7 @@ public static User getLoggedInUser(String username, String password) {
                 stock.setBoughtByUser(user);
                 user.setNumOfStocks(user.getNumOfStocks() + 1);
 
-                List<Double> prices = Arrays.asList(stock.getActualInitialPrice(), stock.getActualCurrentPrice());
+                List<Double> prices = Arrays.asList(price, stock.getActualCurrentPrice());
                 boughtStocks.put(stock.getActualLabel(), prices);
 
                 saveUserBoughtStocksToCSV(user, filePath);
