@@ -6,10 +6,20 @@ public class User {
     private String password;
     private double accountBalance;
     private boolean isPremium;
+    private int numOfStocks;
 //    private boolean depositPending; // Flag for pending deposit approval
 //    private boolean withdrawPending; // Flag for pending withdraw approval
 
-    public User(String username, String password, double accountBalance) {
+    public User(String username, String password, double accountBalance, int numOfStocks, boolean isPremium) {
+        this.username = username;
+        this.password = password;
+        this.accountBalance = accountBalance;
+        this.numOfStocks=numOfStocks;
+        this.isPremium=isPremium;
+//        this.depositPending = false;
+//        this.withdrawPending = false;
+    }
+    public User() {
         this.username = username;
         this.password = password;
         this.accountBalance = accountBalance;
@@ -41,7 +51,15 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-//
+
+    public void setNumOfStocks(int numOfStocks) {
+        this.numOfStocks = numOfStocks;
+    }
+
+    public int getNumOfStocks() {
+        return numOfStocks;
+    }
+    //
 //    public double getAccountBalance() {
 //        return accountBalance;
 //    }

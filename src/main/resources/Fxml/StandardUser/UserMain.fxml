@@ -117,6 +117,11 @@
                   <Font name="Century Gothic Bold" size="29.0" />
                </font>
             </Label>
+            <Label fx:id="test" layoutX="24.0" layoutY="126.0" prefHeight="32.0" prefWidth="107.0" text="Account Balance">
+               <font>
+                  <Font name="Century Gothic" size="25.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
       <Label layoutX="251.0" layoutY="269.0" text="Total Number Of Stocks">
@@ -125,5 +130,10 @@
          </font>
       </Label>
       <TextField fx:id="NumberOfStocks" layoutX="251.0" layoutY="317.0" prefHeight="56.0" prefWidth="107.0" />
+      <Label fx:id="test2" layoutX="277.0" layoutY="329.0" prefHeight="32.0" prefWidth="56.0" text="No.">
+         <font>
+            <Font name="Century Gothic" size="25.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

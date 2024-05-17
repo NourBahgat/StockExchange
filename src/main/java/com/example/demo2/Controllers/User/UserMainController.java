@@ -22,7 +22,10 @@ public class UserMainController {
     @FXML
     private TextField AccountBalance;
     @FXML
-    private static Label test;
+    private Label test;
+    @FXML
+    private Label test2;
+
 
 
 //    public void initialize(){
@@ -47,9 +50,9 @@ public class UserMainController {
         scene = new Scene(root);
         stage.setScene(scene);
     }
-//    public static void setTitle(User user){
-//       double credit= user.getAccountBalance();
-//       test.setText(String.valueOf(credit));
-//
-//    }
+public void displayBalance(double balance){
+        test.setText(String.valueOf(balance));
+}
+    public void displayNumberOfStocks(int NumStocks){
+    }
 }

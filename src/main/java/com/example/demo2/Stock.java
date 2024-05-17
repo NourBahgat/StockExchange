@@ -67,6 +67,11 @@ public class Stock {
         return profit.get();
     }
 
+    public void setAvailableStocks(int availableStocks) {
+        this.availableStocks.set(availableStocks);
+    }
+    //    public void setActualAvailableStocks(){this.availableStocks.get()=availableStocks.get();}
+
 //    public static ArrayList<Stock> getStockList() {
 //        return stockList;
 //    }

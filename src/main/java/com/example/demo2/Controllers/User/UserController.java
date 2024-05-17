@@ -39,6 +39,9 @@ public class UserController {
 
     @FXML
     private Label ExpiredLabel;
+    @FXML
+    private Label test;
+    private User loggedInUser;
 
     @FXML
     private TextField AccountBalance;
@@ -46,6 +49,7 @@ public class UserController {
     private User user;
     @FXML
     private Label Balance;
+    private User obj;
 
 //    public void initialize() {
 //        // You can initialize AccountBalance here or in your FXML file
@@ -55,6 +59,8 @@ public class UserController {
     public void handleSignUp(ActionEvent event) throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
+        int numOfStocks=0;
+        boolean isPremium=false;
         double credit = Double.parseDouble(creditField.getText());
 //        StockExchangeManapager userAdd= new StockExchangeManager();
 
@@ -67,17 +73,15 @@ public class UserController {
             return; // Exit the method without proceeding further
         }
 
-//        userAdd.addUser(username);
-//        userAdd.listUsers();
         // Write user information to CSV file
             try (PrintWriter writer = new PrintWriter(new FileWriter("users.csv", true))) {
-                writer.println(username + "," + password + "," + credit);
+                writer.println(username + "," + password + "," + credit + "," + numOfStocks + "," + isPremium);
                 label.setVisible(true);
                 label.setText("Signed Up successfully, Return to login page");
 
                 StockExchangeManager userAdd = new StockExchangeManager();
                 userAdd.updateUsersFromCSV("users.csv");
-                User newUser = new User(username, password, credit);
+                User newUser = new User(username, password, credit, numOfStocks,isPremium);
                 userAdd.addUser(newUser);
                 userAdd.listUsers();
 
@@ -120,16 +124,23 @@ public class UserController {
 
    // AdminController admin = new AdminController();
     public void handleLogin(ActionEvent event) throws IOException {
+        obj=new User();
+//        StockExchangeManager objBalance=new StockExchangeManager();
         String username = usernameField.getText();
         String password = passwordField.getText();
-        User loggedInUser = StockExchangeManager.getLoggedInUser(username, password);
-        double accountBalance = loggedInUser.getAccountBalance();
-        System.out.println(accountBalance);
-//        UserMainController.setTitle(loggedInUser);
+        obj.setUsername(username);
+        obj.setPassword(password);
+        double balance=StockExchangeManager.getLoggedInUser(username,password);
+        obj.setAccountBalance(balance);
       if(AdminController.StartSession && validateLogin(username, password)) {
-//          loggedInUser= new User(username, password, 0.0);
-//          initData(loggedInUser);
-          Parent root = FXMLLoader.load(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
+
+          //Parent root = FXMLLoader.load(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
+          FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
+          root=loader.load();
+          UserMainController userMainController=loader.getController();
+          userMainController.displayBalance(obj.getAccountBalance());
+          System.out.println(obj.getAccountBalance());
+
           stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
           scene = new Scene(root);
           stage.setScene(scene);
@@ -164,85 +175,33 @@ public class UserController {
         }
         return false; // Username and password do not match
     }
-//    public void switchToViewStocks (ActionEvent event) throws IOException {
-//        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/ViewStocks.fxml")));
-//        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//        scene = new Scene(root);
-//        stage.setScene(scene);
-//
-//    }
-//    public void switchToRequestsPage (ActionEvent event) throws IOException {
-//        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/RequestsPage.fxml")));
-//        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//        scene = new Scene(root);
-//        stage.setScene(scene);
-//
-//    }
-    public void BackToUserMain (ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/UserMain.fxml")));
+    public void switchToViewStocks (ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/ViewStocks.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
 
     }
-//    public void initData(User user) {
-//        loggedInUser = user;
-//        if (loggedInUser != null) {
-//            // Retrieve account balance from StockExchangeManager's static list
-//            User userbalance= new
-//            AccountBalance.setText(String.valueOf(accountBalance));
-//        }
-//    }
-//    public void displayAccountBalance(String username, String password) {
-//        User user=getUserByUsernameAndPassword(username,password);
-//        double balance= user.getAccountBalance();
-//        Balance.setVisible(true);
-//        System.out.println("i passed here");
-//        }
-    private User getUserByUsernameAndPassword(String username, String password) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("users.csv"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] userData = line.split(",");
-                if (userData.length >= 3 && userData[0].equals(username) && userData[1].equals(password)) {
-                    // Username and password match, create and return a User object
-                    double balance = Double.parseDouble(userData[2]);
-                    return new User(username, password, balance);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Handle IO exception
-        }
-        // Username and password not found, return null
-        return null;
-    }
-//    private User getUserFromCSV(String username) {
-//        try (BufferedReader reader = new BufferedReader(new FileReader("users.csv"))) {
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                String[] userData = line.split(",");
-//                if (userData.length >= 3 && userData[0].equals(username)) {
-//                    // Parse user information from CSV and create a User object
-//                    String password = userData[1];
-//                    double accountBalance = Double.parseDouble(userData[2]);
-//                    return new User(username, password, accountBalance);
-//                }
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//    public void setUser(User user) {
-//        this.user = user;
-//        if (user != null) {
-//            // Set the account balance in the text field
-//            accountBalance.setText(String.valueOf(user.getAccountBalance()));
-//        }
-//    }
-//public void displayAccountBalance(ActionEvent event){
-//        User userObj = new User(usernameField.getText(),passwordField.getText(),)
-//}
+    public void switchToRequestsPage (ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/RequestsPage.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
 
+    }
+    public void BackToUserMain (ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/UserMain.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+    }
+    public void setTitle(){
+        if (loggedInUser != null) {
+            double balance = loggedInUser.getAccountBalance();
+            test.setText("yay");
+        } else {
+            // Handle case where no user is logged in
+            System.out.println("No user logged in.");
+        }
+    }
 }

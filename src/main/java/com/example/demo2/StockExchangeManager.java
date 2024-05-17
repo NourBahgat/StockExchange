@@ -1,16 +1,15 @@
 package com.example.demo2;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StockExchangeManager {
     private static List<User> users = new ArrayList<>();
@@ -67,7 +66,7 @@ public class StockExchangeManager {
             while ((line = reader.readLine()) != null) {
                 String[] userData = line.split(",");
                 if (userData.length > 0 && idx != 0) {
-                    User loadedUser = new User(userData[0], userData[1], Double.parseDouble(userData[2]));
+                    User loadedUser = new User(userData[0], userData[1], Double.parseDouble(userData[2]), Integer.parseInt(userData[3]),Boolean.getBoolean(userData[4]));
                     users.add(loadedUser); // Add the username to the users list
                 }
                 idx++;
@@ -100,7 +99,7 @@ public class StockExchangeManager {
 //        }
 //        return null;
 //    }
-public static User getLoggedInUser(String username, String password) {
+public static double getLoggedInUser(String username, String password) {
     try (BufferedReader reader = new BufferedReader(new FileReader("users.csv"))) {
         String line;
         int idx = 0;
@@ -113,7 +112,7 @@ public static User getLoggedInUser(String username, String password) {
 
                 if (csvUsername.equals(username) && csvPassword.equals(password)) {
                     // Found matching user, return User object
-                    return new User(csvUsername, csvPassword, balance);
+                    return balance;
                 }
             }
             idx++;
@@ -121,9 +120,7 @@ public static User getLoggedInUser(String username, String password) {
     } catch (IOException e) {
         e.printStackTrace();
     }
-
-    // No matching user found
-    return null;
+    return 0;
 }
 
     public void addUserRequest(User user, String request) {
@@ -191,6 +188,55 @@ public static User getLoggedInUser(String username, String password) {
             e.printStackTrace();
         }
     }
+    public void buyStock(User user, Stock stock) {
+        // Display confirmation dialog to admin
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Buy Stock Request");
+        alert.setHeaderText("User " + user.getUsername() + " wants to buy stock " + stock.getLabel());
+        alert.setContentText("Do you want to approve this request?");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        // If admin approves the request
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            double price = stock.getActualCurrentPrice();
+            double userCredit = user.getAccountBalance();
+
+            // Check if user has enough credit
+            if (userCredit >= price) {
+                // Subtract price from user credit
+                user.setAccountBalance(userCredit - price);
+
+                // Decrease available stocks
+                int availableStocks = stock.getActualAvailableStocks();
+                stock.setAvailableStocks(availableStocks - 1);
+
+                // Increase number of stocks bought by the user
+                user.setNumOfStocks(user.getNumOfStocks() + 1);
+
+                // Show success message
+                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                successAlert.setTitle("Success");
+                successAlert.setHeaderText(null);
+                successAlert.setContentText("Stock purchase approved and completed successfully!");
+                successAlert.showAndWait();
+            } else {
+                // Show insufficient credit message
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText(null);
+                errorAlert.setContentText("Insufficient credit to buy the stock!");
+                errorAlert.showAndWait();
+            }
+        } else {
+            // Admin disapproved the request
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText(null);
+            errorAlert.setContentText("Stock purchase request disapproved by admin!");
+            errorAlert.showAndWait();
+        }
+    }
+
 
 //    public List<Stock.Transaction> getUserTransactionHistory(User user) {
 //        List<Stock.Transaction> userTransactions = new ArrayList<>();
