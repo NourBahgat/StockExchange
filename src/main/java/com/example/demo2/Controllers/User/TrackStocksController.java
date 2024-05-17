@@ -9,8 +9,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.IOException;
@@ -31,6 +36,10 @@ public class TrackStocksController {
 
     @FXML
     private TableColumn<StockData, Double> currentPrice;
+
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
 
     private User currentUser;
 
@@ -63,6 +72,19 @@ public class TrackStocksController {
             //toht khalas
 //            StockExchangeManager.SellStock(user, selectedstock);
         }
+    }
+
+    public void backToMain(ActionEvent event) throws IOException {
+        User user = UserController.loggedInUser;
+        System.out.println(user.toString());
+        //root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/UserMain.fxml")));
+        FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
+        root=loader.load();
+        UserMainController userMainController= loader.getController();
+        userMainController.initData(user);
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
     }
 
 

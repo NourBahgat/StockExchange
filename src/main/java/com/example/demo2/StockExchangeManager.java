@@ -15,16 +15,15 @@ import java.util.*;
 
 public class StockExchangeManager {
     private static List<User> users = new ArrayList<>();
-    private Map<User, List<String>> userRequests;
-//    private List<Stock.Transaction> transactionHistory;
     public static ArrayList<Stock> stockList = new ArrayList<>();
+    private static List<TransactionRequest> transactionRequests = new ArrayList<>();
+    private Map<User, List<String>> userRequests;
     private List<Stock> availableStocks;
     private List<Order> orders;
     private List<Session> sessions;
     @FXML
     private ListView<String> usernameListView;
-    private static HashMap<String, List<Double>> boughtStocks = new HashMap<>();
-    private static List<TransactionRequest> transactionRequests = new ArrayList<>();
+
 
     public StockExchangeManager() {
         this.userRequests = new HashMap<>();
@@ -41,12 +40,6 @@ public class StockExchangeManager {
 
     public void addUser(User user) {
         this.users.add(user);
-    }
-
-    public static List<User> getUsers() {
-        updateUsersFromCSV("users.csv");
-        System.out.println(users);
-        return users;
     }
 
     public void setUsers(List<User> users) {
@@ -118,16 +111,6 @@ public static User getLoggedInUser(String username, String password) {
     }
     return null;
 }
-
-    public void addUserRequest(User user, String request) {
-        if (userRequests.containsKey(user)) {
-            userRequests.get(user).add(request);
-        } else {
-            List<String> requests = new ArrayList<>();
-            requests.add(request);
-            userRequests.put(user, requests);
-        }
-    }
 
     public void exportUserRequestsToCSV(String filename) throws IOException {
 //        Stock.getStockList();
@@ -246,7 +229,7 @@ public static User getLoggedInUser(String username, String password) {
         }
     }
 
-    public void buyStock(User user, Stock stock) {
+    public static void buyStock(User user, Stock stock) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Buy Stock Request");
         alert.setHeaderText("User " + user.getUsername() + " wants to buy stock " + stock.getLabel());
@@ -288,7 +271,7 @@ public static User getLoggedInUser(String username, String password) {
         }
     }
 //nour's update of sellstock to show message that request is pending admin approval
-public static void SellStock(User user, Stock stock) {
+public static void sellStock(User user, Stock stock) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Sell Stock");
         alert.setHeaderText("Confirm Sell Stock");
@@ -297,13 +280,8 @@ public static void SellStock(User user, Stock stock) {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             double currentStockPrice = stock.getActualCurrentPrice();
-            TransactionRequest request = new TransactionRequest(user.getUsername(), "sell", stock.getActualLabel(), currentStockPrice);
+            TransactionRequest request = new TransactionRequest(user, RequestType.SELL_STOCK, stock, currentStockPrice);
             StockExchangeManager.addTransactionRequest(request);
-            Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
-            infoAlert.setTitle("Request Submitted");
-            infoAlert.setHeaderText(null);
-            infoAlert.setContentText("Your sell request has been submitted for approval.");
-            infoAlert.showAndWait();
         }
     else {
 //        Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -349,6 +327,17 @@ public static void SellStock(User user, Stock stock) {
             System.err.println("Error occurred while saving CSV file: " + e.getMessage());
         }
     }
+
+    public static void createTransactionRequest(User user, RequestType type, Stock stock, Double amount) {
+        TransactionRequest newRequest = new TransactionRequest(user, type, stock, amount);
+        addTransactionRequest(newRequest);
+        Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
+        infoAlert.setTitle("Request Submitted");
+        infoAlert.setHeaderText(null);
+        infoAlert.setContentText(user.getUsername() +  "'s request has been submitted for approval.");
+        infoAlert.showAndWait();
+    }
+
     public static void addTransactionRequest(TransactionRequest request) {
         transactionRequests.add(request);
     }
@@ -358,25 +347,28 @@ public static void SellStock(User user, Stock stock) {
     }
 
     public static void approveTransaction(TransactionRequest request) {
-        User user = UserController.loggedInUser;
-        if (user == null) {
-            return;
+        User user = request.getUser();
+        Stock stock = request.getStock();
+        Double amount = request.getAmount();
+        RequestType type = request.getRequestType();
+
+        switch (type) {
+            case DEPOSIT:
+                user.deposit(amount);
+                break;
+            case WITHDRAWAL:
+                user.withdraw(amount);
+                break;
+            case BUY_STOCK:
+                buyStock(user, stock);
+                break;
+            case SELL_STOCK:
+                sellStock(user, stock);
+                break;
+            default:
+                break;
         }
 
-        switch (request.getOperation()) {
-            case "buy":
-
-                break;
-            case "sell":
-
-                break;
-            case "deposit":
-                user.setAccountBalance(user.getAccountBalance() + request.getAmount());
-                break;
-            case "withdraw":
-                user.setAccountBalance(user.getAccountBalance() - request.getAmount());
-                break;
-        }
         transactionRequests.remove(request);
     }
     public static void disapproveTransaction(TransactionRequest request) {
@@ -450,13 +442,56 @@ public static void SellStock(User user, Stock stock) {
         updateUserCSV();
         updateStockCSV();
         saveUserBoughtStocksToCSV("boughtStocks.csv");
-        //updateRequestCSV();
+        updateRequestCSV();
+    }
+
+    private static void updateRequestCSV() {
+        String csvFile = "requests.csv";
+
+        try (FileWriter writer = new FileWriter(csvFile)) {
+            writer.write("username,action_type,label,amount"
+                    + System.getProperty("line.separator"));
+            for (TransactionRequest request : transactionRequests) {
+                String line = request.getUsername() + ","
+                        + request.getRequestType() + ","
+                        + request.getLabel() + ","
+                        + request.getAmount();
+                writer.write(line + System.getProperty("line.separator"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void loadSystem() {
         loadUserList();
         loadStockList();
         loadUserBoughtStocksList("boughtStocks.csv");
+        loadRequestList();
+    }
+
+    private static void loadRequestList() {
+        String csvFile = "requests.csv";
+        String line;
+        String cvsSplitBy = ",";
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            line = br.readLine();   // Skips header from file
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(cvsSplitBy);
+                User user = getUserFromUsername(data[0]);
+                RequestType type = RequestType.valueOf(data[1]);
+                Stock stock = getStockFromLabel(data[2]);
+                Double amount = Double.parseDouble(data[3]);
+                TransactionRequest loadedRequest = new TransactionRequest(user, type, stock, amount);
+                transactionRequests.add(loadedRequest);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<User> getUsers() {
+        return users;
     }
 
 
@@ -468,35 +503,6 @@ public static void SellStock(User user, Stock stock) {
     public class Session extends StockExchangeManager{
         public Session() {
 
-        }
-    }
-    public static class TransactionRequest {
-        private String username;
-        private String operation;
-        private String stockLabel;
-        private double amount;
-
-        public TransactionRequest(String username, String operation, String stockLabel, double amount) {
-            this.username = username;
-            this.operation = operation;
-            this.stockLabel = stockLabel;
-            this.amount = amount;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public String getOperation() {
-            return operation;
-        }
-
-        public String getStockLabel() {
-            return stockLabel;
-        }
-
-        public double getAmount() {
-            return amount;
         }
     }
 }

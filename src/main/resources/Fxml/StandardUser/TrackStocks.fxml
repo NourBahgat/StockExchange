@@ -21,12 +21,12 @@
             <Font name="Century Gothic Bold" size="25.0" />
          </font>
       </Label>
-      <Button layoutX="456.0" layoutY="199.0" mnemonicParsing="false" style="-fx-background-color: #d3d3d3;" text="Sell Stock">
+      <Button layoutX="456.0" layoutY="199.0" mnemonicParsing="false" onAction="#sellStock" style="-fx-background-color: #d3d3d3;" text="Sell Stock">
          <font>
             <Font name="Century Gothic" size="26.0" />
          </font>
       </Button>
-      <Button layoutX="547.0" layoutY="407.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="78.0" style="-fx-background-color: #d3d3d3;" text="Back">
+      <Button layoutX="547.0" layoutY="407.0" mnemonicParsing="false" onAction="#backToMain" prefHeight="22.0" prefWidth="78.0" style="-fx-background-color: #d3d3d3;" text="Back">
          <font>
             <Font name="Century Gothic" size="15.0" />
          </font>

@@ -1,7 +1,7 @@
 package com.example.demo2.Controllers.Admin;
 
 import com.example.demo2.StockExchangeManager;
-import com.example.demo2.StockExchangeManager.TransactionRequest;
+import com.example.demo2.TransactionRequest;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -29,8 +29,8 @@ public class ManageRequests {
 
         public void initialize() {
             usernameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
-            operationColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getOperation()));
-            stockLabel.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStockLabel()));
+            operationColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getActionStr()));
+            stockLabel.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLabel()));
             amountColumn.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getAmount()).asObject());
             loadRequests();
         }
@@ -40,6 +40,7 @@ public class ManageRequests {
             requestsTableView.setItems(requests);
         }
 
+    @FXML
     private void handleApprove() {
         TransactionRequest selectedRequest = requestsTableView.getSelectionModel().getSelectedItem();
         if (selectedRequest != null) {
