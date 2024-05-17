@@ -16,7 +16,7 @@ public class App extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/FXML/Login.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             manager = new StockExchangeManager();
-            StockExchangeManager.loadUserList();
+            StockExchangeManager.loadSystem();
             stage.setTitle("Stock exchange");
             stage.setScene(scene);
             stage.show();
@@ -32,7 +32,7 @@ public class App extends Application {
             synchronized(manager) {
                 try {
                     if (manager != null) {
-                        manager.saveSystem();
+                        StockExchangeManager.saveSystem();
                     }
                 } catch (Exception e) {
 

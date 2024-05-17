@@ -68,7 +68,6 @@ public class ManageStocks {
     }
 
     private void loadStocksData() {
-      StockExchangeManager.saveFromCSVtoList();
 //        stocksData.clear();
 //        stockTableView.getItems().clear();
         stocksData.addAll(stockList);

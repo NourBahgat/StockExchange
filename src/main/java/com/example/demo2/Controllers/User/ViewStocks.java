@@ -72,22 +72,8 @@ public class ViewStocks {
     }
 
     private void loadStocksData() {
-        String csvFile = "stocks.csv"; // Adjust file path as necessary
-        String line;
-        String cvsSplitBy = ",";
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            line = br.readLine(); // Skips headers
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(cvsSplitBy);
-                Stock stock = new Stock(data[0], Double.parseDouble(data[1]),
-                        Double.parseDouble(data[2]), Integer.parseInt(data[3]),
-                        Double.parseDouble(data[4]));
-                stocksData.add(stock);
-            }
-            stockTableView.setItems(stocksData);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        stocksData.addAll(stockList);
+        stockTableView.setItems(stocksData);
     }
 
     public void BackToUserMain (ActionEvent event) throws IOException {

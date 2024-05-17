@@ -129,7 +129,7 @@ public static User getLoggedInUser(String username, String password) {
             }
         }
     }
-    public static void saveFromCSVtoList(){
+    public static void loadStockList(){
 
         String csvFile = "stocks.csv";
         String line;
@@ -137,6 +137,7 @@ public static User getLoggedInUser(String username, String password) {
         stockList.clear();
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            line = br.readLine();
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(cvsSplitBy);
                 String labelSlot=data[0];
@@ -144,7 +145,7 @@ public static User getLoggedInUser(String username, String password) {
                 double currentPriceSlot=Double.parseDouble(data[2]);
                 int availableStockSlot=Integer.parseInt(data[3]);
                 double profitsSlot= Double.parseDouble(data[4]);
-                Stock loadstock=new Stock(labelSlot, initialPricesSlot,currentPriceSlot,availableStockSlot, profitsSlot);
+                Stock loadstock = new Stock(labelSlot, initialPricesSlot,currentPriceSlot,availableStockSlot, profitsSlot);
                 stockList.add(loadstock);
 
             }
@@ -167,7 +168,7 @@ public static User getLoggedInUser(String username, String password) {
                 double credit = Double.parseDouble(data[2]);
                 int numOfStocks = Integer.parseInt(data[3]);
                 boolean isPremium = Boolean.parseBoolean(data[4]);
-                User loadedUser =new User(username, password, credit, numOfStocks, isPremium);
+                User loadedUser = new User(username, password, credit, numOfStocks, isPremium);
                 users.add(loadedUser);
             }
         } catch (IOException e) {
@@ -328,10 +329,15 @@ public static User getLoggedInUser(String username, String password) {
 
     }
 
-    public void saveSystem() {
+    public static void saveSystem() {
         updateUserCSV();
         updateStockCSV();
         //updateRequestCSV();
+    }
+
+    public static void loadSystem() {
+        loadUserList();
+        loadStockList();
     }
 
 
