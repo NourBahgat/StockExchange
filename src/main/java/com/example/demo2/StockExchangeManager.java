@@ -99,30 +99,13 @@ public class StockExchangeManager {
 //        }
 //        return null;
 //    }
-public static double getLoggedInUser(String username, String password) {
-    try (BufferedReader reader = new BufferedReader(new FileReader("users.csv"))) {
-        String line;
-        int idx = 0;
-        while ((line = reader.readLine()) != null) {
-            String[] userData = line.split(",");
-            if (userData.length > 0 && idx != 0) {
-                String csvUsername = userData[0];
-                String csvPassword = userData[1];
-                double balance = Double.parseDouble(userData[2]);
-                int numOfStocks=Integer.parseInt(userData[3]);
-                boolean isPremium=Boolean.parseBoolean(userData[4]);
-
-                if (csvUsername.equals(username) && csvPassword.equals(password)) {
-                    // Found matching user, return User object
-                    return balance;
-                }
-            }
-            idx++;
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
+public static User getLoggedInUser(String username, String password) {
+    for (User user : users) {
+        System.out.println(user.toString());
+        if (user.getUsername().equals(username) && user.getPassword().equals(password))
+            return user;
     }
-    return 0;
+    return null;
 }
 
     public void addUserRequest(User user, String request) {
@@ -170,14 +153,38 @@ public static double getLoggedInUser(String username, String password) {
         }
     }
 
+    public static void loadUserList() {
+        String csvFile = "users.csv";
+        String line;
+        String cvsSplitBy = ",";
+        users.clear();
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            line = br.readLine();   // Skips header from file
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(cvsSplitBy);
+                String username= data[0];
+                String password = data[1];
+                double credit = Double.parseDouble(data[2]);
+                int numOfStocks = Integer.parseInt(data[3]);
+                boolean isPremium = Boolean.parseBoolean(data[4]);
+                User loadedUser =new User(username, password, credit, numOfStocks, isPremium);
+                users.add(loadedUser);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
 
-    public static void updateCSV() {
+
+    public static void updateStockCSV() {
         String csvFile = "stocks.csv";
 
         try (FileWriter writer = new FileWriter(csvFile)) {
+            writer.write("label,initial price,current price,available stocks,profit"
+                    + System.getProperty("line.separator"));
             for (Stock stock : stockList) {
                 String line = stock.getActualLabel() + "," +
                         stock.getActualInitialPrice() + "," +
@@ -190,6 +197,26 @@ public static double getLoggedInUser(String username, String password) {
             e.printStackTrace();
         }
     }
+
+    public static void updateUserCSV() {
+        String csvFile = "users.csv";
+
+        try (FileWriter writer = new FileWriter(csvFile)) {
+            writer.write("username,password,initial credit,numOfStocks,isPremium"
+                    + System.getProperty("line.separator"));
+            for (User user : users) {
+                String line = user.getUsername() + "," +
+                        user.getPassword() + "," +
+                        user.getAccountBalance() + "," +
+                        user.getNumOfStocks() + "," +
+                        user.isPremium();
+                writer.write(line + System.getProperty("line.separator"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void buyStock(User user, Stock stock) {
         // Display confirmation dialog to admin
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -299,6 +326,12 @@ public static double getLoggedInUser(String username, String password) {
 
     public void updateSession(Session session) {
 
+    }
+
+    public void saveSystem() {
+        updateUserCSV();
+        updateStockCSV();
+        //updateRequestCSV();
     }
 
 

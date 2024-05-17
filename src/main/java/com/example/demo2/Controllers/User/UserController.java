@@ -40,7 +40,7 @@ public class UserController {
     private Label ExpiredLabel;
     @FXML
     private Label test;
-    private User loggedInUser;
+    public static User loggedInUser;
 
     @FXML
     private TextField AccountBalance;
@@ -48,8 +48,6 @@ public class UserController {
     private User user;
     @FXML
     private Label Balance;
-    private User obj;
-    private User obj2;
 
 //    public void initialize() {
 //        // You can initialize AccountBalance here or in your FXML file
@@ -124,17 +122,10 @@ public class UserController {
 
    // AdminController admin = new AdminController();
     public void handleLogin(ActionEvent event) throws IOException {
-        obj=new User();
-//        StockExchangeManager objBalance=new StockExchangeManager();
         String username = usernameField.getText();
         String password = passwordField.getText();
-        obj.setUsername(username);
-        obj.setPassword(password);
-        double balance=StockExchangeManager.getLoggedInUser(username,password);
-        obj.setAccountBalance(balance);
-        int numberOfStocks=obj.getNumOfStocks();
-        boolean isPremium=obj.isPremium();
-        System.out.println(obj);
+        loggedInUser = StockExchangeManager.getLoggedInUser(username,password);
+        System.out.println(loggedInUser);
       if(AdminController.StartSession && validateLogin(username, password)) {
 
           //Parent root = FXMLLoader.load(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
@@ -144,8 +135,8 @@ public class UserController {
 //          userMainController.displayBalance(obj.getAccountBalance());
 //          userMainController.displayNumberOfStocks(numberOfStocks);
 //          userMainController.helloUser(username);
-          userMainController.initData(obj);
-          System.out.println(obj.getAccountBalance());
+          userMainController.initData(loggedInUser);
+          System.out.println(loggedInUser.getAccountBalance());
 
           stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
           scene = new Scene(root);
@@ -194,15 +185,6 @@ public class UserController {
         scene = new Scene(root);
         stage.setScene(scene);
 
-    }
-    public void BackToUserMain (ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/UserMain.fxml")));
-//        FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
-//        root=loader.load();
-//        UserMainController userMainController=loader.getController();
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
     }
 //    public void buyStockHandler(ActionEvent event) {
 //        // Retrieve the selected stock from your view

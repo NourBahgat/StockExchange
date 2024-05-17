@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.example.demo2.StockExchangeManager.stockList;
-import static com.example.demo2.StockExchangeManager.updateCSV;
+import static com.example.demo2.StockExchangeManager.updateStockCSV;
 
 public class ManageStocks {
 
@@ -100,7 +100,7 @@ public class ManageStocks {
                 admin.removeStock(selectedStock);
                 stocksData.remove(selectedStock);
                 stockList.remove(selectedStock);
-               updateCSV();
+                updateStockCSV();
             }
         }
     }
@@ -114,7 +114,7 @@ public class ManageStocks {
 
         stockList.add(newStock);
         stocksData.add(newStock);
-        updateCSV();
+        updateStockCSV();
 
         // Clear input fields
         labelField.clear();

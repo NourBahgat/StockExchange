@@ -4,6 +4,7 @@ package com.example.demo2.Controllers;
 import java.io.IOException;
 import java.util.Objects;
 
+import com.example.demo2.StockExchangeManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;

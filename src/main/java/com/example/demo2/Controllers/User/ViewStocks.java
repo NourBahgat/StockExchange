@@ -1,5 +1,6 @@
 package com.example.demo2.Controllers.User;
 
+import com.example.demo2.App;
 import com.example.demo2.Stock;
 import com.example.demo2.StockExchangeManager;
 import com.example.demo2.User;
@@ -42,7 +43,7 @@ public class ViewStocks {
     private TextField initialpriceTextField;
     @FXML
     private TextField currentpriceTextField;
-    private StockExchangeManager stockExchangeManager;
+    private final StockExchangeManager stockExchangeManager = App.manager;
     private Stock selectedstock;
 
     private Stage stage;
@@ -75,6 +76,7 @@ public class ViewStocks {
         String line;
         String cvsSplitBy = ",";
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            line = br.readLine(); // Skips headers
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(cvsSplitBy);
                 Stock stock = new Stock(data[0], Double.parseDouble(data[1]),
@@ -88,20 +90,24 @@ public class ViewStocks {
         }
     }
 
-    public void BackToUserMain(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/UserMain.fxml")));
+    public void BackToUserMain (ActionEvent event) throws IOException {
+        User user = UserController.loggedInUser;
+        System.out.println(user.toString());
+        //root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/UserMain.fxml")));
+        FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
+        root=loader.load();
+        UserMainController userMainController= loader.getController();
+        userMainController.initData(user);
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
-
     }
-//    public void BuyStock(String username, String password, double credit, int numStocks, boolean isPremium){
-//        User user=new User(username,password,credit,numStocks,isPremium);
-//        if(selectedstock !=null){
-//            Stock newStock = new Stock(selectedstock.getActualLabel(), selectedstock.getActualInitialPrice(), selectedstock.getActualCurrentPrice(), selectedstock.getActualAvailableStocks(), selectedstock.getActualProfit());
-//            StockExchangeManager buy=new StockExchangeManager();
-//            buy.buyStock(user,newStock);
-//        }
-//    }
+
+    public void BuyStock (ActionEvent event) throws IOException {
+        User user= UserController.loggedInUser;
+        if(selectedstock !=null){
+            stockExchangeManager.buyStock(user, selectedstock);
+        }
+    }
 }
 
