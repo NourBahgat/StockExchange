@@ -18,8 +18,12 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.util.Objects;
 
-public class UserController {
+import static com.example.demo2.Admin.searchUserInCSV;
+//import static com.example.demo2.StockExchangeManager.users;
 
+
+public class UserController {
+//    private User loggedInUser;
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -35,6 +39,18 @@ public class UserController {
 
     @FXML
     private Label ExpiredLabel;
+
+    @FXML
+    private TextField AccountBalance;
+
+    private User user;
+    @FXML
+    private Label Balance;
+
+//    public void initialize() {
+//        // You can initialize AccountBalance here or in your FXML file
+//        AccountBalance = new TextField();
+//    }
 
     public void handleSignUp(ActionEvent event) throws IOException {
         String username = usernameField.getText();
@@ -106,7 +122,13 @@ public class UserController {
     public void handleLogin(ActionEvent event) throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
+        User loggedInUser = StockExchangeManager.getLoggedInUser(username, password);
+        double accountBalance = loggedInUser.getAccountBalance();
+        System.out.println(accountBalance);
+//        UserMainController.setTitle(loggedInUser);
       if(AdminController.StartSession && validateLogin(username, password)) {
+//          loggedInUser= new User(username, password, 0.0);
+//          initData(loggedInUser);
           Parent root = FXMLLoader.load(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
           stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
           scene = new Scene(root);
@@ -142,20 +164,20 @@ public class UserController {
         }
         return false; // Username and password do not match
     }
-    public void switchToViewStocks (ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/ViewStocks.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-
-    }
-    public void switchToRequestsPage (ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/RequestsPage.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-
-    }
+//    public void switchToViewStocks (ActionEvent event) throws IOException {
+//        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/ViewStocks.fxml")));
+//        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        scene = new Scene(root);
+//        stage.setScene(scene);
+//
+//    }
+//    public void switchToRequestsPage (ActionEvent event) throws IOException {
+//        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/RequestsPage.fxml")));
+//        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        scene = new Scene(root);
+//        stage.setScene(scene);
+//
+//    }
     public void BackToUserMain (ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/UserMain.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -163,6 +185,64 @@ public class UserController {
         stage.setScene(scene);
 
     }
-
+//    public void initData(User user) {
+//        loggedInUser = user;
+//        if (loggedInUser != null) {
+//            // Retrieve account balance from StockExchangeManager's static list
+//            User userbalance= new
+//            AccountBalance.setText(String.valueOf(accountBalance));
+//        }
+//    }
+//    public void displayAccountBalance(String username, String password) {
+//        User user=getUserByUsernameAndPassword(username,password);
+//        double balance= user.getAccountBalance();
+//        Balance.setVisible(true);
+//        System.out.println("i passed here");
+//        }
+    private User getUserByUsernameAndPassword(String username, String password) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("users.csv"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] userData = line.split(",");
+                if (userData.length >= 3 && userData[0].equals(username) && userData[1].equals(password)) {
+                    // Username and password match, create and return a User object
+                    double balance = Double.parseDouble(userData[2]);
+                    return new User(username, password, balance);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle IO exception
+        }
+        // Username and password not found, return null
+        return null;
+    }
+//    private User getUserFromCSV(String username) {
+//        try (BufferedReader reader = new BufferedReader(new FileReader("users.csv"))) {
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                String[] userData = line.split(",");
+//                if (userData.length >= 3 && userData[0].equals(username)) {
+//                    // Parse user information from CSV and create a User object
+//                    String password = userData[1];
+//                    double accountBalance = Double.parseDouble(userData[2]);
+//                    return new User(username, password, accountBalance);
+//                }
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//    public void setUser(User user) {
+//        this.user = user;
+//        if (user != null) {
+//            // Set the account balance in the text field
+//            accountBalance.setText(String.valueOf(user.getAccountBalance()));
+//        }
+//    }
+//public void displayAccountBalance(ActionEvent event){
+//        User userObj = new User(usernameField.getText(),passwordField.getText(),)
+//}
 
 }

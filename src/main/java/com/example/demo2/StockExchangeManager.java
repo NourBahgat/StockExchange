@@ -92,6 +92,39 @@ public class StockExchangeManager {
         usernameListView.getItems().addAll(StockExchangeManager.getUsernameList());
     }
 
+//    public static User getLoggedInUser(String username, String password) {
+//        for (User user : users) {
+//            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+//                return user;
+//            }
+//        }
+//        return null;
+//    }
+public static User getLoggedInUser(String username, String password) {
+    try (BufferedReader reader = new BufferedReader(new FileReader("users.csv"))) {
+        String line;
+        int idx = 0;
+        while ((line = reader.readLine()) != null) {
+            String[] userData = line.split(",");
+            if (userData.length > 0 && idx != 0) {
+                String csvUsername = userData[0];
+                String csvPassword = userData[1];
+                double balance = Double.parseDouble(userData[2]);
+
+                if (csvUsername.equals(username) && csvPassword.equals(password)) {
+                    // Found matching user, return User object
+                    return new User(csvUsername, csvPassword, balance);
+                }
+            }
+            idx++;
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    // No matching user found
+    return null;
+}
 
     public void addUserRequest(User user, String request) {
         if (userRequests.containsKey(user)) {

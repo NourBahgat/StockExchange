@@ -5,6 +5,7 @@ public class User {
     private String username;
     private String password;
     private double accountBalance;
+    private boolean isPremium;
 //    private boolean depositPending; // Flag for pending deposit approval
 //    private boolean withdrawPending; // Flag for pending withdraw approval
 
@@ -14,6 +15,14 @@ public class User {
         this.accountBalance = accountBalance;
 //        this.depositPending = false;
 //        this.withdrawPending = false;
+    }
+
+    public double getAccountBalance() {
+        return accountBalance;
+    }
+
+    public void setAccountBalance(double accountBalance) {
+        this.accountBalance = accountBalance;
     }
 
     // Getters and setters
@@ -80,6 +89,28 @@ public class User {
                 ", password='" + password + '\'' +
                 ", accountBalance=" + accountBalance +
                 '}';
+    }
+    public void deposit(double amount) {
+        if (amount > 0) {
+            accountBalance += amount;
+            System.out.println("Deposit successful. New balance: " + accountBalance);
+        } else {
+            System.out.println("Invalid deposit amount.");
+        }
+    }
+
+    // Method to withdraw funds
+    public void withdraw(double amount) {
+        if (amount > 0) {
+            if (accountBalance >= amount) {
+                accountBalance -= amount;
+                System.out.println("Withdrawal successful. New balance: " + accountBalance);
+            } else {
+                System.out.println("Insufficient funds.");
+            }
+        } else {
+            System.out.println("Invalid withdrawal amount.");
+        }
     }
 
     public void save() {
