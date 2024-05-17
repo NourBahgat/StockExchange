@@ -52,6 +52,13 @@ public class UserMainController {
         stage.setScene(scene);
 
     }
+    public void switchToTrackStocks (ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/TrackStocks.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+
+    }
     public void BackToUserMain (ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/UserMain.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -74,7 +81,6 @@ public class UserMainController {
         userName.setText("Hello, "+ loggedInUser.getUsername());
         numStocks.setText(String.valueOf(loggedInUser.getNumOfStocks()));
         Balance.setText(String.valueOf(loggedInUser.getAccountBalance()));
-
     }
     public void BackToLogin (ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Login.fxml")));

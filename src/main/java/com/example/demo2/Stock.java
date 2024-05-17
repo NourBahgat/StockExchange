@@ -20,6 +20,7 @@ public class Stock {
     private DoubleProperty currentPrice;
     private IntegerProperty availableStocks;
     private DoubleProperty profit;
+    private User boughtByUser;
     public Stock(String label, double initialPricess, double
                  currentPrice, int availableStocks, double profit) {
         this.label =new SimpleStringProperty(label);
@@ -69,6 +70,13 @@ public class Stock {
 
     public void setAvailableStocks(int availableStocks) {
         this.availableStocks.set(availableStocks);
+    }
+    public User getBoughtByUser() {
+        return boughtByUser;
+    }
+
+    public void setBoughtByUser(User user) {
+        boughtByUser = user;
     }
     //    public void setActualAvailableStocks(){this.availableStocks.get()=availableStocks.get();}
 

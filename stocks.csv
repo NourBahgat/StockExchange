@@ -1,4 +1,5 @@
 label,initial price,current price,available stocks,profit
 Apple,30.0,4000.0,12,5.0
-Windows,200.0,200.0,49,30.0
-Deloitte,200.0,200.0,30,30.0
+Windows,200.0,200.0,46,30.0
+Deloitte,200.0,200.0,29,30.0
+Adidas,200.0,400.0,27,20.0

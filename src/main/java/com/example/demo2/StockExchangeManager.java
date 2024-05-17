@@ -21,6 +21,8 @@ public class StockExchangeManager {
     private List<Session> sessions;
     @FXML
     private ListView<String> usernameListView;
+    private static HashMap<String, List<Double>> boughtStocks = new HashMap<>();
+
 
 
 
@@ -219,38 +221,35 @@ public static User getLoggedInUser(String username, String password) {
     }
 
     public void buyStock(User user, Stock stock) {
-        // Display confirmation dialog to admin
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Buy Stock Request");
         alert.setHeaderText("User " + user.getUsername() + " wants to buy stock " + stock.getLabel());
         alert.setContentText("Do you want to approve this request?");
         Optional<ButtonType> result = alert.showAndWait();
+        String filePath = "boughtStocks.csv";
 
-        // If admin approves the request
         if (result.isPresent() && result.get() == ButtonType.OK) {
             double price = stock.getActualCurrentPrice();
             double userCredit = user.getAccountBalance();
 
-            // Check if user has enough credit
             if (userCredit >= price) {
-                // Subtract price from user credit
                 user.setAccountBalance(userCredit - price);
-
-                // Decrease available stocks
                 int availableStocks = stock.getActualAvailableStocks();
                 stock.setAvailableStocks(availableStocks - 1);
-
-                // Increase number of stocks bought by the user
+                stock.setBoughtByUser(user);
                 user.setNumOfStocks(user.getNumOfStocks() + 1);
 
-                // Show success message
+                List<Double> prices = Arrays.asList(stock.getActualInitialPrice(), stock.getActualCurrentPrice());
+                boughtStocks.put(stock.getActualLabel(), prices);
+
+                saveUserBoughtStocksToCSV(user, filePath);
+
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle("Success");
                 successAlert.setHeaderText(null);
                 successAlert.setContentText("Stock purchase approved and completed successfully!");
                 successAlert.showAndWait();
             } else {
-                // Show insufficient credit message
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("Error");
                 errorAlert.setHeaderText(null);
@@ -258,7 +257,6 @@ public static User getLoggedInUser(String username, String password) {
                 errorAlert.showAndWait();
             }
         } else {
-            // Admin disapproved the request
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setTitle("Error");
             errorAlert.setHeaderText(null);
@@ -266,6 +264,41 @@ public static User getLoggedInUser(String username, String password) {
             errorAlert.showAndWait();
         }
     }
+
+    public static List<Stock> getUserBoughtStocks(User user) {
+        List<Stock> boughtStocksList = new ArrayList<>();
+        for (Stock stock : stockList) {
+            if (stock.getBoughtByUser() != null && stock.getBoughtByUser().equals(user)) {
+                boughtStocksList.add(stock);
+            }
+        }
+        return boughtStocksList;
+    }
+
+    public static void saveUserBoughtStocksToCSV(User user, String filePath) {
+        List<Stock> boughtStocksList = getUserBoughtStocks(user);
+        try {
+            FileWriter writer = new FileWriter(filePath);
+            writer.append("Stock Name,Initial Price,Current Price\n");
+            for (Stock stock : boughtStocksList) {
+                List<Double> prices = boughtStocks.get(stock.getActualLabel());
+                writer.append(stock.getActualLabel())
+                        .append(",")
+                        .append(String.valueOf(prices.get(0)))
+                        .append(",")
+                        .append(String.valueOf(prices.get(1)))
+                        .append("\n");
+            }
+            writer.flush();
+            writer.close();
+            System.out.println("CSV file saved successfully.");
+        } catch (IOException e) {
+            System.err.println("Error occurred while saving CSV file: " + e.getMessage());
+        }
+    }
+
+
+
 
 
 //    public List<Stock.Transaction> getUserTransactionHistory(User user) {
