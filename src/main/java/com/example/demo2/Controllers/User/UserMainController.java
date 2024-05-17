@@ -65,17 +65,6 @@ public class UserMainController {
         scene = new Scene(root);
         stage.setScene(scene);
     }
-    public void displayBalance(double balance){
-        Balance.setText(String.valueOf(balance));
-}
-    public void displayNumberOfStocks(int NumStocks){
-        numStocks.setText(String.valueOf(NumStocks));
-    }
-    public void helloUser(String username){
-        userName.setText("Hello, "+username);
-    }
-    public void buyStock(User user){
-    }
     public void initData(User user){
         loggedInUser=user;
         userName.setText("Hello, "+ loggedInUser.getUsername());
@@ -97,11 +86,10 @@ public class UserMainController {
         depositedMoney =Double.parseDouble( MoneyTextField.getText());
     }
     public void Subscripe(ActionEvent event) throws IOException {
-     if(depositedMoney<Subscriptionprice){
-         smallamount.setText("Insufficient Amount");
-     }
-     else{
+        if (depositedMoney < Subscriptionprice) {
+            smallamount.setText("Insufficient Amount");
+        } else {
 
-     }
+        }
     }
 }

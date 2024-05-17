@@ -1,5 +1,6 @@
 package com.example.demo2;
 
+import com.example.demo2.Controllers.User.UserController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -23,6 +24,7 @@ public class StockExchangeManager {
     @FXML
     private ListView<String> usernameListView;
     private static HashMap<String, List<Double>> boughtStocks = new HashMap<>();
+    private static List<TransactionRequest> transactionRequests = new ArrayList<>();
 
     public StockExchangeManager() {
         this.userRequests = new HashMap<>();
@@ -285,6 +287,32 @@ public static User getLoggedInUser(String username, String password) {
             errorAlert.showAndWait();
         }
     }
+//nour's update of sellstock to show message that request is pending admin approval
+public static void SellStock(User user, Stock stock) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Sell Stock");
+        alert.setHeaderText("Confirm Sell Stock");
+        alert.setContentText("Do you want to sell the stock: " + stock.getLabel() + "?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            double currentStockPrice = stock.getActualCurrentPrice();
+            TransactionRequest request = new TransactionRequest(user.getUsername(), "sell", stock.getActualLabel(), currentStockPrice);
+            StockExchangeManager.addTransactionRequest(request);
+            Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
+            infoAlert.setTitle("Request Submitted");
+            infoAlert.setHeaderText(null);
+            infoAlert.setContentText("Your sell request has been submitted for approval.");
+            infoAlert.showAndWait();
+        }
+    else {
+//        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("No Selection");
+        alert.setHeaderText("No Stock Selected");
+        alert.setContentText("Please select a stock to sell.");
+        alert.showAndWait();
+    }
+    }
 
     public static List<Pair<Stock, List<Double>>> getUserBoughtStocks(User user) {
         List<Pair<Stock, List<Double>>> boughtStocksList = new ArrayList<>();
@@ -321,9 +349,40 @@ public static User getLoggedInUser(String username, String password) {
             System.err.println("Error occurred while saving CSV file: " + e.getMessage());
         }
     }
+    public static void addTransactionRequest(TransactionRequest request) {
+        transactionRequests.add(request);
+    }
 
+    public static List<TransactionRequest> getTransactionRequests() {
+        return new ArrayList<>(transactionRequests);
+    }
 
+    public static void approveTransaction(TransactionRequest request) {
+        User user = UserController.loggedInUser;
+        if (user == null) {
+            return;
+        }
 
+        switch (request.getOperation()) {
+            case "buy":
+
+                break;
+            case "sell":
+
+                break;
+            case "deposit":
+                user.setAccountBalance(user.getAccountBalance() + request.getAmount());
+                break;
+            case "withdraw":
+                user.setAccountBalance(user.getAccountBalance() - request.getAmount());
+                break;
+        }
+        transactionRequests.remove(request);
+    }
+    public static void disapproveTransaction(TransactionRequest request) {
+        //sheel el request bas??
+        transactionRequests.remove(request);
+    }
 
 
 //    public List<Stock.Transaction> getUserTransactionHistory(User user) {
@@ -409,6 +468,35 @@ public static User getLoggedInUser(String username, String password) {
     public class Session extends StockExchangeManager{
         public Session() {
 
+        }
+    }
+    public static class TransactionRequest {
+        private String username;
+        private String operation;
+        private String stockLabel;
+        private double amount;
+
+        public TransactionRequest(String username, String operation, String stockLabel, double amount) {
+            this.username = username;
+            this.operation = operation;
+            this.stockLabel = stockLabel;
+            this.amount = amount;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public String getOperation() {
+            return operation;
+        }
+
+        public String getStockLabel() {
+            return stockLabel;
+        }
+
+        public double getAmount() {
+            return amount;
         }
     }
 }

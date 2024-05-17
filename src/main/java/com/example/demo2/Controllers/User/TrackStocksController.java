@@ -7,11 +7,13 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.util.Pair;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +54,14 @@ public class TrackStocksController {
                 }
             }
             stockTableView.setItems(stockDataList);
+        }
+    }
+    public void sellStock (ActionEvent event) throws IOException {
+        User user= UserController.loggedInUser;
+        Object selectedstock=stockTableView.getSelectionModel().getSelectedItem();
+        if(selectedstock !=null){
+            //toht khalas
+//            StockExchangeManager.SellStock(user, selectedstock);
         }
     }
 
