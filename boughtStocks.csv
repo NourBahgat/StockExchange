@@ -1,2 +1,5 @@
-Stock Name,Initial Price,Current Price
-Windows,200.0,200.0
+Username, Stock Name, Bought Prices
+nour,Apple,200.0,200.0,3000.0,1200.0
+nour,Windows,30.0,100.0,300.0,1000.0
+nour,Deloitte,100.0,200.0
+nour,Adidas,400.0

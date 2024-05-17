@@ -10,8 +10,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.util.Pair;
 
 import java.util.List;
+import java.util.Map;
 
 
 public class TrackStocksController {
@@ -40,10 +42,14 @@ public class TrackStocksController {
     private void loadUserBoughtStocks() {
         currentUser = UserController.loggedInUser;
         if (currentUser != null) {
-            List<Stock> userBoughtStocks = StockExchangeManager.getUserBoughtStocks(currentUser);
+            List<Pair<Stock, List<Double>>> userBoughtStocks = StockExchangeManager.getUserBoughtStocks(currentUser);
             ObservableList<Object> stockDataList = FXCollections.observableArrayList();
-            for (Stock stock : userBoughtStocks) {
-                stockDataList.add(new StockData(stock.getActualLabel(), stock.getActualInitialPrice(), stock.getActualCurrentPrice()));
+            for (Pair<Stock, List<Double>> stockCosts : userBoughtStocks) {
+                Stock stock = stockCosts.getKey();
+                List<Double> costs = stockCosts.getValue();
+                for (double cost : costs) {
+                    stockDataList.add(new StockData(stock.getActualLabel(), cost, stock.getActualCurrentPrice()));
+                }
             }
             stockTableView.setItems(stockDataList);
         }
