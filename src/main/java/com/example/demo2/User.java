@@ -23,8 +23,8 @@ public class User {
         this.username = username;
         this.password = password;
         this.accountBalance = accountBalance;
-//        this.depositPending = false;
-//        this.withdrawPending = false;
+        this.numOfStocks=numOfStocks;
+        this.isPremium=isPremium;
     }
 
     public double getAccountBalance() {

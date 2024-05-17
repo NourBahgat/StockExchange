@@ -109,6 +109,8 @@ public static double getLoggedInUser(String username, String password) {
                 String csvUsername = userData[0];
                 String csvPassword = userData[1];
                 double balance = Double.parseDouble(userData[2]);
+                int numOfStocks=Integer.parseInt(userData[3]);
+                boolean isPremium=Boolean.parseBoolean(userData[4]);
 
                 if (csvUsername.equals(username) && csvPassword.equals(password)) {
                     // Found matching user, return User object

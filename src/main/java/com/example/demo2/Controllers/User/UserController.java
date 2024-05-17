@@ -50,6 +50,7 @@ public class UserController {
     @FXML
     private Label Balance;
     private User obj;
+    private User obj2;
 
 //    public void initialize() {
 //        // You can initialize AccountBalance here or in your FXML file
@@ -132,6 +133,8 @@ public class UserController {
         obj.setPassword(password);
         double balance=StockExchangeManager.getLoggedInUser(username,password);
         obj.setAccountBalance(balance);
+        int numberOfStocks=obj.getNumOfStocks();
+        System.out.println(obj);
       if(AdminController.StartSession && validateLogin(username, password)) {
 
           //Parent root = FXMLLoader.load(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
@@ -139,6 +142,9 @@ public class UserController {
           root=loader.load();
           UserMainController userMainController=loader.getController();
           userMainController.displayBalance(obj.getAccountBalance());
+          userMainController.displayNumberOfStocks(numberOfStocks);
+          userMainController.helloUser(username);
+          userMainController.buyStock(obj);
           System.out.println(obj.getAccountBalance());
 
           stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -195,13 +201,5 @@ public class UserController {
         scene = new Scene(root);
         stage.setScene(scene);
     }
-    public void setTitle(){
-        if (loggedInUser != null) {
-            double balance = loggedInUser.getAccountBalance();
-            test.setText("yay");
-        } else {
-            // Handle case where no user is logged in
-            System.out.println("No user logged in.");
-        }
-    }
+
 }
