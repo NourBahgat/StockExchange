@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+
 public class UserMainController {
     private User loggedInUser;
     private Stage stage;
@@ -62,6 +63,12 @@ public class UserMainController {
         userName.setText("Hello, "+username);
     }
     public void buyStock(User user){
+    }
+    public void initData(User user){
+        loggedInUser=user;
+        userName.setText("Hello, "+ loggedInUser.getUsername());
+        numStocks.setText(String.valueOf(loggedInUser.getNumOfStocks()));
+        Balance.setText(String.valueOf(loggedInUser.getAccountBalance()));
 
     }
 }

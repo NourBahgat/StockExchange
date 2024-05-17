@@ -95,5 +95,13 @@ public class ViewStocks {
         stage.setScene(scene);
 
     }
+//    public void BuyStock(String username, String password, double credit, int numStocks, boolean isPremium){
+//        User user=new User(username,password,credit,numStocks,isPremium);
+//        if(selectedstock !=null){
+//            Stock newStock = new Stock(selectedstock.getActualLabel(), selectedstock.getActualInitialPrice(), selectedstock.getActualCurrentPrice(), selectedstock.getActualAvailableStocks(), selectedstock.getActualProfit());
+//            StockExchangeManager buy=new StockExchangeManager();
+//            buy.buyStock(user,newStock);
+//        }
+//    }
 }
 

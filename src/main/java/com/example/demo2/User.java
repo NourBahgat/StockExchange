@@ -59,6 +59,14 @@ public class User {
     public int getNumOfStocks() {
         return numOfStocks;
     }
+
+    public boolean isPremium() {
+        return isPremium;
+    }
+
+    public void setPremium(boolean premium) {
+        isPremium = premium;
+    }
     //
 //    public double getAccountBalance() {
 //        return accountBalance;

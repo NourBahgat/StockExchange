@@ -1,6 +1,7 @@
 package com.example.demo2.Controllers.User;
 
 import com.example.demo2.Controllers.Admin.AdminController;
+import com.example.demo2.Stock;
 import com.example.demo2.StockExchangeManager;
 import com.example.demo2.User;
 import javafx.event.ActionEvent;
@@ -9,14 +10,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.example.demo2.Admin.searchUserInCSV;
 //import static com.example.demo2.StockExchangeManager.users;
@@ -134,6 +133,7 @@ public class UserController {
         double balance=StockExchangeManager.getLoggedInUser(username,password);
         obj.setAccountBalance(balance);
         int numberOfStocks=obj.getNumOfStocks();
+        boolean isPremium=obj.isPremium();
         System.out.println(obj);
       if(AdminController.StartSession && validateLogin(username, password)) {
 
@@ -141,10 +141,10 @@ public class UserController {
           FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
           root=loader.load();
           UserMainController userMainController=loader.getController();
-          userMainController.displayBalance(obj.getAccountBalance());
-          userMainController.displayNumberOfStocks(numberOfStocks);
-          userMainController.helloUser(username);
-          userMainController.buyStock(obj);
+//          userMainController.displayBalance(obj.getAccountBalance());
+//          userMainController.displayNumberOfStocks(numberOfStocks);
+//          userMainController.helloUser(username);
+          userMainController.initData(obj);
           System.out.println(obj.getAccountBalance());
 
           stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -197,9 +197,27 @@ public class UserController {
     }
     public void BackToUserMain (ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/UserMain.fxml")));
+//        FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
+//        root=loader.load();
+//        UserMainController userMainController=loader.getController();
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
     }
-
+//    public void buyStockHandler(ActionEvent event) {
+//        // Retrieve the selected stock from your view
+//        Stock selectedStock = /* Code to retrieve selected stock */;
+//
+//        // Display confirmation dialog to user
+//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//        alert.setTitle("Buy Stock");
+//        alert.setHeaderText("Confirm Purchase");
+//        alert.setContentText("Do you want to buy " + selectedStock.getLabel() + "?");
+//        Optional<ButtonType> result = alert.showAndWait();
+//
+//        if (result.isPresent() && result.get() == ButtonType.OK) {
+//            // Call buyStock method with logged-in user and selected stock
+//            buyStock(loggedInUser, selectedStock);
+//        }
 }
+
