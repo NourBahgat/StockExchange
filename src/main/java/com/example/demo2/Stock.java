@@ -16,15 +16,13 @@ public class Stock {
 //    private double currentPrice;
 //    private int availableStocks;
 //    private double profit;
-private Map<User, Double> buyerOrderCosts = new HashMap<>();
-    private ArrayList<Double> priceHistory;
-//    public static ArrayList<Stock> stockList;
     private StringProperty label;
     private DoubleProperty initialPrice;
     private DoubleProperty currentPrice;
     private IntegerProperty availableStocks;
     private DoubleProperty profit;
     private HashMap<User, List<Double>> buyers;
+    private List<Double> priceHistory;
     public Stock(String label, double initialPricess, double
                  currentPrice, int availableStocks, double profit) {
         this.label =new SimpleStringProperty(label);
@@ -87,14 +85,15 @@ private Map<User, Double> buyerOrderCosts = new HashMap<>();
         if (buyers.containsKey(user)) {
             List<Double> buyPrice = buyers.get(user);
             buyPrice.add(currentPrice);
+            System.out.println(buyPrice);
         } else {
             List<Double> buyPrice = new ArrayList<Double>();
             buyPrice.add(currentPrice);
             buyers.put(user, buyPrice);
+            System.out.println(buyPrice);
         }
     }
-    public void removeBuyer(User user, double purchasePrice) {
-        buyerOrderCosts.remove(user);
+    public void removeBuyer(User user, Double purchasePrice) {
         if (buyers.containsKey(user)) {
             List<Double> purchasePrices = buyers.get(user);
             purchasePrices.remove(purchasePrice);
@@ -103,8 +102,18 @@ private Map<User, Double> buyerOrderCosts = new HashMap<>();
             }
         }
     }
+    public List<Double> getPriceHistory() {
+        return priceHistory;
+    }
+    public void updatePrice(double newPrice) {
+        this.currentPrice.set(newPrice);
+        this.priceHistory.add(newPrice);
+    }
 
-        //    public void setActualAvailableStocks(){this.availableStocks.get()=availableStocks.get();}
+    public void setPriceHistory(List<Double> priceHistory) {
+        this.priceHistory = priceHistory;
+    }
+    //    public void setActualAvailableStocks(){this.availableStocks.get()=availableStocks.get();}
 
 //    public static ArrayList<Stock> getStockList() {
 //        return stockList;

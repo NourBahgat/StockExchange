@@ -44,6 +44,8 @@ public class ManageStocks {
     private TextField availableStocksField;
     @FXML
     private TextField profitField;
+    @FXML
+    private TextField currentPriceField;
     private boolean isPopulated= false;
 
     private Stage stage;
@@ -120,5 +122,33 @@ public class ManageStocks {
         initialPriceField.clear();
         availableStocksField.clear();
         profitField.clear();
+    }
+    @FXML
+    public void handleUpdatePriceButton() {
+        Stock selectedStock = stockTableView.getSelectionModel().getSelectedItem();
+        if (selectedStock == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Stock Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a stock to update.");
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            double newPrice = Double.parseDouble(currentPriceField.getText());
+            selectedStock.updatePrice(newPrice);
+            stockTableView.refresh();
+            updateStockCSV();
+
+            // Clear the current price field
+            currentPriceField.clear();
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText(null);
+            alert.setContentText("Please enter a valid number for the price.");
+            alert.showAndWait();
+        }
     }
 }

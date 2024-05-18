@@ -1,7 +1,5 @@
 package com.example.demo2;
 
-import com.example.demo2.Controllers.User.TrackStocksController;
-import com.example.demo2.Controllers.User.UserController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -23,9 +21,7 @@ public class StockExchangeManager {
     private List<Stock> availableStocks;
     private List<Order> orders;
     private List<Session> sessions;
-    @FXML
-    private ListView<String> usernameListView;
-    public static HashMap<String, List<Double>> boughtStocks = new HashMap<>();
+    private static List<Pair<String, Double>> transactionHistory = new ArrayList<>();
 
 
     public StockExchangeManager() {
@@ -83,10 +79,6 @@ public class StockExchangeManager {
         return usernames;
     }
 
-    public void initialize() {
-
-        usernameListView.getItems().addAll(StockExchangeManager.getUsernameList());
-    }
 
     public static User getUserFromUsername(String username) {
         for (User user : users) if (user.getUsername().equals(username)) return user;
@@ -115,6 +107,7 @@ public static User getLoggedInUser(String username, String password) {
     return null;
 }
 
+
     public static void addUserRequest(User user, String request) {
         if (userRequests.containsKey(user)) {
             userRequests.get(user).add(request);
@@ -122,123 +115,6 @@ public static User getLoggedInUser(String username, String password) {
             List<String> requests = new ArrayList<>();
             requests.add(request);
             userRequests.put(user, requests);
-        }
-    }
-
-    public void exportUserRequestsToCSV(String filename) throws IOException {
-//        Stock.getStockList();
-        try (FileWriter writer = new FileWriter(filename)) {
-            writer.write("User,Request\n");
-            for (Map.Entry<User, List<String>> entry : userRequests.entrySet()) {
-                for (String request : entry.getValue()) {
-                    writer.write(entry.getKey().getUsername() + "," + request + "\n");
-                }
-            }
-        }
-    }
-    public static void loadStockList(){
-
-        String csvFile = "stocks.csv";
-        String line;
-        String cvsSplitBy = ",";
-        stockList.clear();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            line = br.readLine();
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(cvsSplitBy);
-                String labelSlot=data[0];
-                double initialPricesSlot=Double.parseDouble(data[1]);
-                double currentPriceSlot=Double.parseDouble(data[2]);
-                int availableStockSlot=Integer.parseInt(data[3]);
-                double profitsSlot= Double.parseDouble(data[4]);
-                Stock loadstock = new Stock(labelSlot, initialPricesSlot,currentPriceSlot,availableStockSlot, profitsSlot);
-                stockList.add(loadstock);
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void loadUserList() {
-        String csvFile = "users.csv";
-        String line;
-        String cvsSplitBy = ",";
-        users.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            line = br.readLine();   // Skips header from file
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(cvsSplitBy);
-                String username= data[0];
-                String password = data[1];
-                double credit = Double.parseDouble(data[2]);
-                int numOfStocks = Integer.parseInt(data[3]);
-                boolean isPremium = Boolean.parseBoolean(data[4]);
-                User loadedUser = new User(username, password, credit, numOfStocks, isPremium);
-                users.add(loadedUser);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void loadUserBoughtStocksList(String filePath) {
-        String line;
-        String cvsSplitBy = ",";
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            line = br.readLine();   // Skips header from file
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(cvsSplitBy);
-                User user = getUserFromUsername(data[0]);
-                Stock stock = getStockFromLabel(data[1]);
-                if (user == null || stock == null) continue;
-                for (int i = 2; i < data.length; i++) {
-                    stock.addBuyer(user, Double.parseDouble(data[i]));
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Error occurred while loading BoughtStocks CSV file: " + e.getMessage());
-        }
-    }
-
-
-
-    public static void updateStockCSV() {
-        String csvFile = "stocks.csv";
-
-        try (FileWriter writer = new FileWriter(csvFile)) {
-            writer.write("label,initial price,current price,available stocks,profit"
-                    + System.getProperty("line.separator"));
-            for (Stock stock : stockList) {
-                String line = stock.getActualLabel() + "," +
-                        stock.getActualInitialPrice() + "," +
-                        stock.getActualCurrentPrice() + "," +
-                        stock.getActualAvailableStocks() + "," +
-                        stock.getActualProfit();
-                writer.write(line + System.getProperty("line.separator"));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void updateUserCSV() {
-        String csvFile = "users.csv";
-
-        try (FileWriter writer = new FileWriter(csvFile)) {
-            writer.write("username,password,initial credit,numOfStocks,isPremium"
-                    + System.getProperty("line.separator"));
-            for (User user : users) {
-                String line = user.getUsername() + "," +
-                        user.getPassword() + "," +
-                        user.getAccountBalance() + "," +
-                        user.getNumOfStocks() + "," +
-                        user.isPremium();
-                writer.write(line + System.getProperty("line.separator"));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -284,6 +160,39 @@ public static User getLoggedInUser(String username, String password) {
         }
     }
 
+    public static void sellStock(User user, Stock stock) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Sell Stock Request");
+        alert.setHeaderText("User " + user.getUsername() + " wants to buy stock " + stock.getLabel());
+        alert.setContentText("Do you want to approve this request?");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            double price = stock.getActualCurrentPrice();
+            double userCredit = user.getAccountBalance();
+            stock.removeBuyer(user, price);
+            user.setAccountBalance(userCredit + price);
+            int availableStocks = stock.getActualAvailableStocks();
+            stock.setAvailableStocks(availableStocks + 1);
+            user.setNumOfStocks(user.getNumOfStocks() - 1);
+
+            Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+            successAlert.setTitle("Success");
+            successAlert.setHeaderText(null);
+            successAlert.setContentText("Stock sold successfully!");
+            successAlert.showAndWait();
+
+        } else {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText(null);
+            errorAlert.setContentText("Stock sell request disapproved by admin!");
+            errorAlert.showAndWait();
+        }
+    }
+
+
+
     public static List<Pair<Stock, List<Double>>> getUserBoughtStocks(User user) {
         List<Pair<Stock, List<Double>>> boughtStocksList = new ArrayList<>();
         for (Stock stock : stockList) {
@@ -295,26 +204,7 @@ public static User getLoggedInUser(String username, String password) {
         }
         return boughtStocksList;
     }
-    public static void updateBoughtStocksCSV() {
-        String filePath = "boughtStocks.csv";
-        try (FileWriter writer = new FileWriter(filePath)) {
-            writer.append("Username,Stock Name,Bought Prices\n");
-            for (User user : users) {
-                List<Pair<Stock, List<Double>>> boughtStocksList = getUserBoughtStocks(user);
-                for (Pair<Stock, List<Double>> stockCosts : boughtStocksList) {
-                    Stock stock = stockCosts.getKey();
-                    List<Double> prices = stockCosts.getValue();
-                    writer.append(user.getUsername()).append(",").append(stock.getActualLabel());
-                    for (Double price : prices) {
-                        writer.append(",").append(String.valueOf(price));
-                    }
-                    writer.append("\n");
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Error occurred while updating BoughtStocks CSV file: " + e.getMessage());
-        }
-    }
+
     public static void removeStockFromUser(User user, String stockLabel, double purchasePrice) {
         Stock stock = getStockFromLabel(stockLabel);
         if (stock != null) {
@@ -324,33 +214,6 @@ public static User getLoggedInUser(String username, String password) {
         }
     }
 
-    public static void saveUserBoughtStocksToCSV(String filePath) {
-        try {
-            FileWriter writer = new FileWriter(filePath);
-            writer.append("Username, Stock Name, Bought Prices\n");
-            for (User user : users) {
-                List<Pair<Stock, List<Double>>> boughtStocksList = getUserBoughtStocks(user);
-                for (Pair<Stock, List<Double>> stockCosts : boughtStocksList) {
-                    Stock stock = stockCosts.getKey();
-                    List<Double> prices = stockCosts.getValue();
-                    writer.append(user.getUsername()).append(",").append(stock.getActualLabel());
-                    for (Double price : prices) {
-                        writer.append(",").append(String.valueOf(price));
-                    }
-                    writer.append("\n");
-                }
-            }
-            writer.flush();
-            writer.close();
-            System.out.println("CSV file saved successfully.");
-        } catch (IOException e) {
-            System.err.println("Error occurred while saving CSV file: " + e.getMessage());
-        }
-
-    }
-
-
-
     public static void createTransactionRequest(User user, RequestType type, Stock stock, Double amount) {
         TransactionRequest newRequest = new TransactionRequest(user, type, stock, amount);
         addTransactionRequest(newRequest);
@@ -359,6 +222,24 @@ public static User getLoggedInUser(String username, String password) {
         infoAlert.setHeaderText(null);
         infoAlert.setContentText("Your request has been submitted for approval.");
         infoAlert.showAndWait();
+    }
+    public static void logTransaction(User user, String type, Double amount) {
+        user.addTransaction(type, amount);
+        transactionHistory.add(new Pair<>(type, amount));
+    }
+
+    public static void saveTransactionHistoryToCSV(User user) {
+        String filePath = user.getUsername() + "_transaction_history.csv";
+        try (FileWriter writer = new FileWriter(filePath)) {
+            writer.write("Type,Amount\n");
+            for (Pair<String, Double> transaction : user.getTransactionHistory()) {
+                writer.write(transaction.getKey() + "," + transaction.getValue() + "\n");
+            }
+            writer.flush();
+            System.out.println("Transaction history saved to " + filePath);
+        } catch (IOException e) {
+            System.err.println("Error saving transaction history: " + e.getMessage());
+        }
     }
 
     public static void addTransactionRequest(TransactionRequest request) {
@@ -377,17 +258,19 @@ public static User getLoggedInUser(String username, String password) {
 
         switch (type) {
             case DEPOSIT:
+                user.addTransaction(type.name(), amount);
                 user.deposit(amount);
                 break;
             case WITHDRAWAL:
+                user.addTransaction(type.name(), amount);
                 user.withdraw(amount);
                 break;
             case BUY_STOCK:
                 buyStock(user, stock);
                 break;
-//            case SELL_STOCK:
-//                sellStock(user, stock);
-//                break;
+            case SELL_STOCK:
+                sellStock(user, stock);
+                break;
             default:
                 break;
         }
@@ -465,7 +348,93 @@ public static User getLoggedInUser(String username, String password) {
         updateUserCSV();
         updateStockCSV();
         saveUserBoughtStocksToCSV("boughtStocks.csv");
+        saveUserTransactionHistory("transactions.csv");
         updateRequestCSV();
+//        StockExchangeManager.saveTransactionHistoryToCSV(loggedInUser, "transactionHistory.csv");
+    }
+
+    public static void updateStockCSV() {
+        String csvFile = "stocks.csv";
+
+        try (FileWriter writer = new FileWriter(csvFile)) {
+            writer.write("label,initial price,current price,available stocks,profit"
+                    + System.getProperty("line.separator"));
+            for (Stock stock : stockList) {
+                String line = stock.getActualLabel() + "," +
+                        stock.getActualInitialPrice() + "," +
+                        stock.getActualCurrentPrice() + "," +
+                        stock.getActualAvailableStocks() + "," +
+                        stock.getActualProfit();
+                writer.write(line + System.getProperty("line.separator"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateUserCSV() {
+        String csvFile = "users.csv";
+
+        try (FileWriter writer = new FileWriter(csvFile)) {
+            writer.write("username,password,initial credit,numOfStocks,isPremium"
+                    + System.getProperty("line.separator"));
+            for (User user : users) {
+                String line = user.getUsername() + "," +
+                        user.getPassword() + "," +
+                        user.getAccountBalance() + "," +
+                        user.getNumOfStocks() + "," +
+                        user.isPremium();
+                writer.write(line + System.getProperty("line.separator"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void saveUserBoughtStocksToCSV(String filePath) {
+        try {
+            FileWriter writer = new FileWriter(filePath);
+            writer.append("Username,Stock Name,Bought Prices\n");
+            for (User user : users) {
+                List<Pair<Stock, List<Double>>> boughtStocksList = getUserBoughtStocks(user);
+                for (Pair<Stock, List<Double>> stockCosts : boughtStocksList) {
+                    Stock stock = stockCosts.getKey();
+                    List<Double> prices = stockCosts.getValue();
+                    writer.append(user.getUsername()).append(",").append(stock.getActualLabel());
+                    for (Double price : prices) {
+                        writer.append(",").append(String.valueOf(price));
+                    }
+                    writer.append("\n");
+                }
+            }
+            writer.flush();
+            writer.close();
+            System.out.println("CSV file saved successfully.");
+        } catch (IOException e) {
+            System.err.println("Error occurred while saving CSV file: " + e.getMessage());
+        }
+
+    }
+
+    public static void saveUserTransactionHistory(String filePath) {
+        try {
+            FileWriter writer = new FileWriter(filePath);
+            writer.append("Username,Transaction Type,Amount\n");
+            for (User user : users) {
+                List<Pair<String, Double>> transactionHistory = user.getTransactionHistory();
+                String username = user.getUsername();
+                for (Pair<String, Double> transaction : transactionHistory) {
+                    writer.append(username).append(",").append(transaction.getKey()).append(",")
+                            .append(transaction.getValue().toString()).append("\n");
+                }
+            }
+            writer.flush();
+            writer.close();
+            System.out.println("CSV file saved successfully.");
+        } catch (IOException e) {
+            System.err.println("Error occurred while saving CSV file: " + e.getMessage());
+        }
+
     }
 
     private static void updateRequestCSV() {
@@ -484,15 +453,111 @@ public static User getLoggedInUser(String username, String password) {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        saveUserBoughtStocksToCSV("boughtStocks.csv");
-        //updateRequestCSV();
     }
 
     public static void loadSystem() {
         loadUserList();
         loadStockList();
         loadUserBoughtStocksList("boughtStocks.csv");
+        loadUserTransactionHistory("transactions.csv");
         loadRequestList();
+//        StockExchangeManager.loadTransactionHistoryFromCSV(, "transactionHistory.csv");
+    }
+
+    public void exportUserRequestsToCSV(String filename) throws IOException {
+//        Stock.getStockList();
+        try (FileWriter writer = new FileWriter(filename)) {
+            writer.write("User,Request\n");
+            for (Map.Entry<User, List<String>> entry : userRequests.entrySet()) {
+                for (String request : entry.getValue()) {
+                    writer.write(entry.getKey().getUsername() + "," + request + "\n");
+                }
+            }
+        }
+    }
+
+    public static void loadUserList() {
+        String csvFile = "users.csv";
+        String line;
+        String cvsSplitBy = ",";
+        users.clear();
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            line = br.readLine();   // Skips header from file
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(cvsSplitBy);
+                String username= data[0];
+                String password = data[1];
+                double credit = Double.parseDouble(data[2]);
+                int numOfStocks = Integer.parseInt(data[3]);
+                boolean isPremium = Boolean.parseBoolean(data[4]);
+                User loadedUser = new User(username, password, credit, numOfStocks, isPremium);
+                users.add(loadedUser);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadStockList(){
+
+        String csvFile = "stocks.csv";
+        String line;
+        String cvsSplitBy = ",";
+        stockList.clear();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            line = br.readLine();
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(cvsSplitBy);
+                String labelSlot=data[0];
+                double initialPricesSlot=Double.parseDouble(data[1]);
+                double currentPriceSlot=Double.parseDouble(data[2]);
+                int availableStockSlot=Integer.parseInt(data[3]);
+                double profitsSlot= Double.parseDouble(data[4]);
+                Stock loadstock = new Stock(labelSlot, initialPricesSlot,currentPriceSlot,availableStockSlot, profitsSlot);
+                stockList.add(loadstock);
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadUserBoughtStocksList(String filePath) {
+        String line;
+        String cvsSplitBy = ",";
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            line = br.readLine();   // Skips header from file
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(cvsSplitBy);
+                User user = getUserFromUsername(data[0]);
+                Stock stock = getStockFromLabel(data[1]);
+                if (user == null || stock == null) continue;
+                for (int i = 2; i < data.length; i++) {
+                    stock.addBuyer(user, Double.parseDouble(data[i]));
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error occurred while loading BoughtStocks CSV file: " + e.getMessage());
+        }
+    }
+
+    public static void loadUserTransactionHistory(String filePath) {
+        String line;
+        String cvsSplitBy = ",";
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            line = br.readLine();   // Skips header from file
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(cvsSplitBy);
+                User user = getUserFromUsername(data[0]);
+                String type = data[1];
+                double amount = Double.parseDouble(data[2]);
+                assert user != null;
+                user.addTransaction(type, amount);
+            }
+        } catch (IOException e) {
+            System.err.println("Error occurred while loading BoughtStocks CSV file: " + e.getMessage());
+        }
     }
 
     private static void loadRequestList() {

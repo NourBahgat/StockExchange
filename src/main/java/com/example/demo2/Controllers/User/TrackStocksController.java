@@ -1,8 +1,6 @@
 package com.example.demo2.Controllers.User;
 
-import com.example.demo2.Stock;
-import com.example.demo2.User;
-import com.example.demo2.StockExchangeManager;
+import com.example.demo2.*;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -41,7 +39,9 @@ public class TrackStocksController {
     @FXML
     private Button sellStockButton;
 
-    private User currentUser;
+    private User loggedInUser;
+    private final StockExchangeManager stockExchangeManager = App.manager;
+    private StockData selectedstock;
 
     public void initialize() {
         label.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLabel()));
@@ -49,11 +49,13 @@ public class TrackStocksController {
         currentPrice.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getCurrentPrice()).asObject());
         loadUserBoughtStocks();
     }
-
+    private void setupTableViewListener() {
+        stockTableView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> selectedstock = newValue);
+    }
     private void loadUserBoughtStocks() {
-        currentUser = UserController.loggedInUser;
-        if (currentUser != null) {
-            List<Pair<Stock, List<Double>>> userBoughtStocks = StockExchangeManager.getUserBoughtStocks(currentUser);
+        if (loggedInUser != null) {
+            List<Pair<Stock, List<Double>>> userBoughtStocks = StockExchangeManager.getUserBoughtStocks(loggedInUser);
             ObservableList<StockData> stockDataList = FXCollections.observableArrayList();
 
             for (Pair<Stock, List<Double>> stockCosts : userBoughtStocks) {
@@ -67,58 +69,20 @@ public class TrackStocksController {
         }
     }
 
-    @FXML
-    private void handleSellStock() {
-        StockData selectedStockData = stockTableView.getSelectionModel().getSelectedItem();
-        if (selectedStockData != null) {
-            sendSellRequest(selectedStockData);
-        } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No Selection");
-            alert.setHeaderText(null);
-            alert.setContentText("Please select a stock to sell.");
-            alert.showAndWait();
-        }
+    public void initData(User user){
+        loggedInUser=user;
+        loadUserBoughtStocks();
     }
 
-    public void sendSellRequest(StockData stockData) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Sell Stock Request");
-        alert.setHeaderText("Sell Request for Stock: " + stockData.getLabel());
-        alert.setContentText("Do you want to approve or disapprove this request?");
-
-        ButtonType approveButton = new ButtonType("Approve");
-        ButtonType disapproveButton = new ButtonType("Disapprove");
-        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-
-        alert.getButtonTypes().setAll(approveButton, disapproveButton, cancelButton);
-        alert.showAndWait().ifPresent(response -> {
-            if (response == approveButton) {
-                User currentUser = UserController.loggedInUser;
-                double sellPrice = stockData.getCurrentPrice();
-                StockExchangeManager.addUserRequest(currentUser, "Sell request for stock: " + stockData.getLabel());
-
-                stockTableView.getItems().remove(stockData);  // Remove stock from table
-
-                currentUser.setNumOfStocks(currentUser.getNumOfStocks() - 1);
-                currentUser.setAccountBalance(currentUser.getAccountBalance() + sellPrice);
-
-                StockExchangeManager.removeStockFromUser(currentUser, stockData.getLabel(), sellPrice);
-
-
-                Alert adminAlert = new Alert(Alert.AlertType.INFORMATION);
-                adminAlert.setTitle("Sell Request approved");
-                adminAlert.setHeaderText(null);
-                adminAlert.setContentText("Sell request for stock: " + stockData.getLabel() + " approved ");
-                adminAlert.showAndWait();
-            } else if (response == disapproveButton) {
-                Alert disapproveAlert = new Alert(Alert.AlertType.INFORMATION);
-                disapproveAlert.setTitle("Request Disapproved");
-                disapproveAlert.setHeaderText(null);
-                disapproveAlert.setContentText("Sell request for stock: " + stockData.getLabel() + " disapproved.");
-                disapproveAlert.showAndWait();
-            }
-        });
+    @FXML
+    private void handleSellStock() {
+        StockData selectedStock = stockTableView.getSelectionModel().getSelectedItem();
+        User user = loggedInUser;
+        if(selectedStock !=null){
+            Stock stock = stockExchangeManager.getStockFromLabel(selectedStock.label);
+            assert stock != null;
+            stockExchangeManager.createTransactionRequest(user, RequestType.SELL_STOCK, stock, stock.getActualCurrentPrice());
+        }
     }
 
     public static class StockData {
@@ -146,7 +110,7 @@ public class TrackStocksController {
     }
 
     public void backtoUserMain(ActionEvent event) throws IOException {
-        User user = UserController.loggedInUser;
+        User user = loggedInUser;
         System.out.println(user.toString());
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/UserMain.fxml"));
         root = loader.load();

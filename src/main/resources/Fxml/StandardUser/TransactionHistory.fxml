@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="450.0" prefWidth="640.0" style="-fx-background-color: #007BA7;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.Controllers.User.TransactionHistoryController">
+   <children>
+      <Label layoutX="14.0" layoutY="101.0" text="Transaction History" textFill="WHITE">
+         <font>
+            <Font name="Century Gothic Bold" size="30.0" />
+         </font>
+      </Label>
+      <TableView fx:id="transactionHistoryTable" layoutX="302.0" prefHeight="450.0" prefWidth="337.0">
+        <columns>
+          <TableColumn fx:id="OperationColumn" prefWidth="169.60003662109375" text="Operation" />
+          <TableColumn fx:id="AmountColumn" minWidth="6.4000244140625" prefWidth="164.79998779296875" text="Amount" />
+        </columns>
+      </TableView>
+      <FontAwesomeIconView fill="WHITE" glyphName="MONEY" layoutX="69.0" layoutY="278.0" size="150" wrappingWidth="17.657130241394043" />
+      <JFXButton layoutX="14.0" layoutY="14.0" onAction="#handleBackFromTransaction" style="-fx-background-color: #d3d3d3;" text="Back">
+         <font>
+            <Font name="Century Gothic" size="12.0" />
+         </font>
+      </JFXButton>
+   </children>
+</AnchorPane>

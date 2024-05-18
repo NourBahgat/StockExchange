@@ -1,6 +1,7 @@
 
 package com.example.demo2;
 
+import com.example.demo2.Controllers.User.MarketPerformanceController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -26,7 +27,6 @@ public class App extends Application {
         }
 
     }
-
     public static void main(String[] args) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             synchronized(manager) {

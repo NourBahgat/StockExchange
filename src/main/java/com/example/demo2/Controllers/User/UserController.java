@@ -40,7 +40,7 @@ public class UserController {
     private Label ExpiredLabel;
     @FXML
     private Label test;
-    public static User loggedInUser;
+    private User loggedInUser;
 
     @FXML
     private TextField AccountBalance;
@@ -132,9 +132,6 @@ public class UserController {
           FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
           root=loader.load();
           UserMainController userMainController=loader.getController();
-//          userMainController.displayBalance(obj.getAccountBalance());
-//          userMainController.displayNumberOfStocks(numberOfStocks);
-//          userMainController.helloUser(username);
           userMainController.initData(loggedInUser);
           System.out.println(loggedInUser.getAccountBalance());
 
