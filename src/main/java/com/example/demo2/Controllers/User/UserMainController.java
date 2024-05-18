@@ -42,10 +42,15 @@ public class UserMainController {
 //
 //    }
     public void switchToViewStocks (ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/ViewStocks.fxml")));
+        FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/ViewStocks.fxml"));
+        root=loader.load();
+        ViewStocks viewStocks = loader.getController();
+        viewStocks.initData(loggedInUser);
+
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
+        stage.show();
     }
     public void switchToRequestsPage (ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/RequestsPage.fxml")));
@@ -55,10 +60,15 @@ public class UserMainController {
 
     }
     public void switchToTrackStocks (ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/TrackStocks.fxml")));
+        FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/TrackStocks.fxml"));
+        root=loader.load();
+        TrackStocksController trackStocksController = loader.getController();
+        trackStocksController.initData(loggedInUser);
+
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
+        stage.show();
 
     }
     public void BackToUserMain (ActionEvent event) throws IOException {
@@ -77,7 +87,8 @@ public class UserMainController {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Login.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
-        stage.setScene(scene);}
+        stage.setScene(scene);
+    }
     public void GoToSubscribe (ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/Subscription.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -16,7 +16,6 @@ public class Stock {
 //    private double currentPrice;
 //    private int availableStocks;
 //    private double profit;
-private Map<User, Double> buyerOrderCosts = new HashMap<>();
     private StringProperty label;
     private DoubleProperty initialPrice;
     private DoubleProperty currentPrice;
@@ -86,14 +85,15 @@ private Map<User, Double> buyerOrderCosts = new HashMap<>();
         if (buyers.containsKey(user)) {
             List<Double> buyPrice = buyers.get(user);
             buyPrice.add(currentPrice);
+            System.out.println(buyPrice);
         } else {
             List<Double> buyPrice = new ArrayList<Double>();
             buyPrice.add(currentPrice);
             buyers.put(user, buyPrice);
+            System.out.println(buyPrice);
         }
     }
-    public void removeBuyer(User user, double purchasePrice) {
-        buyerOrderCosts.remove(user);
+    public void removeBuyer(User user, Double purchasePrice) {
         if (buyers.containsKey(user)) {
             List<Double> purchasePrices = buyers.get(user);
             purchasePrices.remove(purchasePrice);

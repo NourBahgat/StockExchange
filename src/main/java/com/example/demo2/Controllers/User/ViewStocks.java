@@ -42,6 +42,7 @@ public class ViewStocks {
     private TextField currentpriceTextField;
     private final StockExchangeManager stockExchangeManager = App.manager;
     private Stock selectedstock;
+    private User loggedInUser;
 
     private Stage stage;
     private Scene scene;
@@ -68,13 +69,17 @@ public class ViewStocks {
         }
     }
 
+    public void initData(User user){
+        loggedInUser=user;
+    }
+
     private void loadStocksData() {
         stocksData.addAll(stockList);
         stockTableView.setItems(stocksData);
     }
 
     public void BackToUserMain (ActionEvent event) throws IOException {
-        User user = UserController.loggedInUser;
+        User user = loggedInUser;
         System.out.println(user.toString());
         //root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/UserMain.fxml")));
         FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
@@ -87,7 +92,7 @@ public class ViewStocks {
     }
 
     public void BuyStock (ActionEvent event) throws IOException {
-        User user = UserController.loggedInUser;
+        User user = loggedInUser;
         if(selectedstock !=null){
             stockExchangeManager.createTransactionRequest(user, RequestType.BUY_STOCK, selectedstock, selectedstock.getActualCurrentPrice());
         }
