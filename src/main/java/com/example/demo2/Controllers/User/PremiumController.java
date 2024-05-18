@@ -29,24 +29,29 @@ public class PremiumController {
     private Label label;
     private Button button;
 
-    public void switchToSignInPremium(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/PremiumUser/Premium.fxml")));
+//    public void switchToSignInPremium(ActionEvent event) throws IOException {
+//        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/PremiumUser/Premium.fxml")));
+//        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        scene = new Scene(root);
+//        stage.setScene(scene);
+//    }
+
+    public void BackToUserMain(ActionEvent event) throws IOException {
+        User user = UserController.loggedInUser;
+        System.out.println(user.toString());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/UserMain.fxml"));
+        root = loader.load();
+        UserMainController userMainController = loader.getController();
+        userMainController.initData(user);
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
     }
-    public void PremiumSignUp(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/PremiumUser/PremiumSignUp.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-
-    }
-    public void Notifications(ActionEvent event) throws IOException {
+    public void handleShowNotifications(ActionEvent event) throws IOException {
 
 
     }
-    public void charts(ActionEvent event) throws IOException {
+    public void handleShowLineCharts (ActionEvent event) throws IOException {
 
 
     }

@@ -92,16 +92,45 @@ public void removeUser(String username)
         e.printStackTrace();
     }
 }
-
-        public void addUser(String username, String password, double credit) {
-            try {
-                FileWriter writer = new FileWriter("users.csv", true);
-                writer.append(username).append(",").append(password).append(",").append(String.valueOf(credit)).append("\n");
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public static void addUser(String username, String password, double credit) {
+        try {
+            FileWriter writer = new FileWriter("users.csv", true);
+            writer.append(username).append(",").append(password).append(",").append(String.valueOf(credit)).append("\n");
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
+
+//    public static List<User> loadUsersFromCSV() {
+//        List<User> users = new ArrayList<>();
+//        try (BufferedReader br = new BufferedReader(new FileReader("users.csv"))) {
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                String[] data = line.split(",");
+//                if (data.length == 3) {
+//                    String username = data[0];
+//                    String password = data[1];
+//                    double credit = Double.parseDouble(data[2]);
+//                    users.add(new User(username, password, credit));
+//                }
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return users;
+//    }
+
+
+//        public void addUser(String username, String password, double credit) {
+//            try {
+//                FileWriter writer = new FileWriter("users.csv", true);
+//                writer.append(username).append(",").append(password).append(",").append(String.valueOf(credit)).append("\n");
+//                writer.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
 
     // Method to add a new stock

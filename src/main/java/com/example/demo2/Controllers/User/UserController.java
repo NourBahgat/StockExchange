@@ -172,6 +172,12 @@ public class UserController {
         }
         return false; // Username and password do not match
     }
+    public void BackToUserMain (ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/UserMain.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+    }
     public void switchToViewStocks (ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/ViewStocks.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

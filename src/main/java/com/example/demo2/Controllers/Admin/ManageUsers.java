@@ -109,7 +109,7 @@ public class ManageUsers {
 //        showAlert(Alert.AlertType.INFORMATION, "Success", "User added successfully!", null);
 //    }
 
-    private static void showAlert(Alert.AlertType alertType, String title, String message, String headerText) {
+    public static void showAlert(Alert.AlertType alertType, String title, String message, String headerText) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
