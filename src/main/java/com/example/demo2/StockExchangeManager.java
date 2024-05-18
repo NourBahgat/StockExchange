@@ -217,10 +217,6 @@ public static User getLoggedInUser(String username, String password) {
     public static void createTransactionRequest(User user, RequestType type, Stock stock, Double amount) {
         TransactionRequest newRequest = new TransactionRequest(user, type, stock, amount);
         addTransactionRequest(newRequest);
-        logTransaction(user, type.name(), amount);
-        if (type == RequestType.DEPOSIT || type == RequestType.WITHDRAWAL) {
-            user.addTransaction(type.name(), amount);
-        }
         Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
         infoAlert.setTitle("Request Submitted");
         infoAlert.setHeaderText(null);
@@ -246,35 +242,6 @@ public static User getLoggedInUser(String username, String password) {
         }
     }
 
-    public static void loadTransactionHistoryFromCSV(User user, String filename) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            boolean isHeader = true;
-            while ((line = reader.readLine()) != null) {
-                if (isHeader) {
-                    isHeader = false; // Skip the header row
-                    continue;
-                }
-                String[] data = line.split(",");
-                if (data.length < 2) {
-                    System.err.println("Invalid data format in line: " + line);
-                    continue; // Skip lines that don't have enough data
-                }
-                String type = data[0];
-                try {
-                    double amount = Double.parseDouble(data[1]);
-                    user.addTransaction(type, amount);
-                } catch (NumberFormatException e) {
-                    System.err.println("Invalid number format in line: " + line);
-                    // Optionally, continue to the next line
-                    continue;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void addTransactionRequest(TransactionRequest request) {
         transactionRequests.add(request);
     }
@@ -291,9 +258,11 @@ public static User getLoggedInUser(String username, String password) {
 
         switch (type) {
             case DEPOSIT:
+                user.addTransaction(type.name(), amount);
                 user.deposit(amount);
                 break;
             case WITHDRAWAL:
+                user.addTransaction(type.name(), amount);
                 user.withdraw(amount);
                 break;
             case BUY_STOCK:
@@ -379,6 +348,7 @@ public static User getLoggedInUser(String username, String password) {
         updateUserCSV();
         updateStockCSV();
         saveUserBoughtStocksToCSV("boughtStocks.csv");
+        saveUserTransactionHistory("transactions.csv");
         updateRequestCSV();
 //        StockExchangeManager.saveTransactionHistoryToCSV(loggedInUser, "transactionHistory.csv");
     }
@@ -446,6 +416,27 @@ public static User getLoggedInUser(String username, String password) {
 
     }
 
+    public static void saveUserTransactionHistory(String filePath) {
+        try {
+            FileWriter writer = new FileWriter(filePath);
+            writer.append("Username,Transaction Type,Amount\n");
+            for (User user : users) {
+                List<Pair<String, Double>> transactionHistory = user.getTransactionHistory();
+                String username = user.getUsername();
+                for (Pair<String, Double> transaction : transactionHistory) {
+                    writer.append(username).append(",").append(transaction.getKey()).append(",")
+                            .append(transaction.getValue().toString()).append("\n");
+                }
+            }
+            writer.flush();
+            writer.close();
+            System.out.println("CSV file saved successfully.");
+        } catch (IOException e) {
+            System.err.println("Error occurred while saving CSV file: " + e.getMessage());
+        }
+
+    }
+
     private static void updateRequestCSV() {
         String csvFile = "requests.csv";
 
@@ -468,6 +459,7 @@ public static User getLoggedInUser(String username, String password) {
         loadUserList();
         loadStockList();
         loadUserBoughtStocksList("boughtStocks.csv");
+        loadUserTransactionHistory("transactions.csv");
         loadRequestList();
 //        StockExchangeManager.loadTransactionHistoryFromCSV(, "transactionHistory.csv");
     }
@@ -544,6 +536,24 @@ public static User getLoggedInUser(String username, String password) {
                 for (int i = 2; i < data.length; i++) {
                     stock.addBuyer(user, Double.parseDouble(data[i]));
                 }
+            }
+        } catch (IOException e) {
+            System.err.println("Error occurred while loading BoughtStocks CSV file: " + e.getMessage());
+        }
+    }
+
+    public static void loadUserTransactionHistory(String filePath) {
+        String line;
+        String cvsSplitBy = ",";
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            line = br.readLine();   // Skips header from file
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(cvsSplitBy);
+                User user = getUserFromUsername(data[0]);
+                String type = data[1];
+                double amount = Double.parseDouble(data[3]);
+                assert user != null;
+                user.addTransaction(type, amount);
             }
         } catch (IOException e) {
             System.err.println("Error occurred while loading BoughtStocks CSV file: " + e.getMessage());
