@@ -1,4 +1,6 @@
 package com.example.demo2;
+import javafx.util.Pair;
+
 import java.util.*;
 
 public class User {
@@ -7,6 +9,8 @@ public class User {
     private double accountBalance;
     private boolean isPremium;
     private int numOfStocks;
+    private List<Pair<String, Double>> transactionHistory;
+
 //    private boolean depositPending; // Flag for pending deposit approval
 //    private boolean withdrawPending; // Flag for pending withdraw approval
 
@@ -16,6 +20,7 @@ public class User {
         this.accountBalance = accountBalance;
         this.numOfStocks=numOfStocks;
         this.isPremium=isPremium;
+        this.transactionHistory = new ArrayList<>();
 //        this.depositPending = false;
 //        this.withdrawPending = false;
     }
@@ -137,6 +142,13 @@ public class User {
         } else {
             System.out.println("Invalid withdrawal amount.");
         }
+    }
+    public void addTransaction(String type, double amount) {
+        transactionHistory.add(new Pair<>(type, amount));
+    }
+
+    public List<Pair<String, Double>> getTransactionHistory() {
+        return transactionHistory;
     }
 
     public void save() {

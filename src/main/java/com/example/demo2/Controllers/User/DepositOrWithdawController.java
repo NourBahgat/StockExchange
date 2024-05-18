@@ -1,19 +1,28 @@
 package com.example.demo2.Controllers.User;
 
 import com.example.demo2.*;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 
-import static org.apache.commons.lang3.ObjectUtils.NULL;
 
 public class DepositOrWithdawController {
     @FXML
     private TextField withdrawTextField;
+    @FXML
+    private TextField depositTextField;
     private final StockExchangeManager stockExchangeManager = App.manager;
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
 
     private User loggedInUser;
 
@@ -37,6 +46,22 @@ public class DepositOrWithdawController {
                 showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter a valid numeric amount.");
             }
         }
+    @FXML
+    public void handleDepositButton() {
+        User user = loggedInUser;
+        String depositAmountText = depositTextField.getText();
+        try {
+            double depositAmount = Double.parseDouble(depositAmountText);
+            if (depositAmount <= 0) {
+                showAlert(Alert.AlertType.ERROR, "Invalid Amount", "Withdraw amount must be greater than zero.");
+                return;
+            }
+            stockExchangeManager.createTransactionRequest(user, RequestType.DEPOSIT, null, depositAmount);
+            depositTextField.clear();
+        } catch(NumberFormatException e){
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter a valid numeric amount.");
+        }
+    }
 
     public void initData(User user){
         loggedInUser=user;
@@ -48,4 +73,5 @@ public class DepositOrWithdawController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
 }

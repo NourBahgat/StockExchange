@@ -1,10 +1,7 @@
 package com.example.demo2;
 
-import com.example.demo2.Controllers.User.TrackStocksController;
-import com.example.demo2.Controllers.User.UserController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.util.Pair;
@@ -24,9 +21,7 @@ public class StockExchangeManager {
     private List<Stock> availableStocks;
     private List<Order> orders;
     private List<Session> sessions;
-    @FXML
-    private ListView<String> usernameListView;
-    public static HashMap<String, List<Double>> boughtStocks = new HashMap<>();
+    private static List<Pair<String, Double>> transactionHistory = new ArrayList<>();
 
 
     public StockExchangeManager() {
@@ -84,10 +79,6 @@ public class StockExchangeManager {
         return usernames;
     }
 
-    public void initialize() {
-
-        usernameListView.getItems().addAll(StockExchangeManager.getUsernameList());
-    }
 
     public static User getUserFromUsername(String username) {
         for (User user : users) if (user.getUsername().equals(username)) return user;
@@ -115,6 +106,7 @@ public static User getLoggedInUser(String username, String password) {
     }
     return null;
 }
+
 
     public static void addUserRequest(User user, String request) {
         if (userRequests.containsKey(user)) {
@@ -225,11 +217,62 @@ public static User getLoggedInUser(String username, String password) {
     public static void createTransactionRequest(User user, RequestType type, Stock stock, Double amount) {
         TransactionRequest newRequest = new TransactionRequest(user, type, stock, amount);
         addTransactionRequest(newRequest);
+        logTransaction(user, type.name(), amount);
+        if (type == RequestType.DEPOSIT || type == RequestType.WITHDRAWAL) {
+            user.addTransaction(type.name(), amount);
+        }
         Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
         infoAlert.setTitle("Request Submitted");
         infoAlert.setHeaderText(null);
         infoAlert.setContentText("Your request has been submitted for approval.");
         infoAlert.showAndWait();
+    }
+    public static void logTransaction(User user, String type, Double amount) {
+        user.addTransaction(type, amount);
+        transactionHistory.add(new Pair<>(type, amount));
+    }
+
+    public static void saveTransactionHistoryToCSV(User user) {
+        String filePath = user.getUsername() + "_transaction_history.csv";
+        try (FileWriter writer = new FileWriter(filePath)) {
+            writer.write("Type,Amount\n");
+            for (Pair<String, Double> transaction : user.getTransactionHistory()) {
+                writer.write(transaction.getKey() + "," + transaction.getValue() + "\n");
+            }
+            writer.flush();
+            System.out.println("Transaction history saved to " + filePath);
+        } catch (IOException e) {
+            System.err.println("Error saving transaction history: " + e.getMessage());
+        }
+    }
+
+    public static void loadTransactionHistoryFromCSV(User user, String filename) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            boolean isHeader = true;
+            while ((line = reader.readLine()) != null) {
+                if (isHeader) {
+                    isHeader = false; // Skip the header row
+                    continue;
+                }
+                String[] data = line.split(",");
+                if (data.length < 2) {
+                    System.err.println("Invalid data format in line: " + line);
+                    continue; // Skip lines that don't have enough data
+                }
+                String type = data[0];
+                try {
+                    double amount = Double.parseDouble(data[1]);
+                    user.addTransaction(type, amount);
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid number format in line: " + line);
+                    // Optionally, continue to the next line
+                    continue;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void addTransactionRequest(TransactionRequest request) {
@@ -337,6 +380,7 @@ public static User getLoggedInUser(String username, String password) {
         updateStockCSV();
         saveUserBoughtStocksToCSV("boughtStocks.csv");
         updateRequestCSV();
+//        StockExchangeManager.saveTransactionHistoryToCSV(loggedInUser, "transactionHistory.csv");
     }
 
     public static void updateStockCSV() {
@@ -425,6 +469,7 @@ public static User getLoggedInUser(String username, String password) {
         loadStockList();
         loadUserBoughtStocksList("boughtStocks.csv");
         loadRequestList();
+//        StockExchangeManager.loadTransactionHistoryFromCSV(, "transactionHistory.csv");
     }
 
     public void exportUserRequestsToCSV(String filename) throws IOException {

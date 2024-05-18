@@ -17,7 +17,7 @@
                   <Font name="Century Gothic" size="19.0" />
                </font>
             </JFXButton>
-            <JFXButton prefHeight="56.0" prefWidth="254.0" text="Transaction History" textFill="WHITE">
+            <JFXButton fx:id="switchToTransactionhistory" onAction="#switchToTransactionHistory" prefHeight="56.0" prefWidth="254.0" text="Transaction History" textFill="WHITE">
                <font>
                   <Font name="Century Gothic" size="19.0" />
                </font>

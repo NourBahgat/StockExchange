@@ -155,4 +155,16 @@ public class UserMainController {
         scene = new Scene(root);
         stage.setScene(scene);
     }
+    public void switchToTransactionHistory (ActionEvent event) throws IOException {
+        FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/TransactionHistory.fxml"));
+        root=loader.load();
+        TransactionHistoryController transactionHistoryController= loader.getController();
+        transactionHistoryController.initData(loggedInUser);
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+
+    }
 }
