@@ -95,9 +95,16 @@ private Map<User, Double> buyerOrderCosts = new HashMap<>();
     }
     public void removeBuyer(User user, double purchasePrice) {
         buyerOrderCosts.remove(user);
+        if (buyers.containsKey(user)) {
+            List<Double> purchasePrices = buyers.get(user);
+            purchasePrices.remove(purchasePrice);
+            if (purchasePrices.isEmpty()) {
+                buyers.remove(user);
+            }
+        }
     }
 
-    //    public void setActualAvailableStocks(){this.availableStocks.get()=availableStocks.get();}
+        //    public void setActualAvailableStocks(){this.availableStocks.get()=availableStocks.get();}
 
 //    public static ArrayList<Stock> getStockList() {
 //        return stockList;
@@ -183,4 +190,4 @@ private Map<User, Double> buyerOrderCosts = new HashMap<>();
 //            super(label, initialPrice, availableStocks);
 //        }
 //    }
-}
+    }

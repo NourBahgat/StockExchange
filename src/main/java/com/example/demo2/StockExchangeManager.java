@@ -319,8 +319,8 @@ public static User getLoggedInUser(String username, String password) {
         Stock stock = getStockFromLabel(stockLabel);
         if (stock != null) {
             stock.removeBuyer(user, purchasePrice);
-            updateBoughtStocksCSV();
-            updateStockCSV();
+//            updateBoughtStocksCSV();
+//            updateStockCSV();
         }
     }
 
@@ -357,7 +357,7 @@ public static User getLoggedInUser(String username, String password) {
         Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
         infoAlert.setTitle("Request Submitted");
         infoAlert.setHeaderText(null);
-        infoAlert.setContentText(user.getUsername() +  "'s request has been submitted for approval.");
+        infoAlert.setContentText("Your request has been submitted for approval.");
         infoAlert.showAndWait();
     }
 
@@ -491,7 +491,6 @@ public static User getLoggedInUser(String username, String password) {
     public static void loadSystem() {
         loadUserList();
         loadStockList();
-        loadUserBoughtStocksList("boughtStocks.csv");
         loadUserBoughtStocksList("boughtStocks.csv");
         loadRequestList();
     }

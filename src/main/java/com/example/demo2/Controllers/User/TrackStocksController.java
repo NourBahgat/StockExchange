@@ -21,14 +21,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-
 public class TrackStocksController {
     private Stage stage;
     private Scene scene;
     private Parent root;
 
     @FXML
-    private TableView<Object> stockTableView;
+    private TableView<StockData> stockTableView;  // Use StockData instead of Object
 
     @FXML
     private TableColumn<StockData, String> label;
@@ -44,22 +43,19 @@ public class TrackStocksController {
 
     private User currentUser;
 
-
-
     public void initialize() {
-
-            label.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLabel()));
-            purchasePrice.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPurchasePrice()).asObject());
-            currentPrice.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getCurrentPrice()).asObject());
-            loadUserBoughtStocks();
-
+        label.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLabel()));
+        purchasePrice.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPurchasePrice()).asObject());
+        currentPrice.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getCurrentPrice()).asObject());
+        loadUserBoughtStocks();
     }
 
     private void loadUserBoughtStocks() {
         currentUser = UserController.loggedInUser;
         if (currentUser != null) {
             List<Pair<Stock, List<Double>>> userBoughtStocks = StockExchangeManager.getUserBoughtStocks(currentUser);
-            ObservableList<Object> stockDataList = FXCollections.observableArrayList();
+            ObservableList<StockData> stockDataList = FXCollections.observableArrayList();
+
             for (Pair<Stock, List<Double>> stockCosts : userBoughtStocks) {
                 Stock stock = stockCosts.getKey();
                 List<Double> costs = stockCosts.getValue();
@@ -67,13 +63,13 @@ public class TrackStocksController {
                     stockDataList.add(new StockData(stock.getActualLabel(), cost, stock.getActualCurrentPrice()));
                 }
             }
-            stockTableView.setItems(stockDataList);
+            stockTableView.setItems(stockDataList);  // Set items to the table view
         }
     }
 
     @FXML
     private void handleSellStock() {
-        StockData selectedStockData = (StockData) stockTableView.getSelectionModel().getSelectedItem();
+        StockData selectedStockData = stockTableView.getSelectionModel().getSelectedItem();
         if (selectedStockData != null) {
             sendSellRequest(selectedStockData);
         } else {
@@ -101,24 +97,15 @@ public class TrackStocksController {
                 User currentUser = UserController.loggedInUser;
                 double sellPrice = stockData.getCurrentPrice();
                 StockExchangeManager.addUserRequest(currentUser, "Sell request for stock: " + stockData.getLabel());
-//                addUserRequest(currentUser, "Sell request for stock: " + stockData.getLabel());
 
-                // Remove stock from table
-                stockTableView.getItems().remove(stockData);
+                stockTableView.getItems().remove(stockData);  // Remove stock from table
 
                 currentUser.setNumOfStocks(currentUser.getNumOfStocks() - 1);
                 currentUser.setAccountBalance(currentUser.getAccountBalance() + sellPrice);
 
-                // Update boughtStocks.csv
-                StockExchangeManager.removeStockFromUser(currentUser, stockData.getLabel(), stockData.getPurchasePrice());
-
-                // Update boughtStocks.csv
-                StockExchangeManager.updateUserCSV();
-                // Update bought stocks CSV
-                StockExchangeManager.updateBoughtStocksCSV();
+                StockExchangeManager.removeStockFromUser(currentUser, stockData.getLabel(), sellPrice);
 
 
-                // Send a pop-up message to the admin here
                 Alert adminAlert = new Alert(Alert.AlertType.INFORMATION);
                 adminAlert.setTitle("Sell Request approved");
                 adminAlert.setHeaderText(null);
@@ -133,7 +120,6 @@ public class TrackStocksController {
             }
         });
     }
-
 
     public static class StockData {
         private final String label;
@@ -159,21 +145,16 @@ public class TrackStocksController {
         }
     }
 
-      public void backtoUserMain (ActionEvent event) throws IOException {
+    public void backtoUserMain(ActionEvent event) throws IOException {
         User user = UserController.loggedInUser;
         System.out.println(user.toString());
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/UserMain.fxml")));
-        FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
-        root=loader.load();
-        UserMainController userMainController= loader.getController();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/UserMain.fxml"));
+        root = loader.load();
+        UserMainController userMainController = loader.getController();
         userMainController.initData(user);
-          // Update boughtStocks.csv
-          StockExchangeManager.updateUserCSV();
-          // Update bought stocks CSV
-          StockExchangeManager.updateBoughtStocksCSV();
+
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
     }
 }
-
