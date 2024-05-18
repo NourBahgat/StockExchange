@@ -1,6 +1,7 @@
 package com.example.demo2;
 
 import com.example.demo2.Controllers.User.TrackStocksController;
+import com.example.demo2.Controllers.User.UserController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -18,12 +19,14 @@ public class StockExchangeManager {
     private static Map<User, List<String>> userRequests;
 //    private List<Stock.Transaction> transactionHistory;
     public static ArrayList<Stock> stockList = new ArrayList<>();
+    private static List<TransactionRequest> transactionRequests = new ArrayList<>();
     private List<Stock> availableStocks;
     private List<Order> orders;
     private List<Session> sessions;
     @FXML
     private ListView<String> usernameListView;
     public static HashMap<String, List<Double>> boughtStocks = new HashMap<>();
+
 
     public StockExchangeManager() {
         this.userRequests = new HashMap<>();
@@ -40,12 +43,6 @@ public class StockExchangeManager {
 
     public void addUser(User user) {
         this.users.add(user);
-    }
-
-    public static List<User> getUsers() {
-        updateUsersFromCSV("users.csv");
-        System.out.println(users);
-        return users;
     }
 
     public void setUsers(List<User> users) {
@@ -245,7 +242,7 @@ public static User getLoggedInUser(String username, String password) {
         }
     }
 
-    public void buyStock(User user, Stock stock) {
+    public static void buyStock(User user, Stock stock) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Buy Stock Request");
         alert.setHeaderText("User " + user.getUsername() + " wants to buy stock " + stock.getLabel());
@@ -354,8 +351,53 @@ public static User getLoggedInUser(String username, String password) {
 
 
 
+    public static void createTransactionRequest(User user, RequestType type, Stock stock, Double amount) {
+        TransactionRequest newRequest = new TransactionRequest(user, type, stock, amount);
+        addTransactionRequest(newRequest);
+        Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
+        infoAlert.setTitle("Request Submitted");
+        infoAlert.setHeaderText(null);
+        infoAlert.setContentText(user.getUsername() +  "'s request has been submitted for approval.");
+        infoAlert.showAndWait();
+    }
 
+    public static void addTransactionRequest(TransactionRequest request) {
+        transactionRequests.add(request);
+    }
 
+    public static List<TransactionRequest> getTransactionRequests() {
+        return new ArrayList<>(transactionRequests);
+    }
+
+    public static void approveTransaction(TransactionRequest request) {
+        User user = request.getUser();
+        Stock stock = request.getStock();
+        Double amount = request.getAmount();
+        RequestType type = request.getRequestType();
+
+        switch (type) {
+            case DEPOSIT:
+                user.deposit(amount);
+                break;
+            case WITHDRAWAL:
+                user.withdraw(amount);
+                break;
+            case BUY_STOCK:
+                buyStock(user, stock);
+                break;
+//            case SELL_STOCK:
+//                sellStock(user, stock);
+//                break;
+            default:
+                break;
+        }
+
+        transactionRequests.remove(request);
+    }
+    public static void disapproveTransaction(TransactionRequest request) {
+        //sheel el request bas??
+        transactionRequests.remove(request);
+    }
 
 
 //    public List<Stock.Transaction> getUserTransactionHistory(User user) {
@@ -423,6 +465,26 @@ public static User getLoggedInUser(String username, String password) {
         updateUserCSV();
         updateStockCSV();
         saveUserBoughtStocksToCSV("boughtStocks.csv");
+        updateRequestCSV();
+    }
+
+    private static void updateRequestCSV() {
+        String csvFile = "requests.csv";
+
+        try (FileWriter writer = new FileWriter(csvFile)) {
+            writer.write("username,action_type,label,amount"
+                    + System.getProperty("line.separator"));
+            for (TransactionRequest request : transactionRequests) {
+                String line = request.getUsername() + ","
+                        + request.getRequestType() + ","
+                        + request.getLabel() + ","
+                        + request.getAmount();
+                writer.write(line + System.getProperty("line.separator"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        saveUserBoughtStocksToCSV("boughtStocks.csv");
         //updateRequestCSV();
     }
 
@@ -430,6 +492,32 @@ public static User getLoggedInUser(String username, String password) {
         loadUserList();
         loadStockList();
         loadUserBoughtStocksList("boughtStocks.csv");
+        loadUserBoughtStocksList("boughtStocks.csv");
+        loadRequestList();
+    }
+
+    private static void loadRequestList() {
+        String csvFile = "requests.csv";
+        String line;
+        String cvsSplitBy = ",";
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            line = br.readLine();   // Skips header from file
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(cvsSplitBy);
+                User user = getUserFromUsername(data[0]);
+                RequestType type = RequestType.valueOf(data[1]);
+                Stock stock = getStockFromLabel(data[2]);
+                Double amount = Double.parseDouble(data[3]);
+                TransactionRequest loadedRequest = new TransactionRequest(user, type, stock, amount);
+                transactionRequests.add(loadedRequest);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<User> getUsers() {
+        return users;
     }
 
 

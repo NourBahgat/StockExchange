@@ -19,10 +19,7 @@ import javafx.util.Pair;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-
-import static com.example.demo2.StockExchangeManager.*;
 
 
 public class TrackStocksController {
@@ -88,7 +85,7 @@ public class TrackStocksController {
         }
     }
 
-    private void sendSellRequest(StockData stockData) {
+    public void sendSellRequest(StockData stockData) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Sell Stock Request");
         alert.setHeaderText("Sell Request for Stock: " + stockData.getLabel());
@@ -102,6 +99,7 @@ public class TrackStocksController {
         alert.showAndWait().ifPresent(response -> {
             if (response == approveButton) {
                 User currentUser = UserController.loggedInUser;
+                double sellPrice = stockData.getCurrentPrice();
                 StockExchangeManager.addUserRequest(currentUser, "Sell request for stock: " + stockData.getLabel());
 //                addUserRequest(currentUser, "Sell request for stock: " + stockData.getLabel());
 
@@ -109,6 +107,8 @@ public class TrackStocksController {
                 stockTableView.getItems().remove(stockData);
 
                 currentUser.setNumOfStocks(currentUser.getNumOfStocks() - 1);
+                currentUser.setAccountBalance(currentUser.getAccountBalance() + sellPrice);
+
                 // Update boughtStocks.csv
                 StockExchangeManager.removeStockFromUser(currentUser, stockData.getLabel(), stockData.getPurchasePrice());
 

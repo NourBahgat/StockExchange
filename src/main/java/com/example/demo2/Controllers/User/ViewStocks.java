@@ -1,9 +1,6 @@
 package com.example.demo2.Controllers.User;
 
-import com.example.demo2.App;
-import com.example.demo2.Stock;
-import com.example.demo2.StockExchangeManager;
-import com.example.demo2.User;
+import com.example.demo2.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -90,9 +87,9 @@ public class ViewStocks {
     }
 
     public void BuyStock (ActionEvent event) throws IOException {
-        User user= UserController.loggedInUser;
+        User user = UserController.loggedInUser;
         if(selectedstock !=null){
-            stockExchangeManager.buyStock(user, selectedstock);
+            stockExchangeManager.createTransactionRequest(user, RequestType.BUY_STOCK, selectedstock, selectedstock.getActualCurrentPrice());
         }
     }
 }

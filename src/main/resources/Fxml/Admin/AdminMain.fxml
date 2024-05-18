@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import de.jensd.fx.glyphs.fontawesome.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXBadge?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="450.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.Controllers.Admin.AdminController">
+<AnchorPane prefHeight="450.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.Controllers.Admin.AdminController">
    <children>
-      <VBox layoutY="38.4" prefHeight="412.0" prefWidth="200.0" style="-fx-background-color: #02367B;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="38.0">
+      <VBox layoutY="38.4" prefHeight="412.0" prefWidth="200.0" style="-fx-background-color: #02367B;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <JFXButton onAction="#switchToManageUsers" prefHeight="55.0" prefWidth="202.0" ripplerFill="#bfb0b0" text="Manage users" textFill="WHITE">
+            <JFXButton onAction="#switchToManageUsers" prefHeight="47.0" prefWidth="200.0" ripplerFill="#bfb0b0" text="Manage users" textFill="WHITE">
                <font>
                   <Font name="Century Gothic" size="15.0" />
                </font>
@@ -25,21 +28,20 @@
                   <Font name="Century Gothic" size="15.0" />
                </font>
             </JFXButton>
-            <JFXButton prefHeight="55.0" prefWidth="202.0" text="Manage user requests" textFill="WHITE">
+            <JFXButton onAction="#switchToManageRequests" prefHeight="55.0" prefWidth="202.0" text="Manage user requests" textFill="WHITE">
                <font>
                   <Font name="Century Gothic" size="15.0" />
                </font>
             </JFXButton>
-            <JFXButton onAction="#SwitchToMainBage" prefHeight="55.0" prefWidth="202.0" text="Log out" textFill="WHITE">
+            <JFXButton prefHeight="55.0" prefWidth="202.0" text="Log out" textFill="WHITE">
                <font>
                   <Font name="Century Gothic" size="15.0" />
                </font>
             </JFXButton>
          </children>
       </VBox>
-      <Pane layoutX="14.0" layoutY="-130.0" prefHeight="38.0" prefWidth="640.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <JFXBadge layoutX="235.0" layoutY="78.0" prefHeight="95.0" prefWidth="0.0" />
-      <Pane layoutX="200.0" layoutY="38.0" prefHeight="200.0" prefWidth="442.0" style="-fx-background-color: #d3d3d3;">
+      <Pane layoutX="200.0" layoutY="38.0" prefHeight="200.0" prefWidth="442.0" style="-fx-background-color: #d3d3d3;" AnchorPane.topAnchor="0.0">
          <children>
             <Label layoutX="24.0" layoutY="14.0" text="Number Of Users">
                <font>

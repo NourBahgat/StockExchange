@@ -90,6 +90,28 @@ public void removeUser(String username)
         e.printStackTrace();
     }
 }
+//    public void addUser(String username, String password, double credit) {
+//        String csvFile = "users.csv";
+//
+//        try (FileWriter writer = new FileWriter(csvFile, true)) {
+//            writer.append(username).append(",").append(password).append(",").append(String.valueOf(credit)).append("\n");
+//            writer.flush();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+
+        public void addUser(String username, String password, double credit) {
+            try {
+                FileWriter writer = new FileWriter("users.csv", true);
+                writer.append(username).append(",").append(password).append(",").append(String.valueOf(credit)).append("\n");
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
 
     // Method to add a new stock
     public void addStock(Stock stock, StockExchangeManager stockExchangeManager) {

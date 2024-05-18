@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
@@ -39,6 +40,7 @@ public class ManageUsers {
 
     @FXML
     public void initialize() {
+        userTableView.getItems().clear();
         // Get the list of usernames from UserManager
         List<User> users = stockExchangeManager.getUsers();
 
@@ -46,7 +48,6 @@ public class ManageUsers {
         for (User user : users) {
             userTableView.getItems().add(user.getUsername());
         }
-
         usernameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         userTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
@@ -66,7 +67,7 @@ public class ManageUsers {
         Admin delete = new Admin();
         delete.removeUser(selected);
         System.out.println(selected);
-        StockExchangeManager.updateUsersFromCSV("users.csv");
+        StockExchangeManager.updateUserCSV();
         userTableView.getItems().clear();
         List<User> updatedUsernames = stockExchangeManager.getUsers();
         for (User user : updatedUsernames) {
@@ -74,10 +75,57 @@ public class ManageUsers {
         }
     }
 
+    @FXML
+    private void handleAddUserButton() {
+        String username = usernameTextField.getText();
+        String password = passwordTextField.getText();
+        double credit = Double.parseDouble(creditTextField.getText());
+
+        // Add the user to the CSV file
+        Admin admin = new Admin();
+        admin.addUser(username, password, credit);
+
+        // Update the TableView
+        userTableView.getItems().add(username);
+
+        // Show success message
+        showAlert(Alert.AlertType.INFORMATION, "Success", "User added successfully!", null);
+    }
+
+//    @FXML
+//    private void handleAddUserButton() {
+//        String username = usernameTextField.getText();
+//        String password = passwordTextField.getText();
+//        double credit = Double.parseDouble(creditTextField.getText());
+//        StockExchangeManager.updateUsersFromCSV("users.csv");
+//        userTableView.getItems().clear();
+//        List<User> updatedUsernames = stockExchangeManager.getUsers();
+//        for (User user : updatedUsernames) {
+//            userTableView.getItems().add(user.getUsername());
+//        }
+//        Admin admin = new Admin();
+//        admin.addUser(username, password, credit);
+//
+//        showAlert(Alert.AlertType.INFORMATION, "Success", "User added successfully!", null);
+//    }
+
+    private static void showAlert(Alert.AlertType alertType, String title, String message, String headerText) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
+
     public void BackToMainAdmin(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/AdminMain.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
+
     }
+
 }
+
