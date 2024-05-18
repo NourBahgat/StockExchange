@@ -33,7 +33,10 @@ public class TransactionRequest {
     }
 
     public String getUsername() { return user.getUsername(); }
-    public String getLabel() { return stock.getActualLabel(); }
+    public String getLabel() {
+        if (stock == null) return "";
+        return stock.getActualLabel();
+    }
     public Double getAmount() { return amount; }
     public User getUser() { return user; }
     public Stock getStock() { return stock; }
