@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Admin {
     private String adminName;
@@ -90,17 +92,6 @@ public void removeUser(String username)
         e.printStackTrace();
     }
 }
-//    public void addUser(String username, String password, double credit) {
-//        String csvFile = "users.csv";
-//
-//        try (FileWriter writer = new FileWriter(csvFile, true)) {
-//            writer.append(username).append(",").append(password).append(",").append(String.valueOf(credit)).append("\n");
-//            writer.flush();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 
         public void addUser(String username, String password, double credit) {
             try {
