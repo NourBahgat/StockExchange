@@ -88,6 +88,12 @@ public class AdminController {
         scene = new Scene(root);
         stage.setScene(scene);
     }
+    public void AdminLogOut(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Login.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+    }
 public void switchToManageRequests(ActionEvent event) throws IOException{
     root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/ManageRequests.fxml")));
     stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

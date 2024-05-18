@@ -32,10 +32,12 @@ public class UserMainController {
     @FXML
     private Label smallamount;
     @FXML
+    private Label Remaining;
+    @FXML
     private TextField MoneyTextField;
     private double depositedMoney;
     private double Subscriptionprice =100;
-
+    private double remainingBalance;
 //    public void initialize(){
 //
 //    }
@@ -85,11 +87,41 @@ public class UserMainController {
     public void deposit(ActionEvent event) throws IOException {
         depositedMoney =Double.parseDouble( MoneyTextField.getText());
     }
-    public void Subscripe(ActionEvent event) throws IOException {
-        if (depositedMoney < Subscriptionprice) {
-            smallamount.setText("Insufficient Amount");
-        } else {
+//    public void Subscripe(ActionEvent event) throws IOException {
+//        if (depositedMoney < Subscriptionprice) {
+//            smallamount.setText("Insufficient Amount");
+//        }
+//        else{
+//
+//            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/SubscriptionMain.fxml")));
+//            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//            scene = new Scene(root);
+//            stage.setScene(scene);
+//            remainingBalance=depositedMoney-Subscriptionprice ;
+//            Remaining.setText("Remaining Balance ="+remainingBalance+"EGP");
+//        }
+      public void Subscripe(ActionEvent event) throws IOException {
+          if (depositedMoney == Subscriptionprice){
+              root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/SubscriptionMain.fxml")));
+              stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+              scene = new Scene(root);
+              stage.setScene(scene);
+          }
+         else {
+              smallamount.setText("Insufficient Amount");
+          }
 
-        }
+      }
+    public void Notifications(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/Notifications.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+    }
+    public void LineCharts(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/Charts.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
     }
 }
