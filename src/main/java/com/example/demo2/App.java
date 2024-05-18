@@ -27,16 +27,6 @@ public class App extends Application {
         }
 
     }
-    public void start2(Stage primaryStage) {
-        Stock stock = new Stock("AAPL", 150.0, 155.0, 100, 0.0);
-
-        stock.updatePrice(160.0);
-        stock.updatePrice(162.0);
-        stock.updatePrice(158.0);
-
-        MarketPerformanceController.showStockPriceChart(primaryStage, stock);
-    }
-
     public static void main(String[] args) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             synchronized(manager) {

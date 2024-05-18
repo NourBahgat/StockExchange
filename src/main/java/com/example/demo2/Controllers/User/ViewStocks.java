@@ -31,10 +31,6 @@ public class ViewStocks {
     @FXML
     private TableColumn<Stock, String> labelColumn;
     @FXML
-    private TextField labelField;
-    @FXML
-    private TextField profitField;
-    @FXML
     private TextField labelTextField;
     @FXML
     private TextField initialpriceTextField;

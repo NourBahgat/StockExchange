@@ -1,5 +1,6 @@
 package com.example.demo2.Controllers.User;
 
+import com.example.demo2.Stock;
 import com.example.demo2.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,7 +14,10 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
+
+import static com.example.demo2.StockExchangeManager.stockList;
 
 
 public class UserMainController {
@@ -131,6 +135,22 @@ public class UserMainController {
     }
     public void LineCharts(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/Charts.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+    }
+    public void switchToMarketPerformance(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/MarketPerformanceCharts.fxml"));
+        Parent root = loader.load();
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+    }
+    public void switchToDepositWithdraw(ActionEvent event) throws IOException {
+        FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/DepositOrWithdraw.fxml"));
+        root=loader.load();
+        DepositOrWithdawController DepositOrWithdraw = loader.getController();
+        DepositOrWithdraw.initData(loggedInUser);
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);

@@ -22,7 +22,7 @@ public class Stock {
     private IntegerProperty availableStocks;
     private DoubleProperty profit;
     private HashMap<User, List<Double>> buyers;
-    private ArrayList<Double> priceHistory;
+    private List<Double> priceHistory;
     public Stock(String label, double initialPricess, double
                  currentPrice, int availableStocks, double profit) {
         this.label =new SimpleStringProperty(label);
@@ -102,7 +102,7 @@ public class Stock {
             }
         }
     }
-    public ArrayList<Double> getPriceHistory() {
+    public List<Double> getPriceHistory() {
         return priceHistory;
     }
     public void updatePrice(double newPrice) {
@@ -110,7 +110,10 @@ public class Stock {
         this.priceHistory.add(newPrice);
     }
 
-        //    public void setActualAvailableStocks(){this.availableStocks.get()=availableStocks.get();}
+    public void setPriceHistory(List<Double> priceHistory) {
+        this.priceHistory = priceHistory;
+    }
+    //    public void setActualAvailableStocks(){this.availableStocks.get()=availableStocks.get();}
 
 //    public static ArrayList<Stock> getStockList() {
 //        return stockList;
