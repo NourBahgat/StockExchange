@@ -551,7 +551,7 @@ public static User getLoggedInUser(String username, String password) {
                 String[] data = line.split(cvsSplitBy);
                 User user = getUserFromUsername(data[0]);
                 String type = data[1];
-                double amount = Double.parseDouble(data[3]);
+                double amount = Double.parseDouble(data[2]);
                 assert user != null;
                 user.addTransaction(type, amount);
             }
