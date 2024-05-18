@@ -23,7 +23,7 @@ import static com.example.demo2.StockExchangeManager.stockList;
 
 
 public class UserMainController {
-    private User loggedInUser;
+    private static User loggedInUser;
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -39,15 +39,8 @@ public class UserMainController {
     private Label smallamount;
     @FXML
     private Label Remaining;
-    @FXML
-    private TextField MoneyTextField;
-    private double depositedMoney;
-    private double Subscriptionprice =100;
 
-//    public void initialize(){
-//
-//    }
-    public void switchToViewStocks (ActionEvent event) throws IOException {
+    public void switchToViewStocks(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/ViewStocks.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -62,7 +55,8 @@ public class UserMainController {
         stage.setScene(scene);
 
     }
-    public void switchToTrackStocks (ActionEvent event) throws IOException {
+
+    public void switchToTrackStocks(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/TrackStocks.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -84,7 +78,8 @@ public class UserMainController {
         scene = new Scene(root);
         stage.setScene(scene);
     }
-    public void GoToSubscribe (ActionEvent event) throws IOException {
+
+    public void GoToSubscribe(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/Subscription.fxml")));
         stage.setScene(scene);
     }
@@ -144,6 +139,18 @@ public class UserMainController {
         alert.showAndWait();
     }
 
+    private boolean subscribeUser() {
+        // Deduct 100 EGP from the user's account balance
+        if (loggedInUser.getAccountBalance() >= 100) {
+            loggedInUser.setAccountBalance(loggedInUser.getAccountBalance() - 100);
+            loggedInUser.setPremium(true); // Set the user as premium
+            updateUserCSV(); // Update the user's balance and premium status in the CSV file
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void redirectToAnotherPage(ActionEvent event) throws IOException {
         // Load the new FXML page
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/PremiumUser/PremiumPage.fxml")));
@@ -156,10 +163,8 @@ public class UserMainController {
         stage.setScene(scene);
         stage.show();
     }
-    public void deposit(ActionEvent event) throws IOException {
-        depositedMoney =Double.parseDouble( MoneyTextField.getText());
-    }
-//    public void Subscripe(ActionEvent event) throws IOException {
+
+    //    public void Subscripe(ActionEvent event) throws IOException {
 //        if (depositedMoney < Subscriptionprice) {
 //            smallamount.setText("Insufficient Amount");
 //        }
@@ -172,38 +177,16 @@ public class UserMainController {
 //            remainingBalance=depositedMoney-Subscriptionprice ;
 //            Remaining.setText("Remaining Balance ="+remainingBalance+"EGP");
 //        }
-      public void Subscripe(ActionEvent event) throws IOException {
-          if (depositedMoney == Subscriptionprice){
-              root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/SubscriptionMain.fxml")));
-              stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-              scene = new Scene(root);
-              stage.setScene(scene);
-          }
-         else {
-              smallamount.setText("Insufficient Amount");
-          }
 
-      }
     public void Notifications(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/Notifications.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
 
-    private boolean subscribeUser() {
-        // Deduct 100 EGP from the user's account balance
-        if (loggedInUser.getAccountBalance() >= 100) {
-            loggedInUser.setAccountBalance(loggedInUser.getAccountBalance() - 100);
-            // Add subscription logic here, for example, update the user's subscription status in the database or CSV file
-            System.out.println("User has subscribed and paid 100 EGP fee.");
-            loggedInUser.setPremium(true);
-            updateUserCSV(); // Update the user's balance in the CSV file
-            return true;
-        } else {
-            return false;
-        }
     }
-//    public void deposit(ActionEvent event) throws IOException {
+
+    //    public void deposit(ActionEvent event) throws IOException {
 //        depositedMoney =Double.parseDouble( MoneyTextField.getText());
 //    }
 //    public void Subscripe(ActionEvent event) throws IOException {
@@ -218,6 +201,7 @@ public class UserMainController {
         scene = new Scene(root);
         stage.setScene(scene);
     }
+
     public void switchToMarketPerformance(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/MarketPerformanceCharts.fxml"));
         Parent root = loader.load();
@@ -225,19 +209,21 @@ public class UserMainController {
         scene = new Scene(root);
         stage.setScene(scene);
     }
+
     public void switchToDepositWithdraw(ActionEvent event) throws IOException {
-        FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/DepositOrWithdraw.fxml"));
-        root=loader.load();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/StandardUser/DepositOrWithdraw.fxml"));
+        root = loader.load();
         DepositOrWithdawController DepositOrWithdraw = loader.getController();
         DepositOrWithdraw.initData(loggedInUser);
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
     }
-    public void switchToTransactionHistory (ActionEvent event) throws IOException {
-        FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/TransactionHistory.fxml"));
-        root=loader.load();
-        TransactionHistoryController transactionHistoryController= loader.getController();
+
+    public void switchToTransactionHistory(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/StandardUser/TransactionHistory.fxml"));
+        root = loader.load();
+        TransactionHistoryController transactionHistoryController = loader.getController();
         transactionHistoryController.initData(loggedInUser);
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

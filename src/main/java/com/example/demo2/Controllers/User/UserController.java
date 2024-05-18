@@ -40,7 +40,7 @@ public class UserController {
     private Label ExpiredLabel;
     @FXML
     private Label test;
-    private User loggedInUser;
+    public static User loggedInUser;
 
     @FXML
     private TextField AccountBalance;
