@@ -1,8 +1,6 @@
 package com.example.demo2.Controllers.User;
 
-import com.example.demo2.Stock;
-import com.example.demo2.User;
-import com.example.demo2.StockExchangeManager;
+import com.example.demo2.*;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -42,6 +40,8 @@ public class TrackStocksController {
     private Button sellStockButton;
 
     private User currentUser;
+    private final StockExchangeManager stockExchangeManager = App.manager;
+    private StockData selectedstock;
 
     public void initialize() {
         label.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLabel()));
@@ -49,7 +49,10 @@ public class TrackStocksController {
         currentPrice.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getCurrentPrice()).asObject());
         loadUserBoughtStocks();
     }
-
+    private void setupTableViewListener() {
+        stockTableView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> selectedstock = newValue);
+    }
     private void loadUserBoughtStocks() {
         currentUser = UserController.loggedInUser;
         if (currentUser != null) {

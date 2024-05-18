@@ -4,6 +4,7 @@ import com.example.demo2.Controllers.User.TrackStocksController;
 import com.example.demo2.Controllers.User.UserController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.util.Pair;
@@ -283,6 +284,8 @@ public static User getLoggedInUser(String username, String password) {
             errorAlert.showAndWait();
         }
     }
+
+
 
     public static List<Pair<Stock, List<Double>>> getUserBoughtStocks(User user) {
         List<Pair<Stock, List<Double>>> boughtStocksList = new ArrayList<>();

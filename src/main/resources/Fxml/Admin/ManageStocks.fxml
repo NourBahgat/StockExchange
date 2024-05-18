@@ -19,7 +19,7 @@
             <TableColumn fx:id="profitsColumn" prefWidth="103.99993896484375" text="Profits" />
         </columns>
       </TableView>
-      <Button layoutX="5.0" layoutY="1.0" mnemonicParsing="false" onAction="#BackToAdminMain" prefHeight="26.0" prefWidth="54.0" style="-fx-background-color: #d3d3d3;" text="Back">
+      <Button layoutY="372.0" mnemonicParsing="false" onAction="#BackToAdminMain" prefHeight="26.0" prefWidth="54.0" style="-fx-background-color: #d3d3d3;" text="Back">
          <font>
             <Font name="Century Gothic" size="12.0" />
          </font>
@@ -29,10 +29,10 @@
             <Font name="Century Gothic" size="17.0" />
          </font>
       </Label>
-      <TextField fx:id="labelField" layoutX="22.0" layoutY="119.0" />
-      <Label layoutX="31.0" layoutY="57.0" text="Add new stocks" textFill="#fff7f7">
+      <TextField fx:id="labelField" layoutX="22.0" layoutY="124.0" />
+      <Label layoutX="15.0" layoutY="77.0" text="Add new stocks" textFill="#fff7f7">
          <font>
-            <Font name="Century Gothic" size="17.0" />
+            <Font name="Century Gothic Bold" size="17.0" />
          </font>
       </Label>
       <Button layoutX="504.0" layoutY="370.0" mnemonicParsing="false" onAction="#handleDeleteButton" prefHeight="26.0" prefWidth="89.0" style="-fx-background-color: #d3d3d3;" text="Delete Stock">
@@ -40,12 +40,12 @@
             <Font name="Century Gothic" size="11.0" />
          </font>
       </Button>
-      <Label layoutX="22.0" layoutY="96.0" text="Label" textFill="WHITE">
+      <Label layoutX="18.0" layoutY="100.0" text="Label" textFill="WHITE">
          <font>
             <Font name="Century Gothic" size="17.0" />
          </font>
       </Label>
-      <Label layoutX="22.0" layoutY="151.0" text="Price" textFill="WHITE">
+      <Label layoutX="21.0" layoutY="150.0" text="Price" textFill="WHITE">
          <font>
             <Font name="Century Gothic" size="17.0" />
          </font>
@@ -64,6 +64,17 @@
       </Label>
       <TextField fx:id="profitField" layoutX="22.0" layoutY="288.0" />
       <Button layoutX="52.0" layoutY="321.0" mnemonicParsing="false" onAction="#addStock" prefHeight="26.0" prefWidth="89.0" style="-fx-background-color: #d3d3d3;" text="Add Stock">
+         <font>
+            <Font name="Century Gothic" size="11.0" />
+         </font>
+      </Button>
+      <Label layoutX="17.0" layoutY="8.0" prefHeight="26.0" prefWidth="159.0" text="Select To Edit Price" textFill="#fff7f7">
+         <font>
+            <Font name="Century Gothic Bold" size="17.0" />
+         </font>
+      </Label>
+      <TextField fx:id="currentPriceField" layoutX="18.0" layoutY="34.0" prefHeight="26.0" prefWidth="90.0" />
+      <Button layoutX="116.0" layoutY="34.0" mnemonicParsing="false" onAction="#handleUpdatePriceButton" prefHeight="26.0" prefWidth="59.0" style="-fx-background-color: #d3d3d3;" text="Update">
          <font>
             <Font name="Century Gothic" size="11.0" />
          </font>

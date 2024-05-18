@@ -1,6 +1,7 @@
 
 package com.example.demo2;
 
+import com.example.demo2.Controllers.User.MarketPerformanceController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -25,6 +26,15 @@ public class App extends Application {
             // Handle the exception (e.g., show an error message dialog)
         }
 
+    }
+    public void start2(Stage primaryStage) {
+        Stock stock = new Stock("AAPL", 150.0, 155.0, 100, 0.0);
+
+        stock.updatePrice(160.0);
+        stock.updatePrice(162.0);
+        stock.updatePrice(158.0);
+
+        MarketPerformanceController.showStockPriceChart(primaryStage, stock);
     }
 
     public static void main(String[] args) {

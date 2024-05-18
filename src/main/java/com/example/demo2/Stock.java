@@ -17,14 +17,13 @@ public class Stock {
 //    private int availableStocks;
 //    private double profit;
 private Map<User, Double> buyerOrderCosts = new HashMap<>();
-    private ArrayList<Double> priceHistory;
-//    public static ArrayList<Stock> stockList;
     private StringProperty label;
     private DoubleProperty initialPrice;
     private DoubleProperty currentPrice;
     private IntegerProperty availableStocks;
     private DoubleProperty profit;
     private HashMap<User, List<Double>> buyers;
+    private ArrayList<Double> priceHistory;
     public Stock(String label, double initialPricess, double
                  currentPrice, int availableStocks, double profit) {
         this.label =new SimpleStringProperty(label);
@@ -102,6 +101,13 @@ private Map<User, Double> buyerOrderCosts = new HashMap<>();
                 buyers.remove(user);
             }
         }
+    }
+    public ArrayList<Double> getPriceHistory() {
+        return priceHistory;
+    }
+    public void updatePrice(double newPrice) {
+        this.currentPrice.set(newPrice);
+        this.priceHistory.add(newPrice);
     }
 
         //    public void setActualAvailableStocks(){this.availableStocks.get()=availableStocks.get();}
