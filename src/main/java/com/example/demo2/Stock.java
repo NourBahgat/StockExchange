@@ -23,6 +23,7 @@ public class Stock {
     private IntegerProperty availableStocks;
     private DoubleProperty profit;
     private HashMap<User, List<Double>> buyers;
+    private HashMap<User, List<Double>> sellers;
     private List<TimeStamp> priceHistory;
     public Stock(String label, double initialPricess, double
                  currentPrice, int availableStocks, double profit) {
@@ -32,6 +33,7 @@ public class Stock {
         this.availableStocks = new SimpleIntegerProperty(availableStocks);
         this.profit = new SimpleDoubleProperty(profit);
         this.buyers = new HashMap<>();
+        this.sellers=new HashMap<>();
         this.priceHistory = new ArrayList<>();
         this.priceHistory.add(new TimeStamp(currentPrice, LocalDateTime.now()));
     }
@@ -118,7 +120,6 @@ public class Stock {
             buyers.remove(user);
         }
     }
-
     public void setPriceHistory(List<TimeStamp> priceHistory) {
         this.priceHistory = priceHistory;
     }

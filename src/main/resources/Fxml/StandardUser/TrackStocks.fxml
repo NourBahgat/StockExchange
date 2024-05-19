@@ -16,9 +16,9 @@
             <TableColumn fx:id="currentPrice" prefWidth="145.60003662109375" text="Current Price" />
         </columns>
       </TableView>
-      <Label layoutX="14.0" layoutY="10.0" text="My Stocks" textFill="WHITE">
+      <Label layoutX="14.0" text="My Stocks" textFill="WHITE">
          <font>
-            <Font name="Century Gothic Bold" size="25.0" />
+            <Font name="Century Gothic Bold" size="28.0" />
          </font>
       </Label>
       <Button fx:id="sellStockButton" layoutX="456.0" layoutY="199.0" mnemonicParsing="false" onAction="#handleSellStock" style="-fx-background-color: #d3d3d3;" text="Sell Stock">
@@ -29,6 +29,11 @@
       <Button layoutX="547.0" layoutY="407.0" mnemonicParsing="false" onAction="#backtoUserMain" prefHeight="22.0" prefWidth="78.0" style="-fx-background-color: #d3d3d3;" text="Back">
          <font>
             <Font name="Century Gothic" size="15.0" />
+         </font>
+      </Button>
+      <Button layoutX="433.0" layoutY="376.0" mnemonicParsing="false" onAction="#handleExportButton" style="-fx-background-color: #d3d3d3;" text="Export Stock Transaction History" textFill="#2d792e">
+         <font>
+            <Font name="Century Gothic" size="12.0" />
          </font>
       </Button>
    </children>

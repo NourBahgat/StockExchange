@@ -16,7 +16,8 @@ public class User {
 
     private HashMap<Stock, Double> autoBuyList;
     private HashMap<Stock, Double> costTrackList;
-    private List<StockTransaction> stockTransactions; // New list to store stock transactions
+    private List<StockTransaction> stockTransactions;
+    private List<Pair<Stock, List<Double>>> soldStocks;
 
     public User(String username, String password, double accountBalance, int numOfStocks, boolean isPremium) {
         this.username = username;
@@ -36,7 +37,7 @@ public class User {
         this.accountBalance = accountBalance;
         this.numOfStocks = numOfStocks;
         this.isPremium = isPremium;
-        this.stockTransactions = new ArrayList<>(); // Initialize the list
+        this.stockTransactions = new ArrayList<>();
     }
 
     public double getAccountBalance() {
@@ -101,6 +102,8 @@ public class User {
             }
         }
     }
+
+
 
     public void removeCostTrack(Stock stock) {
         costTrackList.remove(stock);

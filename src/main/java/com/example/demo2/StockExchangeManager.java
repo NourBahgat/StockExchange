@@ -228,6 +228,7 @@ public static User getLoggedInUser(String username, String password) {
         return boughtStocksList;
     }
 
+
     public static void removeStockFromUser(User user, String stockLabel, double purchasePrice) {
         Stock stock = getStockFromLabel(stockLabel);
         if (stock != null) {
@@ -303,6 +304,9 @@ public static User getLoggedInUser(String username, String password) {
     public static void disapproveTransaction(TransactionRequest request) {
         //sheel el request bas??
         transactionRequests.remove(request);
+    }
+    public static void exportUserTransactionsToCSV(User user, String filename) {
+
     }
 
 

@@ -121,4 +121,8 @@ public class TrackStocksController {
         scene = new Scene(root);
         stage.setScene(scene);
     }
+    public void handleExportButton(){
+        User user = loggedInUser;
+        StockExchangeManager.exportUserTransactionsToCSV(user,"test.csv");
+    }
 }
