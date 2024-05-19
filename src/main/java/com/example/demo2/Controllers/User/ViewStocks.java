@@ -36,6 +36,14 @@ public class ViewStocks {
     private TextField initialpriceTextField;
     @FXML
     private TextField currentpriceTextField;
+    @FXML
+    private Button NotifyButton;
+
+    @FXML
+    private Button WantedPriceButton;
+
+    @FXML
+    private TextField WantedPriceTextField;
     private final StockExchangeManager stockExchangeManager = App.manager;
     private Stock selectedstock;
     private User loggedInUser;
@@ -54,15 +62,32 @@ public class ViewStocks {
     private void setupTableViewListener() {
         stockTableView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> selectedstock = newValue);
+        updateSelectedInfo();
+    }
+
+    private void updateSelectedInfo() {
+        if (selectedstock != null) {
+            labelTextField.textProperty().bind(selectedstock.getLabel());
+            initialpriceTextField.textProperty().bind(selectedstock.initialPriceProperty().asString());
+            currentpriceTextField.textProperty().bind(selectedstock.currentPriceProperty().asString());
+            if (!loggedInUser.isPremium()) {
+                NotifyButton.setText("Subscribe to Premium for Tracking");
+            } else if (loggedInUser.isCostTracked(selectedstock)) {
+                NotifyButton.setText("Cancel Tracking");
+            } else {
+                NotifyButton.setText("Notify When Price Changes");
+            }
+            if (loggedInUser.isAutoBuy(selectedstock)) {
+                WantedPriceButton.setText("Cancel Auto Buy");
+            } else {
+                WantedPriceButton.setText("Set Auto Buy Price");
+            }
+        }
     }
 
     @FXML
     private void handleViewPriceHistoryButtonClick(ActionEvent event) {
-        if (selectedstock != null) {
-            labelTextField.textProperty().bind(selectedstock.getLabel());
-            initialpriceTextField.textProperty().bind(selectedstock.initialPriceProperty().asString());
-           currentpriceTextField.textProperty().bind(selectedstock.currentPriceProperty().asString());
-        }
+        updateSelectedInfo();
     }
 
     public void initData(User user){
@@ -117,6 +142,37 @@ public class ViewStocks {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void trackStock(ActionEvent event) {
+        if (selectedstock == null)  return;
+        if (!loggedInUser.isPremium())   return;
+        if (loggedInUser.isCostTracked(selectedstock)) {
+            loggedInUser.removeCostTrack(selectedstock);
+        } else {
+            loggedInUser.setCostTracked(selectedstock, selectedstock.getActualCurrentPrice());
+        }
+        updateSelectedInfo();
+    }
+
+    public void autoBuyStock(ActionEvent event) {
+        if (selectedstock == null)  return;
+        if (loggedInUser.isAutoBuy(selectedstock)) {
+            loggedInUser.removeAutoBuy(selectedstock);
+        } else {
+            try {
+                Double wantedPrice = Double.parseDouble(WantedPriceTextField.getText());
+                if (wantedPrice < 0 ) throw new NumberFormatException();
+                loggedInUser.setAutoBuy(selectedstock, wantedPrice);
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Please Set A Correct Number");
+                alert.setHeaderText(null);
+                alert.setContentText("Please select a correct number bigger than 0.");
+                alert.showAndWait();
+            }
+        }
+        updateSelectedInfo();
     }
 }
 

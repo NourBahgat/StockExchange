@@ -56,8 +56,8 @@
                <font>
                   <Font name="Century Gothic" size="12.0" />
                </font></Button>
-            <Button fx:id="NotifyButton" layoutX="122.0" layoutY="221.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="174.0" style="-fx-background-color: #d3d3d3;" text="Notify When Price Changes" />
-            <Button fx:id="WantedPriceButton" layoutX="211.0" layoutY="266.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="108.0" style="-fx-background-color: #d3d3d3;" text="SetWantedPrice" />
+            <Button fx:id="NotifyButton" onAction="#trackStock" layoutX="122.0" layoutY="221.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="174.0" style="-fx-background-color: #d3d3d3;" text="Notify When Price Changes" />
+            <Button fx:id="WantedPriceButton" onAction="#autoBuyStock" layoutX="211.0" layoutY="266.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="108.0" style="-fx-background-color: #d3d3d3;" text="SetWantedPrice" />
             <TextField fx:id="WantedPriceTextField" layoutX="40.0" layoutY="267.0" />
             </children>
         </AnchorPane>
