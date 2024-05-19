@@ -128,11 +128,10 @@ public class UserMainController {
     }
 
     private boolean subscribeUser() {
-        // Deduct 100 EGP from the user's account balance
         if (loggedInUser.getAccountBalance() >= 100) {
             loggedInUser.setAccountBalance(loggedInUser.getAccountBalance() - 100);
-            loggedInUser.setPremium(true); // Set the user as premium
-            updateUserCSV(); // Update the user's balance and premium status in the CSV file
+            loggedInUser.setPremium(true);
+            updateUserCSV();
             return true;
         } else {
             return false;

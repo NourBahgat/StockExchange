@@ -111,7 +111,7 @@ public class Admin {
             FileWriter writer = new FileWriter("users.csv", true);
             writer.append(username).append(",").append(password).append(",")
                     .append(String.valueOf(credit)).append(",")
-                    .append(String.valueOf(type)).append(",0\n");
+                    .append(",0").append(String.valueOf(type)).append("\n");
             writer.flush(); // Explicitly flush the writer
             writer.close();
         } catch (IOException e) {
