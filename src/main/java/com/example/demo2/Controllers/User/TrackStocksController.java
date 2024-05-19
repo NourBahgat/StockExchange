@@ -123,6 +123,6 @@ public class TrackStocksController {
     }
     public void handleExportButton(){
         User user = loggedInUser;
-        StockExchangeManager.exportUserTransactionsToCSV(user,"test.csv");
+        StockExchangeManager.exportStockTransactionHistoryToCSV(user);
     }
 }

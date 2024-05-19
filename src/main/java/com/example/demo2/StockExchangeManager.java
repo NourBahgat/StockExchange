@@ -160,7 +160,7 @@ public static User getLoggedInUser(String username, String password) {
                 stock.addBuyer(user, price);
                 user.setNumOfStocks(user.getNumOfStocks() + 1);
 
-                //saveUserBoughtStocksToCSV(user, filePath);
+                logStockTransaction(user, "BUY", stock, price);
 
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle("Success");
@@ -198,6 +198,7 @@ public static User getLoggedInUser(String username, String password) {
             int availableStocks = stock.getActualAvailableStocks();
             stock.setAvailableStocks(availableStocks + 1);
             user.setNumOfStocks(user.getNumOfStocks() - 1);
+            logStockTransaction(user, "SELL", stock, price);
 
             Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
             successAlert.setTitle("Success");
@@ -251,6 +252,11 @@ public static User getLoggedInUser(String username, String password) {
         user.addTransaction(type, amount);
         transactionHistory.add(new Pair<>(type, amount));
     }
+    public static void logStockTransaction(User user, String type, Stock stock, Double price) {
+        String transaction = String.format("%s,%s,%s,%.2f", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME), type, stock.getActualLabel(), price);
+        user.addStockTransaction(transaction);
+    }
+
 
     public static void saveTransactionHistoryToCSV(User user) {
         String filePath = user.getUsername() + "_transaction_history.csv";
@@ -263,6 +269,19 @@ public static User getLoggedInUser(String username, String password) {
             System.out.println("Transaction history saved to " + filePath);
         } catch (IOException e) {
             System.err.println("Error saving transaction history: " + e.getMessage());
+        }
+    }
+    public static void exportStockTransactionHistoryToCSV(User user) {
+        String filePath = user.getUsername() + "_stock_transaction_history.csv";
+        try (FileWriter writer = new FileWriter(filePath)) {
+            writer.write("Timestamp,Type,Stock,Price\n");
+            for (String transaction : user.getStockTransactions()) {
+                writer.write(transaction + "\n");
+            }
+            writer.flush();
+            System.out.println("Stock transaction history saved to " + filePath);
+        } catch (IOException e) {
+            System.err.println("Error saving stock transaction history: " + e.getMessage());
         }
     }
 
@@ -308,34 +327,6 @@ public static User getLoggedInUser(String username, String password) {
     public static void exportUserTransactionsToCSV(User user, String filename) {
 
     }
-
-
-//    public List<Stock.Transaction> getUserTransactionHistory(User user) {
-//        List<Stock.Transaction> userTransactions = new ArrayList<>();
-//        for (Stock.Transaction transaction : transactionHistory) {
-//            if (transaction.getLabel().equals(user)) {
-//                userTransactions.add(transaction);
-//            }
-//        }
-//        return userTransactions;
-//    }
-
-//    public void listStocksPriceHistory() {
-//        for (Stock stock : availableStocks) {
-//            System.out.println("Price history for " + stock.getLabel() + ": " + stock.getPriceHistory());
-//        }
-//    }
-//
-//    public void trackStocksPerformance() {
-//        for (Stock stock : availableStocks) {
-//            // Implement tracking stock performance based on requirements
-//        }
-//    }
-//
-//    public void addOrder(Order order) {
-//        orders.add(order);
-//    }
-
     public void deleteOrder(Order order) {
         orders.remove(order);
     }

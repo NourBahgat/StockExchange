@@ -18,8 +18,8 @@ public class User {
 
     private HashMap<Stock, Double> autoBuyList;
     private HashMap<Stock, Double> costTrackList;
-    private List<StockTransaction> stockTransactions;
     private List<Pair<Stock, List<Double>>> soldStocks;
+    private List<String> stockTransactions;
 
     public User(String username, String password, double accountBalance, int numOfStocks, boolean isPremium) {
         this.username = username;
@@ -30,7 +30,8 @@ public class User {
         this.transactionHistory = new ArrayList<>();
         this.autoBuyList = new HashMap<>();
         this.costTrackList = new HashMap<>();
-        this.stockTransactions = new ArrayList<>(); // Initialize the list
+        this.stockTransactions = new ArrayList<>();
+//        this.stockTransactions = new ArrayList<>(); // Initialize the list
     }
 
     public User() {
@@ -39,7 +40,7 @@ public class User {
         this.accountBalance = accountBalance;
         this.numOfStocks = numOfStocks;
         this.isPremium = isPremium;
-        this.stockTransactions = new ArrayList<>();
+//        this.stockTransactions = new ArrayList<>();
     }
 
     public double getAccountBalance() {
@@ -141,6 +142,13 @@ public class User {
             }
         }
     }
+    public void addStockTransaction(String transaction) {
+        stockTransactions.add(transaction);
+    }
+
+    public List<String> getStockTransactions() {
+        return stockTransactions;
+    }
 
 
     public void removeCostTrack(Stock stock) {
@@ -228,61 +236,14 @@ public class User {
         return transactionHistory;
     }
 
-    public void addStockTransaction(String stockLabel, double purchasePrice, double sellingPrice) {
-        stockTransactions.add(new StockTransaction(stockLabel, purchasePrice, sellingPrice));
-    }
+//    public void addStockTransaction(String stockLabel, double purchasePrice, double sellingPrice) {
+//        stockTransactions.add(new StockTransaction(stockLabel, purchasePrice, sellingPrice));
+//    }
 
-    public List<StockTransaction> getStockTransactions() {
-        return stockTransactions;
-    }
-
-    public void save() {
-        // Implement save functionality if needed
-    }
+//    public List<StockTransaction> getStockTransactions() {
+//        return stockTransactions;
+//    }
 
     // Inner class to represent a stock transaction
-    public static class StockTransaction {
-        private String stockLabel;
-        private double purchasePrice;
-        private double sellingPrice;
 
-        public StockTransaction(String stockLabel, double purchasePrice, double sellingPrice) {
-            this.stockLabel = stockLabel;
-            this.purchasePrice = purchasePrice;
-            this.sellingPrice = sellingPrice;
-        }
-
-        public String getStockLabel() {
-            return stockLabel;
-        }
-
-        public void setStockLabel(String stockLabel) {
-            this.stockLabel = stockLabel;
-        }
-
-        public double getPurchasePrice() {
-            return purchasePrice;
-        }
-
-        public void setPurchasePrice(double purchasePrice) {
-            this.purchasePrice = purchasePrice;
-        }
-
-        public double getSellingPrice() {
-            return sellingPrice;
-        }
-
-        public void setSellingPrice(double sellingPrice) {
-            this.sellingPrice = sellingPrice;
-        }
-
-        @Override
-        public String toString() {
-            return "StockTransaction{" +
-                    "stockLabel='" + stockLabel + '\'' +
-                    ", purchasePrice=" + purchasePrice +
-                    ", sellingPrice=" + sellingPrice +
-                    '}';
-        }
-    }
 }
