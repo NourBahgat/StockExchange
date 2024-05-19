@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import de.jensd.fx.glyphs.fontawesome.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXBadge?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="450.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.Controllers.Admin.AdminController">
+<AnchorPane prefHeight="450.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.Controllers.Admin.AdminController">
    <children>
       <VBox layoutY="38.4" prefHeight="412.0" prefWidth="200.0" style="-fx-background-color: #02367B;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -27,7 +30,7 @@
             </JFXButton>
             <JFXButton onAction="#switchToManageRequests" prefHeight="55.0" prefWidth="202.0" text="Manage user requests" textFill="WHITE">
                <font>
-                  <Font name="Century Gothic" size="15.0" />
+                  <Font name="Century Gothic" size="16.0" />
                </font>
             </JFXButton>
             <JFXButton onAction="#AdminLogOut" prefHeight="55.0" prefWidth="202.0" text="Log out" textFill="WHITE">
@@ -38,21 +41,31 @@
          </children>
       </VBox>
       <JFXBadge layoutX="235.0" layoutY="78.0" prefHeight="95.0" prefWidth="0.0" />
-      <Pane layoutX="200.0" layoutY="38.0" prefHeight="200.0" prefWidth="442.0" style="-fx-background-color: #d3d3d3;" AnchorPane.topAnchor="0.0">
+      <Pane fx:id="usrlbl" layoutX="200.0" layoutY="38.0" prefHeight="200.0" prefWidth="442.0" style="-fx-background-color: #d3d3d3;" AnchorPane.topAnchor="0.0">
          <children>
-            <Label layoutX="24.0" layoutY="14.0" text="Number Of Users">
+            <Label fx:id="label" layoutX="97.0" layoutY="75.0" text="Number Of Users" textFill="#4b4e5b">
                <font>
-                  <Font name="Century Gothic Bold" size="20.0" />
+                  <Font name="Century Gothic Bold" size="40.0" />
                </font>
             </Label>
-            <FontAwesomeIconView glyphName="USER" layoutX="34.0" layoutY="123.0" size="80" text="" wrappingWidth="6.971391677856445" />
+            <FontAwesomeIconView glyphName="USER" layoutX="23.0" layoutY="135.0" size="100" text="" wrappingWidth="6.971391677856445" />
+            <Label fx:id="label21" layoutX="17.0" layoutY="14.0" text="Number Of Users">
+               <font>
+                  <Font name="Century Gothic Bold" size="30.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
-      <Label layoutX="227.0" layoutY="260.0" text="Number Of Labels">
+      <Label fx:id="label2" layoutX="217.0" layoutY="261.0" text="Number Of Labels">
          <font>
-            <Font name="Century Gothic Bold" size="20.0" />
+            <Font name="Century Gothic Bold" size="30.0" />
          </font>
       </Label>
-      <FontAwesomeIconView glyphName="BANK" layoutX="228.0" layoutY="381.0" size="80" wrappingWidth="14.514273643493652" />
+      <FontAwesomeIconView glyphName="BANK" layoutX="217.0" layoutY="380.0" size="80" wrappingWidth="14.514273643493652" />
+      <Label fx:id="label1" layoutX="305.0" layoutY="333.0" text="Number Of Label" textFill="#4b4e5b">
+         <font>
+            <Font name="Century Gothic Bold" size="40.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

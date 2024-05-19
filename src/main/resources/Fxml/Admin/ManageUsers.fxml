@@ -46,10 +46,10 @@
                   <Font name="Century Gothic" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="username111" layoutX="134.0" layoutY="181.0" />
-            <Button layoutX="170.0" layoutY="255.0" mnemonicParsing="false" onAction="#handleDeleteButton" text="Delete User" />
+            <TextField fx:id="type" layoutX="134.0" layoutY="181.0" />
+            <Button layoutX="170.0" layoutY="240.0" mnemonicParsing="false" onAction="#handleDeleteButton" text="Delete User" />
             <Button layoutX="306.0" layoutY="346.0" mnemonicParsing="false" onAction="#BackToMainAdmin" prefHeight="26.0" prefWidth="56.0" text="Back" />
-            <Button layoutX="176.0" layoutY="298.0" mnemonicParsing="false" onAction="#handleAddUserButton" text="Add User" />
+            <Button layoutX="176.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleAddUserButton" text="Add User" />
          </children>
       </AnchorPane>
    </children>

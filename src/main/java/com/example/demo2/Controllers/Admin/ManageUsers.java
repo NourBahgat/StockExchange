@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.example.demo2.Admin.searchUserInCSV;
+import static com.example.demo2.StockExchangeManager.users;
 
 
 public class ManageUsers {
@@ -33,6 +34,8 @@ public class ManageUsers {
     private TextField passwordTextField;
     @FXML
     private TextField creditTextField;
+    @FXML
+    private TextField type;
     private StockExchangeManager stockExchangeManager;
     private Stage stage;
     private Scene scene;
@@ -64,10 +67,13 @@ public class ManageUsers {
 
     public void handleDeleteButton(ActionEvent event) throws IOException {
         String selected = userTableView.getSelectionModel().selectedItemProperty().getValue();
-        Admin delete = new Admin();
-        delete.removeUser(selected);
+//        Admin delete = new Admin();
+//        delete.removeUser(selected);
+        users.remove(selected);
         System.out.println(selected);
         StockExchangeManager.updateUserCSV();
+        System.out.println(users);
+        userTableView.refresh();
         userTableView.getItems().clear();
         List<User> updatedUsernames = stockExchangeManager.getUsers();
         for (User user : updatedUsernames) {
@@ -79,17 +85,38 @@ public class ManageUsers {
     private void handleAddUserButton() {
         String username = usernameTextField.getText();
         String password = passwordTextField.getText();
-        double credit = Double.parseDouble(creditTextField.getText());
+        String creditText = creditTextField.getText();
+        double credit = 0.0; // Initialize with a default value
+
+        try {
+            credit = Double.parseDouble(creditText);
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Invalid credit value!", "Please enter a valid numerical value for credit.");
+            return; // Exit the method early
+        }
+        String typeUser=type.getText();
 
         // Add the user to the CSV file
         Admin admin = new Admin();
-        admin.addUser(username, password, credit);
+        StockExchangeManager userAdd = new StockExchangeManager();
+        if (typeUser.equals("Standard")) {
+            admin.addUser(username, password, credit,false );
+            userTableView.getItems().add(username);
+//            userAdd.updateUsersFromCSV("users.csv");
+            User newUser = new User(username, password, credit, 0,true);
+            userAdd.addUser(newUser);
+            showAlert(Alert.AlertType.INFORMATION, "Success", "User added successfully!", null);
+        } else if (typeUser.equals("Premium")) {
+            admin.addUser(username, password, credit,true );
+            userTableView.getItems().add(username);
 
-        // Update the TableView
-        userTableView.getItems().add(username);
-
-        // Show success message
-        showAlert(Alert.AlertType.INFORMATION, "Success", "User added successfully!", null);
+//            userAdd.updateUsersFromCSV("users.csv");
+            User newUser = new User(username, password, credit, 0,true);
+            userAdd.addUser(newUser);
+            showAlert(Alert.AlertType.INFORMATION, "Success", "User added successfully!", null);
+        }
+        else
+        { showAlert(Alert.AlertType.INFORMATION, "Warning", "Please enter a valid type", null);}
     }
 
 //    @FXML

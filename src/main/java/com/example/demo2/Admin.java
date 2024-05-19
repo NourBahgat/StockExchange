@@ -4,8 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Admin {
     private String adminName;
@@ -55,82 +53,71 @@ public class Admin {
 //  public void addUser(User user, StockExchangeManager stockExchangeManager) {
 //       stockExchangeManager.addUser(user);
 // }
-public void removeUser(String username)
-{
-    String csvFile = "users.csv"; // Replace with the path to your CSV file
-    String tempFile = "temp.csv"; // Replace with the path to a temporary file
+    public void removeUser(String username) {
+        String csvFile = "users.csv";
+        String tempFile = "temp.csv";
 
-    File inputFile = new File(csvFile);
-    File tempOutputFile = new File(tempFile);
+        File inputFile = new File(csvFile);
+        File tempOutputFile = new File(tempFile);
 
-    try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-         BufferedWriter writer = new BufferedWriter(new FileWriter(tempOutputFile))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(tempOutputFile))) {
 
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] data = line.split(",");
-            if (data.length >= 3 && data[0].equals(username)) {
-                continue;
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length >= 3 && data[0].equals(username)) {
+                    continue;
+                }
+                writer.write(line + System.lineSeparator());
             }
-            writer.write(line + System.getProperty("line.separator"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
+        // Copy content back from temp file to original file
+        try (BufferedReader reader = new BufferedReader(new FileReader(tempOutputFile));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
 
-    try (BufferedReader reader = new BufferedReader(new FileReader(tempOutputFile));
-         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                writer.write(line + System.lineSeparator());
+            }
 
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] data = line.split(",");
-            writer.write(line + System.getProperty("line.separator"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-    } catch (IOException e) {
-        e.printStackTrace();
+        // Delete the temporary file
+        if (!tempOutputFile.delete()) {
+            System.err.println("Could not delete temp file");
+        }
     }
-}
-    public static void addUser(String username, String password, double credit) {
+//    public void addUser(String username, String password, double credit) {
+//        String csvFile = "users.csv";
+//
+//        try (FileWriter writer = new FileWriter(csvFile, true)) {
+//            writer.append(username).append(",").append(password).append(",").append(String.valueOf(credit)).append("\n");
+//            writer.flush();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+
+    public void addUser(String username, String password, double credit, boolean type) {
         try {
             FileWriter writer = new FileWriter("users.csv", true);
-            writer.append(username).append(",").append(password).append(",").append(String.valueOf(credit)).append("\n");
+            writer.append(username).append(",").append(password).append(",")
+                    .append(String.valueOf(credit)).append(",")
+                    .append(String.valueOf(type)).append(",0\n");
+            writer.flush(); // Explicitly flush the writer
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-//    public static List<User> loadUsersFromCSV() {
-//        List<User> users = new ArrayList<>();
-//        try (BufferedReader br = new BufferedReader(new FileReader("users.csv"))) {
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                String[] data = line.split(",");
-//                if (data.length == 3) {
-//                    String username = data[0];
-//                    String password = data[1];
-//                    double credit = Double.parseDouble(data[2]);
-//                    users.add(new User(username, password, credit));
-//                }
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return users;
-//    }
-
-
-//        public void addUser(String username, String password, double credit) {
-//            try {
-//                FileWriter writer = new FileWriter("users.csv", true);
-//                writer.append(username).append(",").append(password).append(",").append(String.valueOf(credit)).append("\n");
-//                writer.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
 
 
     // Method to add a new stock

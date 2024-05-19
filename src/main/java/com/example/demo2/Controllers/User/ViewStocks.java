@@ -93,5 +93,28 @@ public class ViewStocks {
             stockExchangeManager.createTransactionRequest(user, RequestType.BUY_STOCK, selectedstock, selectedstock.getActualCurrentPrice());
         }
     }
+    public void handleViewPriceHistoryButton(ActionEvent event) throws IOException {
+        Stock selectedStock = stockTableView.getSelectionModel().getSelectedItem();
+        if (selectedStock == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Stock Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a stock to view its price history.");
+            alert.showAndWait();
+            return;
+        }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/MarketPerformanceCharts.fxml"));
+        Parent root = loader.load();
+
+        MarketPerformanceController controller = loader.getController();
+        controller.setStock(selectedStock);
+        controller.initialize(stockList);
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 }
 

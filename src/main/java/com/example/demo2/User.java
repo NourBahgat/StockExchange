@@ -11,8 +11,6 @@ public class User {
     private int numOfStocks;
     private List<Pair<String, Double>> transactionHistory;
 
-//    private boolean depositPending; // Flag for pending deposit approval
-//    private boolean withdrawPending; // Flag for pending withdraw approval
 
     public User(String username, String password, double accountBalance, int numOfStocks, boolean isPremium) {
         this.username = username;

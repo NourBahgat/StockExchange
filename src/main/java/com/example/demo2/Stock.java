@@ -5,6 +5,7 @@ import javafx.beans.property.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +23,7 @@ public class Stock {
     private IntegerProperty availableStocks;
     private DoubleProperty profit;
     private HashMap<User, List<Double>> buyers;
-    private List<Double> priceHistory;
+    private List<TimeStamp> priceHistory;
     public Stock(String label, double initialPricess, double
                  currentPrice, int availableStocks, double profit) {
         this.label =new SimpleStringProperty(label);
@@ -31,7 +32,10 @@ public class Stock {
         this.availableStocks = new SimpleIntegerProperty(availableStocks);
         this.profit = new SimpleDoubleProperty(profit);
         this.buyers = new HashMap<>();
+        this.priceHistory = new ArrayList<>();
+        this.priceHistory.add(new TimeStamp(currentPrice, LocalDateTime.now()));
     }
+
     // Getter methods for JavaFX properties
     public HashMap<User, List<Double>> getBuyersList() { return buyers; }
 
@@ -76,6 +80,10 @@ public class Stock {
     public void setAvailableStocks(int availableStocks) {
         this.availableStocks.set(availableStocks);
     }
+    public void setInitialPrice(double initialPrice) {
+        this.initialPrice.setValue(initialPrice);
+    }
+
     public List<Double> getBuyerOrderCosts(User user) {
         if (buyers.containsKey(user))   return buyers.get(user);
         return null;
@@ -102,17 +110,24 @@ public class Stock {
             }
         }
     }
-    public List<Double> getPriceHistory() {
-        return priceHistory;
-    }
-    public void updatePrice(double newPrice) {
-        this.currentPrice.set(newPrice);
-        this.priceHistory.add(newPrice);
-    }
-
-    public void setPriceHistory(List<Double> priceHistory) {
+    public void setPriceHistory(List<TimeStamp> priceHistory) {
         this.priceHistory = priceHistory;
     }
+    public List<TimeStamp> getPriceHistory() {
+        return priceHistory;
+    }
+    public void addPriceHistory(TimeStamp timeStamp) {
+        priceHistory.add(timeStamp);
+    }
+
+    public void updatePrice(double newPrice) {
+        this.currentPrice.set(newPrice);
+        this.priceHistory.add(new TimeStamp(newPrice, LocalDateTime.now()));
+    }
+
+//    public void setPriceHistory(List<Double> priceHistory) {
+//        this.priceHistory = priceHistory;
+//    }
     //    public void setActualAvailableStocks(){this.availableStocks.get()=availableStocks.get();}
 
 //    public static ArrayList<Stock> getStockList() {

@@ -1,12 +1,11 @@
 package com.example.demo2.Controllers.Admin;
 
-import com.example.demo2.Admin;
-import com.example.demo2.App;
-import com.example.demo2.StockExchangeManager;
+import com.example.demo2.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,14 +17,20 @@ import javafx.stage.Stage;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
+
+import java.net.URL;
 import java.util.List;
 
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
-public class AdminController {
+import static com.example.demo2.StockExchangeManager.stockList;
+import static com.example.demo2.StockExchangeManager.users;
+
+public class AdminController implements Initializable{
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -35,6 +40,12 @@ public class AdminController {
     private PasswordField passwordField;
     @FXML
     private Label label;
+    @FXML
+    private Label label1;
+//    @FXML
+//    private Label label2;
+//    @FXML
+//    private Label stcklbl;
     public static boolean StartSession = true;
 
     public void handleLogIn(ActionEvent event) throws IOException {
@@ -47,6 +58,7 @@ public class AdminController {
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+
         } else {
             label.setVisible(true);
             label.setText("Invalid username or password");
@@ -100,5 +112,20 @@ public void switchToManageRequests(ActionEvent event) throws IOException{
     scene = new Scene(root);
     stage.setScene(scene);
 }
+    private void updateUserAndStockCount() {
+        int numUsers = users.size();
+        int numStocks = stockList.size();
+        System.out.println(numStocks);
+        System.out.println(numUsers);
+        label.setText(String.valueOf(numUsers));
+        //mesh rady yetba3 gher label bs?????!!!!!!
+//
+//
+//      label1.setText(String.valueOf(numStocks));
+    }
 
+   @Override
+  public void initialize(URL location, ResourceBundle resources) {
+      updateUserAndStockCount();
+    }
 }

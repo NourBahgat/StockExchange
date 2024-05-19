@@ -10,10 +10,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class StockExchangeManager {
-    private static List<User> users = new ArrayList<>();
+    public static List<User> users = new ArrayList<>();
     private static Map<User, List<String>> userRequests;
 //    private List<Stock.Transaction> transactionHistory;
     public static ArrayList<Stock> stockList = new ArrayList<>();
@@ -461,6 +463,8 @@ public static User getLoggedInUser(String username, String password) {
         loadUserBoughtStocksList("boughtStocks.csv");
         loadUserTransactionHistory("transactions.csv");
         loadRequestList();
+        loadStockPriceHistoryFromCSV("PriceHistory.csv");
+        saveStockPriceHistoryToCSV("PriceHistory.csv");
 //        StockExchangeManager.loadTransactionHistoryFromCSV(, "transactionHistory.csv");
     }
 
@@ -473,6 +477,57 @@ public static User getLoggedInUser(String username, String password) {
                     writer.write(entry.getKey().getUsername() + "," + request + "\n");
                 }
             }
+        }
+    }
+    public static void saveStockPriceHistoryToCSV(String filePath) {
+        try (FileWriter writer = new FileWriter(filePath)) {
+            writer.append("StockLabel,Timestamp,Price\n");
+            for (Stock stock : stockList) {
+                writer.append(stock.getActualLabel()).append(",")
+                        .append(LocalDateTime.MIN.toString()).append(",")
+                        .append(String.valueOf(stock.getActualInitialPrice())).append("\n");
+
+                List<TimeStamp> priceHistory = stock.getPriceHistory();
+                for (TimeStamp timeStamp : priceHistory) {
+                    writer.append(stock.getActualLabel()).append(",")
+                            .append(timeStamp.getTimestamp().toString()).append(",")
+                            .append(String.valueOf(timeStamp.getPrice())).append("\n");
+                }
+            }
+            writer.flush();
+            System.out.println("Stock price history saved to " + filePath);
+        } catch (IOException e) {
+            System.err.println("Error saving stock price history: " + e.getMessage());
+        }
+    }
+    public static void loadStockPriceHistoryFromCSV(String filePath) {
+        String line;
+        String cvsSplitBy = ",";
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            line = br.readLine();
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(cvsSplitBy);
+                if (data.length < 3) {
+                    continue;
+                }
+
+                String stockLabel = data[0];
+                LocalDateTime timestamp = LocalDateTime.parse(data[1], formatter);
+                double price = Double.parseDouble(data[2]);
+
+                Stock stock = getStockFromLabel(stockLabel);
+                if (stock != null) {
+                    if (timestamp.equals(LocalDateTime.MIN)) {
+                        stock.setInitialPrice(price);
+                    } else {
+                        stock.addPriceHistory(new TimeStamp(price, timestamp));
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading stock price history: " + e.getMessage());
         }
     }
 

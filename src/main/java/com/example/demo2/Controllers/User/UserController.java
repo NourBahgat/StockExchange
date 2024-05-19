@@ -85,7 +85,6 @@ public class UserController {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                // Handle IO exception
             }
     }
 

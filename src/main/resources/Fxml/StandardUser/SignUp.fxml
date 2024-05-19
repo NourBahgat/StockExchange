@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.Controllers.User.UserController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="640.0" style="-fx-background-color: #d3d3d3;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.Controllers.User.UserController">
    <children>
       <Label layoutX="43.0" layoutY="77.0" text="Username">
          <font>
@@ -24,7 +24,7 @@
       <PasswordField fx:id="passwordField" layoutX="43.0" layoutY="192.0" prefHeight="34.0" prefWidth="386.0" promptText="Please choose a strong password that contains characters and numbers" />
       <Label layoutX="43.0" layoutY="35.0" text="Registration">
          <font>
-            <Font size="34.0" />
+            <Font name="Century Gothic Bold" size="34.0" />
          </font>
       </Label>
       <Button layoutX="272.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleSignUp" style="-fx-background-color: #007BA7;" text="Sign Up" textFill="WHITE">
@@ -43,11 +43,11 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Label layoutX="306.0" layoutY="397.0" textFill="#267e39" />
+      <Label layoutX="313.0" layoutY="397.0" prefHeight="18.0" prefWidth="20.0" textAlignment="CENTER" textFill="#267e39" />
       <Label fx:id="label" layoutX="170.0" layoutY="397.0" text="Signed Up successfully" textFill="#5b8659" visible="false" />
       <ToolBar prefHeight="35.0" prefWidth="640.0">
         <items>
-          <Button mnemonicParsing="false" onAction="#switchToSignIn" text="Back" />
+          <Button mnemonicParsing="false" onAction="#switchToSignIn" style="-fx-background-color: #d3d3d4;" text="Back" />
         </items>
       </ToolBar>
    </children>
