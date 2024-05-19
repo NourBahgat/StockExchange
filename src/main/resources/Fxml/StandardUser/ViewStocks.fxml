@@ -52,12 +52,12 @@
                <font>
                   <Font name="Century Gothic" size="12.0" />
                </font></Button>
-            <Button fx:id="ViewPriceHistoryButton1" layoutX="265.0" layoutY="179.0" mnemonicParsing="false" onAction="#handleViewPriceHistoryButton" prefHeight="26.0" prefWidth="92.0" style="-fx-background-color: #d3d3d3;" text="View charts">
+            <Button fx:id="ViewChartsButton" layoutX="265.0" layoutY="179.0" mnemonicParsing="false" onAction="#handleViewChartsButton" prefHeight="26.0" prefWidth="92.0" style="-fx-background-color: #d3d3d3;" text="View charts">
                <font>
                   <Font name="Century Gothic" size="12.0" />
                </font></Button>
-            <Button fx:id="NotifyButton" layoutX="122.0" layoutY="221.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="174.0" style="-fx-background-color: #d3d3d3;" text="Notify When Price Changes" />
-            <Button fx:id="WantedPriceButton" layoutX="211.0" layoutY="266.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="108.0" style="-fx-background-color: #d3d3d3;" text="SetWantedPrice" />
+            <Button fx:id="NotifyButton" layoutX="122.0" layoutY="221.0" mnemonicParsing="false" onAction="#handleNotifyPriceChanges" prefHeight="26.0" prefWidth="174.0" style="-fx-background-color: #d3d3d3;" text="Notify When Price Changes" />
+            <Button fx:id="WantedPriceButton" layoutX="211.0" layoutY="266.0" mnemonicParsing="false" onAction="#autoBuyStock" prefHeight="26.0" prefWidth="108.0" style="-fx-background-color: #d3d3d3;" text="SetWantedPrice" />
             <TextField fx:id="WantedPriceTextField" layoutX="40.0" layoutY="267.0" />
             </children>
         </AnchorPane>

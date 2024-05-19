@@ -126,6 +126,7 @@ public class ManageStocks {
     @FXML
     public void handleUpdatePriceButton() {
         Stock selectedStock = stockTableView.getSelectionModel().getSelectedItem();
+        StockExchangeManager.saveCostTrackerList("costTracker.csv");
         if (selectedStock == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("No Stock Selected");

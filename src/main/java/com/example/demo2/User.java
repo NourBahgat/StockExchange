@@ -6,6 +6,8 @@ import javafx.util.Pair;
 
 import java.util.*;
 
+import static com.example.demo2.Controllers.User.UserController.loggedInUser;
+
 public class User {
     private String username;
     private String password;
@@ -85,24 +87,60 @@ public class User {
         costTrackList.put(stock, currentCost);
     }
 
+
+//    public void checkCostChange() {
+//        // Check if the logged-in user is a premium subscriber
+//        if (loggedInUser != null && loggedInUser.isPremium()) {
+//            System.out.println("User is premium, checking for cost changes..."); // Debug statement
+//
+//            for (Map.Entry<Stock, Double> costTracker : costTrackList.entrySet()) {
+//                Stock stock = costTracker.getKey();
+//                double prevPrice = costTracker.getValue();
+//                double currPrice = stock.getActualCurrentPrice();
+//
+//                if (prevPrice != currPrice) {
+//                    costTracker.setValue(currPrice);
+//
+//                    // Run this part of the code on the JavaFX Application Thread
+//                    Platform.runLater(() -> {
+//                        System.out.println("Showing alert for stock: " + stock.getActualLabel());
+//
+//                        Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
+//                        errorAlert.setTitle("Stock " + stock.getActualLabel() + " price change!");
+//                        errorAlert.setHeaderText("Hello, " + loggedInUser.getUsername());
+//                        errorAlert.setContentText("Price changed from " + prevPrice + " to " + currPrice + ".");
+//                        errorAlert.showAndWait();
+//
+//                        System.out.println("Displayed alert for stock: " + stock.getActualLabel()); // Debug statement
+//                    });
+//                    StockExchangeManager.saveCostTrackerList("costTracker.csv");
+//                }
+//            }
+//        } else {
+//            System.out.println("User is not premium or loggedInUser is null."); // Debug statement
+//        }
+//    }
     public void checkCostChange() {
+
         for (Map.Entry<Stock, Double> costTracker : costTrackList.entrySet()) {
             Stock stock = costTracker.getKey();
             double prevPrice = costTracker.getValue();
             double currPrice = stock.getActualCurrentPrice();
             if (prevPrice != currPrice) {
-                costTracker.setValue(currPrice);
-                Platform.runLater(() -> {
-                    Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
-                    errorAlert.setTitle("Stock " + stock.getActualLabel() + " price change!");
-                    errorAlert.setHeaderText("Hello, " + username);
-                    errorAlert.setContentText("Price changed from " + prevPrice + " to " + currPrice + ".");
-                    errorAlert.showAndWait();
-                });
+                if (loggedInUser.isPremium()) {
+                    costTracker.setValue(currPrice);
+                    Platform.runLater(() -> {
+                        Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
+                        errorAlert.setTitle("Stock " + stock.getActualLabel() + " price change!");
+                        errorAlert.setHeaderText("Hello, " + username);
+                        errorAlert.setContentText("Price changed from " + prevPrice + " to " + currPrice + ".");
+                        errorAlert.showAndWait();
+                    });
+                    StockExchangeManager.saveCostTrackerList("costTracker.csv");
+                }
             }
         }
     }
-
 
 
     public void removeCostTrack(Stock stock) {

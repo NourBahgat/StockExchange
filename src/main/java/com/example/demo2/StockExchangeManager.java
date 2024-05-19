@@ -42,10 +42,10 @@ public class StockExchangeManager {
         while(true) {
             System.out.println("Checking for updates");
             for (User user : users) {
-                if (user.isPremium() == true) {
+//                if (user.isPremium() == true) {
                     user.checkAutoBuy();
                     user.checkCostChange();
-                }
+               // }
             }
             try {
                 sleep(1000);
@@ -511,7 +511,7 @@ public static User getLoggedInUser(String username, String password) {
 
     }
 
-    private static void saveCostTrackerList(String filePath) {
+    public static void saveCostTrackerList(String filePath) {
         try {
             FileWriter writer = new FileWriter(filePath);
             writer.append("Username,Stock Label,Tracked Price\n");
@@ -747,6 +747,8 @@ public static User getLoggedInUser(String username, String password) {
             System.err.println("Error occurred while loading BoughtStocks CSV file: " + e.getMessage());
         }
     }
+
+
 
     public static List<User> getUsers() {
         return users;
