@@ -1,4 +1,5 @@
 package com.example.demo2;
+
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.util.Pair;
@@ -15,25 +16,27 @@ public class User {
 
     private HashMap<Stock, Double> autoBuyList;
     private HashMap<Stock, Double> costTrackList;
+    private List<StockTransaction> stockTransactions; // New list to store stock transactions
 
     public User(String username, String password, double accountBalance, int numOfStocks, boolean isPremium) {
         this.username = username;
         this.password = password;
         this.accountBalance = accountBalance;
-        this.numOfStocks=numOfStocks;
-        this.isPremium=isPremium;
+        this.numOfStocks = numOfStocks;
+        this.isPremium = isPremium;
         this.transactionHistory = new ArrayList<>();
         this.autoBuyList = new HashMap<>();
         this.costTrackList = new HashMap<>();
-//        this.depositPending = false;
-//        this.withdrawPending = false;
+        this.stockTransactions = new ArrayList<>(); // Initialize the list
     }
+
     public User() {
         this.username = username;
         this.password = password;
         this.accountBalance = accountBalance;
-        this.numOfStocks=numOfStocks;
-        this.isPremium=isPremium;
+        this.numOfStocks = numOfStocks;
+        this.isPremium = isPremium;
+        this.stockTransactions = new ArrayList<>(); // Initialize the list
     }
 
     public double getAccountBalance() {
@@ -103,7 +106,9 @@ public class User {
         costTrackList.remove(stock);
     }
 
-    public HashMap<Stock, Double> getCostTrackList() { return costTrackList; }
+    public HashMap<Stock, Double> getCostTrackList() {
+        return costTrackList;
+    }
 
     public boolean isAutoBuy(Stock stock) {
         return autoBuyList.containsKey(stock);
@@ -135,51 +140,13 @@ public class User {
         autoBuyList.remove(stock);
     }
 
-    public HashMap<Stock, Double> getAutoBuyList() { return autoBuyList; }
+    public HashMap<Stock, Double> getAutoBuyList() {
+        return autoBuyList;
+    }
 
     public void setPremium(boolean premium) {
         isPremium = premium;
     }
-    //
-//    public double getAccountBalance() {
-//        return accountBalance;
-//    }
-//
-//    public void setAccountBalance(double accountBalance) {
-//        this.accountBalance = accountBalance;
-//    }
-//    public void setDepositPending(boolean depositPending) {
-//        this.depositPending = depositPending;
-//    }
-//
-//    public void setWithdrawPending(boolean withdrawPending) {
-//        this.withdrawPending = withdrawPending;
-//    }
-//
-//    // Method to deposit funds with admin approval
-//    public void depositWithAdminApproval(double amount) {
-//        if (depositPending) {
-//            // Process deposit with admin approval
-//            accountBalance += amount;
-//            depositPending = false; // Reset pending flag
-//        } else {
-//            System.out.println("Deposit pending admin approval.");
-//        }
-//    }
-//
-//    // Method to withdraw funds with admin approval
-//    public void withdrawWithAdminApproval(double amount) {
-//        if (withdrawPending) {
-//            // Process withdraw with admin approval
-//            if (accountBalance >= amount) {
-//                accountBalance -= amount;
-//                withdrawPending = false; // Reset pending flag
-//            } else {
-//                System.out.println("Insufficient funds.");
-//            }
-//        } else {
-//            System.out.println("Withdrawal pending admin approval.");
-//        }
 
     @Override
     public String toString() {
@@ -189,6 +156,7 @@ public class User {
                 ", accountBalance=" + accountBalance +
                 '}';
     }
+
     public void deposit(double amount) {
         if (amount > 0) {
             accountBalance += amount;
@@ -198,7 +166,6 @@ public class User {
         }
     }
 
-    // Method to withdraw funds
     public void withdraw(double amount) {
         if (amount > 0) {
             if (accountBalance >= amount) {
@@ -211,6 +178,7 @@ public class User {
             System.out.println("Invalid withdrawal amount.");
         }
     }
+
     public void addTransaction(String type, double amount) {
         transactionHistory.add(new Pair<>(type, amount));
     }
@@ -219,7 +187,61 @@ public class User {
         return transactionHistory;
     }
 
-    public void save() {
+    public void addStockTransaction(String stockLabel, double purchasePrice, double sellingPrice) {
+        stockTransactions.add(new StockTransaction(stockLabel, purchasePrice, sellingPrice));
+    }
 
+    public List<StockTransaction> getStockTransactions() {
+        return stockTransactions;
+    }
+
+    public void save() {
+        // Implement save functionality if needed
+    }
+
+    // Inner class to represent a stock transaction
+    public static class StockTransaction {
+        private String stockLabel;
+        private double purchasePrice;
+        private double sellingPrice;
+
+        public StockTransaction(String stockLabel, double purchasePrice, double sellingPrice) {
+            this.stockLabel = stockLabel;
+            this.purchasePrice = purchasePrice;
+            this.sellingPrice = sellingPrice;
+        }
+
+        public String getStockLabel() {
+            return stockLabel;
+        }
+
+        public void setStockLabel(String stockLabel) {
+            this.stockLabel = stockLabel;
+        }
+
+        public double getPurchasePrice() {
+            return purchasePrice;
+        }
+
+        public void setPurchasePrice(double purchasePrice) {
+            this.purchasePrice = purchasePrice;
+        }
+
+        public double getSellingPrice() {
+            return sellingPrice;
+        }
+
+        public void setSellingPrice(double sellingPrice) {
+            this.sellingPrice = sellingPrice;
+        }
+
+        @Override
+        public String toString() {
+            return "StockTransaction{" +
+                    "stockLabel='" + stockLabel + '\'' +
+                    ", purchasePrice=" + purchasePrice +
+                    ", sellingPrice=" + sellingPrice +
+                    '}';
+        }
     }
 }

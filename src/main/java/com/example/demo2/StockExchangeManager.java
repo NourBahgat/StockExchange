@@ -42,8 +42,10 @@ public class StockExchangeManager {
         while(true) {
             System.out.println("Checking for updates");
             for (User user : users) {
-                user.checkAutoBuy();
-                user.checkCostChange();
+                if (user.isPremium() == true) {
+                    user.checkAutoBuy();
+                    user.checkCostChange();
+                }
             }
             try {
                 sleep(1000);

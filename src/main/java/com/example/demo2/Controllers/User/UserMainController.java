@@ -98,16 +98,15 @@ public class UserMainController {
             }
             return;
         }
-        // Create the confirmation dialog
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Subscription Confirmation");
         alert.setHeaderText(null);
         alert.setContentText("Do you agree to pay a 100 EGP fee to subscribe?");
 
-        // Show the dialog and wait for the user's response
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            // User accepted the fee
+
             boolean success = subscribeUser();
             if (success) {
                 showAlert(Alert.AlertType.INFORMATION, "Success", "You have successfully subscribed!", null);
@@ -122,7 +121,6 @@ public class UserMainController {
                 showAlert(Alert.AlertType.ERROR, "Error", "Insufficient balance.", null);
             }
         } else {
-            // User declined the fee
             showAlert(Alert.AlertType.INFORMATION, "Subscription Cancelled", "You have cancelled the subscription.", null);
         }
     }
@@ -136,11 +134,10 @@ public class UserMainController {
     }
 
     private boolean subscribeUser() {
-        // Deduct 100 EGP from the user's account balance
         if (loggedInUser.getAccountBalance() >= 100) {
             loggedInUser.setAccountBalance(loggedInUser.getAccountBalance() - 100);
-            loggedInUser.setPremium(true); // Set the user as premium
-            updateUserCSV(); // Update the user's balance and premium status in the CSV file
+            loggedInUser.setPremium(true);
+            updateUserCSV();
             return true;
         } else {
             return false;

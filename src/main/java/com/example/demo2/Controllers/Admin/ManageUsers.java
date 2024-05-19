@@ -103,7 +103,7 @@ public class ManageUsers {
             admin.addUser(username, password, credit,false );
             userTableView.getItems().add(username);
 //            userAdd.updateUsersFromCSV("users.csv");
-            User newUser = new User(username, password, credit, 0,true);
+            User newUser = new User(username, password, credit, 0,false);
             userAdd.addUser(newUser);
             showAlert(Alert.AlertType.INFORMATION, "Success", "User added successfully!", null);
         } else if (typeUser.equals("Premium")) {
