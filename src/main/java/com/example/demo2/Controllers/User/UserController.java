@@ -174,20 +174,20 @@ public class UserController {
         scene = new Scene(root);
         stage.setScene(scene);
     }
-    public void switchToViewStocks (ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/ViewStocks.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-
-    }
-    public void switchToRequestsPage (ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/RequestsPage.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-
-    }
+//    public void switchToViewStocks (ActionEvent event) throws IOException {
+//        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/ViewStocks.fxml")));
+//        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        scene = new Scene(root);
+//        stage.setScene(scene);
+//
+//    }
+//    public void switchToRequestsPage (ActionEvent event) throws IOException {
+//        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/RequestsPage.fxml")));
+//        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        scene = new Scene(root);
+//        stage.setScene(scene);
+//
+//    }
 //    public void buyStockHandler(ActionEvent event) {
 //        // Retrieve the selected stock from your view
 //        Stock selectedStock = /* Code to retrieve selected stock */;

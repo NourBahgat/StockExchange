@@ -12,7 +12,7 @@
    <children>
       <VBox prefHeight="450.0" prefWidth="230.0" style="-fx-background-color: #007BA7;">
          <children>
-            <JFXButton onAction="#switchToViewStocks" prefHeight="56.0" prefWidth="254.0" text="Explore Stocks" textFill="WHITE">
+            <JFXButton onAction="#switchToExploreStocks" prefHeight="56.0" prefWidth="254.0" text="Explore Stocks" textFill="WHITE">
                <font>
                   <Font name="Century Gothic" size="19.0" />
                </font>

@@ -24,18 +24,12 @@ public class LoginController {
     public void switchToAdmin(ActionEvent event) throws IOException {
         // Check if the admin page is already opened
         if (!adminPageOpened || adminStage == null) {
-            // Load the admin screen
             Parent root = FXMLLoader.load(getClass().getResource("/FXML/Admin/Admin.fxml"));
-
-            // Create a new stage for the admin screen
             adminStage = new Stage();
             adminStage.setScene(new Scene(root));
-            // Add a listener to handle the admin stage close event
             adminStage.setTitle("admin");
             adminStage.setOnCloseRequest(event1 -> adminPageOpened = false);
-            // Show the admin stage
             adminStage.show();
-            // Set the flag to true indicating that the admin page is opened
             adminPageOpened = true;
         } else {
             // If admin page is already opened, bring it to front
@@ -52,13 +46,5 @@ public class LoginController {
         signInStage.setTitle("Sign In");
         signInStage.setScene(new Scene(root));
         signInStage.show();
-    }
-
-    public void switchToSignInPremium(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/PremiumUser/PremiumSignIn.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-
     }
 }

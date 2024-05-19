@@ -1,6 +1,9 @@
 package com.example.demo2.Controllers.Admin;
 
 import com.example.demo2.*;
+import com.example.demo2.Controllers.User.UserController;
+import com.example.demo2.Controllers.User.UserMainController;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,14 +12,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TableColumn;
 
 import java.net.URL;
 import java.util.List;
@@ -47,6 +47,46 @@ public class AdminController implements Initializable {
 //    @FXML
 //    private Label stcklbl;
     public static boolean StartSession = true;
+
+    public static void checkSession(Stage currentStage) {
+        if (!StartSession) {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Session Expired");
+                alert.setHeaderText(null);
+                alert.setContentText("SESSION EXPIRED");
+                alert.showAndWait();
+                redirectToLoginPage(currentStage);
+            });
+        }
+    }
+    public static boolean isStartSession() {
+        return StartSession;
+    }
+
+    private static void redirectToLoginPage(Stage currentStage) {
+        try {
+            Parent root = FXMLLoader.load(AdminController.class.getResource("/Fxml/Login.fxml"));
+            Scene scene = new Scene(root);
+            currentStage.setScene(scene);
+            currentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+//    private static void redirectToLogin(Stage stage) throws IOException {
+//        Parent root = FXMLLoader.load(.class.getResource("/Fxml/Login.fxml"));
+//        Scene scene = new Scene(root);
+//        Platform.runLater(() -> stage.setScene(scene));
+//    }
+//    public static void setStartSession(boolean startSession) {
+//        StartSession = startSession;
+//    }
+//
+//    public static boolean isStartSession() {
+//        return StartSession;
+//    }
+
 
     public void handleLogIn(ActionEvent event) throws IOException {
         String username = usernameField.getText();
@@ -92,13 +132,6 @@ public class AdminController implements Initializable {
 
     public void EndSession(ActionEvent event) throws IOException {
         StartSession = false;
-    }
-
-    public void SwitchToMainBage(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/FXML/Login.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
     }
 
     public void BackToMain(ActionEvent event) throws IOException {

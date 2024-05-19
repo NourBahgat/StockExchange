@@ -1,5 +1,6 @@
 package com.example.demo2.Controllers.User;
 
+import com.example.demo2.Controllers.Admin.AdminController;
 import com.example.demo2.Stock;
 import com.example.demo2.User;
 import javafx.event.ActionEvent;
@@ -38,8 +39,12 @@ public class UserMainController {
     @FXML
     private Label Remaining;
 
-    public void switchToViewStocks(ActionEvent event) throws IOException {
+    public void switchToExploreStocks(ActionEvent event) throws IOException {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        AdminController.checkSession(currentStage);
+        if (AdminController.isStartSession()) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/ViewStocks.fxml"));
+
         root = loader.load();
         ViewStocks viewStocks = loader.getController();
         viewStocks.initData(loggedInUser);
@@ -47,18 +52,24 @@ public class UserMainController {
         scene = new Scene(root);
         stage.setScene(scene);
     }
+        }
+
 
     public void switchToRequestsPage(ActionEvent event) throws IOException {
     }
 
     public void switchToTrackStocks(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/TrackStocks.fxml"));
-        root = loader.load();
-        TrackStocksController controller = loader.getController();
-        controller.initData(loggedInUser);
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        AdminController.checkSession(currentStage);
+        if (AdminController.isStartSession()) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/TrackStocks.fxml"));
+            root = loader.load();
+            TrackStocksController controller = loader.getController();
+            controller.initData(loggedInUser);
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+        }
     }
 
     public void initData(User user) {
@@ -75,50 +86,42 @@ public class UserMainController {
         stage.setScene(scene);
     }
 
-    public void GoToSubscribe(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/Subscription.fxml")));
-        stage.setScene(scene);
-    }
-
-    public void switchToPremiumPage(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/PremiumUser/PremiumPage.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-    }
 
     @FXML
     private void handleSubscribeButton(ActionEvent event) {
-        if (loggedInUser.isPremium()) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setHeaderText(null);
-            alert.setContentText("You are already subscribed to premium");
-            alert.showAndWait();
-        } else {
-            // Create the confirmation dialog
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Subscription Confirmation");
-            alert.setHeaderText(null);
-            alert.setContentText("Do you agree to pay a 100 EGP fee to subscribe?");
-
-            // Show the dialog and wait for the user's response
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                // User accepted the fee
-                boolean success = subscribeUser();
-                if (success) {
-                    showAlert(Alert.AlertType.INFORMATION, "Success", "You have successfully subscribed to premium and notifications on stock price changes !", null);
-
-                } else {
-                    showAlert(Alert.AlertType.ERROR, "Error", "Insufficient balance.", null);
-                }
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        AdminController.checkSession(currentStage);
+        if (AdminController.isStartSession()) {
+            if (loggedInUser.isPremium()) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText(null);
+                alert.setContentText("You are already subscribed to premium");
+                alert.showAndWait();
             } else {
-                // User declined the fee
-                showAlert(Alert.AlertType.INFORMATION, "Subscription Cancelled", "You have cancelled the subscription.", null);
+                // Create the confirmation dialog
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Subscription Confirmation");
+                alert.setHeaderText(null);
+                alert.setContentText("Do you agree to pay a 100 EGP fee to subscribe?");
+
+                // Show the dialog and wait for the user's response
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    // User accepted the fee
+                    boolean success = subscribeUser();
+                    if (success) {
+                        showAlert(Alert.AlertType.INFORMATION, "Success", "You have successfully subscribed to premium and notifications on stock price changes !", null);
+
+                    } else {
+                        showAlert(Alert.AlertType.ERROR, "Error", "Insufficient balance.", null);
+                    }
+                } else {
+                    // User declined the fee
+                    showAlert(Alert.AlertType.INFORMATION, "Subscription Cancelled", "You have cancelled the subscription.", null);
+                }
             }
         }
     }
-
     private static void showAlert(Alert.AlertType alertType, String title, String message, String headerText) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -138,19 +141,6 @@ public class UserMainController {
         }
     }
 
-//    private void redirectToAnotherPage(ActionEvent event) throws IOException {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/PremiumUser/PremiumPage.fxml"));
-//        root = loader.load();
-//        // Get the current stage
-//        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//        scene = new Scene(root);
-//        PremiumController premiumController = loader.getController();
-//        premiumController.initData(loggedInUser);
-//        // Set the scene for the stage
-//        stage.setScene(scene);
-//        stage.show();
-//    }
-
     public void Notifications(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/Notifications.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -167,41 +157,51 @@ public class UserMainController {
     }
 
     public void switchToMarketPerformance(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/MarketPerformanceCharts.fxml"));
-        Parent root = loader.load();
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        AdminController.checkSession(currentStage);
+        if (AdminController.isStartSession()) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/MarketPerformanceCharts.fxml"));
+            Parent root = loader.load();
 
-        MarketPerformanceController controller = loader.getController();
+            MarketPerformanceController controller = loader.getController();
 //        controller.setStock(selectedStock);
-        controller.initData(loggedInUser);
-        controller.initialize(stockList);
+            controller.initData(loggedInUser);
+            controller.initialize(stockList);
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     public void switchToDepositWithdraw(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/StandardUser/DepositOrWithdraw.fxml"));
-        root = loader.load();
-        DepositOrWithdawController DepositOrWithdraw = loader.getController();
-        DepositOrWithdraw.initData(loggedInUser);
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        AdminController.checkSession(currentStage);
+        if (AdminController.isStartSession()) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/StandardUser/DepositOrWithdraw.fxml"));
+            root = loader.load();
+            DepositOrWithdawController DepositOrWithdraw = loader.getController();
+            DepositOrWithdraw.initData(loggedInUser);
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+        }
     }
-
     public void switchToTransactionHistory(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/StandardUser/TransactionHistory.fxml"));
-        root = loader.load();
-        TransactionHistoryController transactionHistoryController = loader.getController();
-        transactionHistoryController.initData(loggedInUser);
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        AdminController.checkSession(currentStage);
+        if (AdminController.isStartSession()) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/StandardUser/TransactionHistory.fxml"));
+            root = loader.load();
+            TransactionHistoryController transactionHistoryController = loader.getController();
+            transactionHistoryController.initData(loggedInUser);
 
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 }
 
