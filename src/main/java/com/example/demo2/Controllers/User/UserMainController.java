@@ -90,40 +90,32 @@ public class UserMainController {
     @FXML
     private void handleSubscribeButton(ActionEvent event) {
         if (loggedInUser.isPremium()) {
-            // Directly redirect to the Premium page
-            try {
-                redirectToAnotherPage(event);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return;
-        }
-        // Create the confirmation dialog
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Subscription Confirmation");
-        alert.setHeaderText(null);
-        alert.setContentText("Do you agree to pay a 100 EGP fee to subscribe?");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText(null);
+            alert.setContentText("You are already subscribed to premium");
+            alert.showAndWait();
+        } else {
+            // Create the confirmation dialog
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Subscription Confirmation");
+            alert.setHeaderText(null);
+            alert.setContentText("Do you agree to pay a 100 EGP fee to subscribe?");
 
-        // Show the dialog and wait for the user's response
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            // User accepted the fee
-            boolean success = subscribeUser();
-            if (success) {
-                showAlert(Alert.AlertType.INFORMATION, "Success", "You have successfully subscribed!", null);
+            // Show the dialog and wait for the user's response
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                // User accepted the fee
+                boolean success = subscribeUser();
+                if (success) {
+                    showAlert(Alert.AlertType.INFORMATION, "Success", "You have successfully subscribed to premium and notifications on stock price changes !", null);
 
-                // Redirect to another FXML page
-                try {
-                    redirectToAnotherPage(event);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Error", "Insufficient balance.", null);
                 }
             } else {
-                showAlert(Alert.AlertType.ERROR, "Error", "Insufficient balance.", null);
+                // User declined the fee
+                showAlert(Alert.AlertType.INFORMATION, "Subscription Cancelled", "You have cancelled the subscription.", null);
             }
-        } else {
-            // User declined the fee
-            showAlert(Alert.AlertType.INFORMATION, "Subscription Cancelled", "You have cancelled the subscription.", null);
         }
     }
 
@@ -147,32 +139,18 @@ public class UserMainController {
         }
     }
 
-    private void redirectToAnotherPage(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/PremiumUser/PremiumPage.fxml"));
-        root = loader.load();
-        // Get the current stage
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        PremiumController premiumController = loader.getController();
-        premiumController.initData(loggedInUser);
-        // Set the scene for the stage
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    //    public void Subscripe(ActionEvent event) throws IOException {
-//        if (depositedMoney < Subscriptionprice) {
-//            smallamount.setText("Insufficient Amount");
-//        }
-//        else{
-//
-//            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/SubscriptionMain.fxml")));
-//            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//            scene = new Scene(root);
-//            stage.setScene(scene);
-//            remainingBalance=depositedMoney-Subscriptionprice ;
-//            Remaining.setText("Remaining Balance ="+remainingBalance+"EGP");
-//        }
+//    private void redirectToAnotherPage(ActionEvent event) throws IOException {
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/PremiumUser/PremiumPage.fxml"));
+//        root = loader.load();
+//        // Get the current stage
+//        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        scene = new Scene(root);
+//        PremiumController premiumController = loader.getController();
+//        premiumController.initData(loggedInUser);
+//        // Set the scene for the stage
+//        stage.setScene(scene);
+//        stage.show();
+//    }
 
     public void Notifications(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/Notifications.fxml")));
@@ -182,15 +160,6 @@ public class UserMainController {
 
     }
 
-    //    public void deposit(ActionEvent event) throws IOException {
-//        depositedMoney =Double.parseDouble( MoneyTextField.getText());
-//    }
-//    public void Subscripe(ActionEvent event) throws IOException {
-//        if (depositedMoney < Subscriptionprice) {
-//            smallamount.setText("Insufficient Amount");
-//        } else {
-//
-//        }
     public void LineCharts(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/Charts.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
