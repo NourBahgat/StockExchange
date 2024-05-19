@@ -21,6 +21,7 @@ public class PremiumController {
     private Stage stage;
     private Scene scene;
     private Parent root;
+    private User loggedInUser;
     @FXML
     private TextField usernameField;
     @FXML
@@ -36,8 +37,12 @@ public class PremiumController {
 //        stage.setScene(scene);
 //    }
 
+    public void initData(User user){
+        loggedInUser=user;
+    }
+
     public void BackToUserMain(ActionEvent event) throws IOException {
-        User user = UserController.loggedInUser;
+        User user = loggedInUser;
         System.out.println(user.toString());
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/UserMain.fxml"));
         root = loader.load();

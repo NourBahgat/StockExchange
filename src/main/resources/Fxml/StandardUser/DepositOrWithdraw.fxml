@@ -47,5 +47,10 @@
             <Font name="Century Gothic" size="12.0" />
          </font>
       </JFXButton>
+      <JFXButton layoutX="547.0" layoutY="407.0" onAction="#backtoUserMain" style="-fx-background-color: #007BA7;" text="Back" textFill="WHITE">
+         <font>
+            <Font name="Century Gothic" size="12.0" />
+         </font>
+      </JFXButton>
    </children>
 </AnchorPane>

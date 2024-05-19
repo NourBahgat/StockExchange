@@ -2,16 +2,29 @@ package com.example.demo2.Controllers.User;
 
 import com.example.demo2.TimeStamp;
 import com.example.demo2.Stock;
+import com.example.demo2.User;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.stage.Stage;
 
+import javax.swing.text.View;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class MarketPerformanceController {
+    private User loggedInUser;
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
 
     @FXML
     private LineChart<Number, Number> stockChart;
@@ -47,6 +60,10 @@ public class MarketPerformanceController {
         stockChart.setAnimated(true);
     }
 
+    public void initData(User user){
+        loggedInUser = user;
+    }
+
     public void setStock(Stock stock) {
 //        stockChart.getData().clear();
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
@@ -64,5 +81,18 @@ public class MarketPerformanceController {
         }
 
         stockChart.getData().add(series);
+    }
+
+    public void backtoStocks(ActionEvent event) throws IOException {
+        User user = loggedInUser;
+        System.out.println(user.toString());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/UserMain.fxml"));
+        root = loader.load();
+        UserMainController mainController = loader.getController();
+        mainController.initData(user);
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
     }
 }

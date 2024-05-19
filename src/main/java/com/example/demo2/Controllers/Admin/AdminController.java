@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
 import static com.example.demo2.StockExchangeManager.stockList;
 import static com.example.demo2.StockExchangeManager.users;
 
-public class AdminController implements Initializable{
+public class AdminController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -39,10 +39,10 @@ public class AdminController implements Initializable{
     @FXML
     private PasswordField passwordField;
     @FXML
-    private Label label;
+    private Label label = new Label();
     @FXML
-    private Label label1;
-//    @FXML
+    private Label label1 = new Label();
+    //    @FXML
 //    private Label label2;
 //    @FXML
 //    private Label stcklbl;
@@ -64,54 +64,64 @@ public class AdminController implements Initializable{
             label.setText("Invalid username or password");
         }
     }
-    public void switchToManageUsers (ActionEvent event) throws IOException {
+
+    public void switchToManageUsers(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/ManageUsers.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
     }
-    public void switchToManageStocks (ActionEvent event) throws IOException {
+
+    public void switchToManageStocks(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/ManageStocks.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
     }
-    public void switchToManageSessions(ActionEvent event) throws IOException{
+
+    public void switchToManageSessions(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/trading session.fxml")));
-    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    scene = new Scene(root);
-    stage.setScene(scene);
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
     }
+
     public void StartSession(ActionEvent event) throws IOException {
-        StartSession =true;
+        StartSession = true;
     }
+
     public void EndSession(ActionEvent event) throws IOException {
-        StartSession =false;
+        StartSession = false;
     }
+
     public void SwitchToMainBage(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/FXML/Login.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
     }
+
     public void BackToMain(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/AdminMain.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
     }
+
     public void AdminLogOut(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Login.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
     }
-public void switchToManageRequests(ActionEvent event) throws IOException{
-    root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/ManageRequests.fxml")));
-    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    scene = new Scene(root);
-    stage.setScene(scene);
-}
+
+    public void switchToManageRequests(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/ManageRequests.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+    }
+
     private void updateUserAndStockCount() {
         int numUsers = users.size();
         int numStocks = stockList.size();
@@ -121,11 +131,11 @@ public void switchToManageRequests(ActionEvent event) throws IOException{
         //mesh rady yetba3 gher label bs?????!!!!!!
 //
 //
-//      label1.setText(String.valueOf(numStocks));
+        label1.setText(String.valueOf(numStocks));
     }
 
-   @Override
-  public void initialize(URL location, ResourceBundle resources) {
-      updateUserAndStockCount();
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        updateUserAndStockCount();
     }
 }

@@ -39,28 +39,26 @@ public class UserMainController {
     private Label Remaining;
 
     public void switchToViewStocks(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/ViewStocks.fxml")));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/ViewStocks.fxml"));
+        root = loader.load();
+        ViewStocks viewStocks = loader.getController();
+        viewStocks.initData(loggedInUser);
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
-        stage.show();
     }
 
     public void switchToRequestsPage(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/RequestsPage.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-
     }
 
     public void switchToTrackStocks(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/TrackStocks.fxml")));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/TrackStocks.fxml"));
+        root = loader.load();
+        TrackStocksController controller = loader.getController();
+        controller.initData(loggedInUser);
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
-        stage.show();
-
     }
 
     public void initData(User user) {
@@ -150,13 +148,13 @@ public class UserMainController {
     }
 
     private void redirectToAnotherPage(ActionEvent event) throws IOException {
-        // Load the new FXML page
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/PremiumUser/PremiumPage.fxml")));
-
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/PremiumUser/PremiumPage.fxml"));
+        root = loader.load();
         // Get the current stage
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
-
+        PremiumController premiumController = loader.getController();
+        premiumController.initData(loggedInUser);
         // Set the scene for the stage
         stage.setScene(scene);
         stage.show();
@@ -206,6 +204,7 @@ public class UserMainController {
 
         MarketPerformanceController controller = loader.getController();
 //        controller.setStock(selectedStock);
+        controller.initData(loggedInUser);
         controller.initialize(stockList);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

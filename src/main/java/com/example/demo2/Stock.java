@@ -110,6 +110,15 @@ public class Stock {
             }
         }
     }
+
+    public void removeBuyer(User user) {
+        if (buyers.containsKey(user)) {
+            List<Double> purchasePrices = buyers.get(user);
+            availableStocks.add(purchasePrices.size());
+            buyers.remove(user);
+        }
+    }
+
     public void setPriceHistory(List<TimeStamp> priceHistory) {
         this.priceHistory = priceHistory;
     }

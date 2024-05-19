@@ -9,6 +9,7 @@
 <?import javafx.scene.text.Font?>
 
 
+<?import com.jfoenix.controls.JFXButton?>
 <AnchorPane prefHeight="450.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.Controllers.User.MarketPerformanceController">
    <children>
       <LineChart fx:id="stockChart" layoutX="126.0" layoutY="25.0">
@@ -29,4 +30,9 @@
          </children>
       </Pane>
    </children>
+    <JFXButton layoutX="15.0" layoutY="407.0" onAction="#backtoStocks" style="-fx-background-color: #007BA7;" text="Back" textFill="WHITE">
+        <font>
+            <Font name="Century Gothic" size="12.0" />
+        </font>
+    </JFXButton>
 </AnchorPane>

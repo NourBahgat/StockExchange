@@ -1,5 +1,6 @@
 package com.example.demo2.Controllers.Admin;
 import com.example.demo2.Admin;
+import com.example.demo2.App;
 import com.example.demo2.StockExchangeManager;
 import com.example.demo2.User;
 import javafx.beans.property.SimpleStringProperty;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.example.demo2.Admin.searchUserInCSV;
+import static com.example.demo2.StockExchangeManager.getUserFromUsername;
 import static com.example.demo2.StockExchangeManager.users;
 
 
@@ -44,6 +46,7 @@ public class ManageUsers {
     @FXML
     public void initialize() {
         userTableView.getItems().clear();
+        stockExchangeManager = App.manager;
         // Get the list of usernames from UserManager
         List<User> users = stockExchangeManager.getUsers();
 
@@ -69,10 +72,7 @@ public class ManageUsers {
         String selected = userTableView.getSelectionModel().selectedItemProperty().getValue();
 //        Admin delete = new Admin();
 //        delete.removeUser(selected);
-        users.remove(selected);
-        System.out.println(selected);
-        StockExchangeManager.updateUserCSV();
-        System.out.println(users);
+        stockExchangeManager.removeUser(getUserFromUsername(selected));
         userTableView.refresh();
         userTableView.getItems().clear();
         List<User> updatedUsernames = stockExchangeManager.getUsers();

@@ -66,7 +66,7 @@ public class ViewStocks {
     }
 
     public void initData(User user){
-        loggedInUser=user;
+        loggedInUser = user;
     }
 
     private void loadStocksData() {
@@ -89,7 +89,7 @@ public class ViewStocks {
 
     public void BuyStock (ActionEvent event) throws IOException {
         User user = loggedInUser;
-        if(selectedstock !=null){
+        if(selectedstock != null){
             stockExchangeManager.createTransactionRequest(user, RequestType.BUY_STOCK, selectedstock, selectedstock.getActualCurrentPrice());
         }
     }
@@ -109,6 +109,8 @@ public class ViewStocks {
 
         MarketPerformanceController controller = loader.getController();
         controller.setStock(selectedStock);
+        System.out.println(loggedInUser);
+        controller.initData(loggedInUser);
         controller.initialize(stockList);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

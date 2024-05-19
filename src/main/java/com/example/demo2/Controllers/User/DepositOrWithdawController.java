@@ -74,4 +74,16 @@ public class DepositOrWithdawController {
         alert.showAndWait();
     }
 
+    public void backtoUserMain(ActionEvent event) throws IOException {
+        User user = loggedInUser;
+        System.out.println(user.toString());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/UserMain.fxml"));
+        root = loader.load();
+        UserMainController userMainController = loader.getController();
+        userMainController.initData(user);
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+    }
 }

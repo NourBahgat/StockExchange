@@ -1,4 +1,6 @@
 package com.example.demo2;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -11,6 +13,8 @@ public class User {
     private int numOfStocks;
     private List<Pair<String, Double>> transactionHistory;
 
+    private HashMap<Stock, Double> autoBuyList;
+    private HashMap<Stock, Double> costTrackList;
 
     public User(String username, String password, double accountBalance, int numOfStocks, boolean isPremium) {
         this.username = username;
@@ -19,6 +23,8 @@ public class User {
         this.numOfStocks=numOfStocks;
         this.isPremium=isPremium;
         this.transactionHistory = new ArrayList<>();
+        this.autoBuyList = new HashMap<>();
+        this.costTrackList = new HashMap<>();
 //        this.depositPending = false;
 //        this.withdrawPending = false;
     }
@@ -66,6 +72,70 @@ public class User {
     public boolean isPremium() {
         return isPremium;
     }
+
+    public boolean isCostTracked(Stock stock) {
+        return costTrackList.containsKey(stock);
+    }
+
+    public void setCostTracked(Stock stock, Double currentCost) {
+        costTrackList.put(stock, currentCost);
+    }
+
+    public void checkCostChange() {
+        for (Map.Entry<Stock, Double> costTracker : costTrackList.entrySet()) {
+            Stock stock = costTracker.getKey();
+            double prevPrice = costTracker.getValue();
+            double currPrice = stock.getActualCurrentPrice();
+            if (prevPrice != currPrice) {
+                costTracker.setValue(currPrice);
+                Platform.runLater(() -> {
+                    Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
+                    errorAlert.setTitle("Stock " + stock.getActualLabel() + " price change!");
+                    errorAlert.setHeaderText("Hello, " + username);
+                    errorAlert.setContentText("Price changed from " + prevPrice + " to " + currPrice + ".");
+                    errorAlert.showAndWait();
+                });
+            }
+        }
+    }
+
+    public void removeCostTrack(Stock stock) {
+        costTrackList.remove(stock);
+    }
+
+    public HashMap<Stock, Double> getCostTrackList() { return costTrackList; }
+
+    public boolean isAutoBuy(Stock stock) {
+        return autoBuyList.containsKey(stock);
+    }
+
+    public void setAutoBuy(Stock stock, Double cost) {
+        autoBuyList.put(stock, cost);
+    }
+
+    public void checkAutoBuy() {
+        Iterator<Map.Entry<Stock, Double>> iterator = autoBuyList.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry<Stock, Double> autoBuy = iterator.next();
+            Stock stock = autoBuy.getKey();
+            double wantedPrice = autoBuy.getValue();
+            double currPrice = stock.getActualCurrentPrice();
+            if (currPrice <= wantedPrice) {
+                System.out.println(currPrice + "  " + wantedPrice);
+                iterator.remove(); // Remove safely using iterator
+                Platform.runLater(() -> {
+                    StockExchangeManager.createTransactionRequest(this, RequestType.BUY_STOCK, stock, currPrice);
+                });
+            }
+        }
+    }
+
+    public void removeAutoBuy(Stock stock) {
+        autoBuyList.remove(stock);
+    }
+
+    public HashMap<Stock, Double> getAutoBuyList() { return autoBuyList; }
 
     public void setPremium(boolean premium) {
         isPremium = premium;
