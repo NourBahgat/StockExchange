@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.example.demo2.Controllers.Admin.ManageUsers.showAlert;
 import static com.example.demo2.StockExchangeManager.updateUserCSV;
 
 import static com.example.demo2.StockExchangeManager.stockList;
@@ -38,21 +37,23 @@ public class UserMainController {
     private Label smallamount;
     @FXML
     private Label Remaining;
+    @FXML
+    private TableView<Stock> stockTableView;
 
     public void switchToExploreStocks(ActionEvent event) throws IOException {
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         AdminController.checkSession(currentStage);
         if (AdminController.isStartSession()) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/ViewStocks.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/ViewStocks.fxml"));
 
-        root = loader.load();
-        ViewStocks viewStocks = loader.getController();
-        viewStocks.initData(loggedInUser);
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-    }
+            root = loader.load();
+            ViewStocks viewStocks = loader.getController();
+            viewStocks.initData(loggedInUser);
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
         }
+    }
 
 
     public void switchToRequestsPage(ActionEvent event) throws IOException {
@@ -150,7 +151,7 @@ public class UserMainController {
     }
 
     public void LineCharts(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/Charts.fxml")));
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/ViewCharts.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -203,5 +204,20 @@ public class UserMainController {
             stage.show();
         }
     }
-}
 
+    @FXML
+    public void viewCharts(ActionEvent event) throws IOException {
+        Stock selectedStock = stockTableView.getSelectionModel().getSelectedItem();
+        if (selectedStock != null) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/MarketPerformance.fxml"));
+            root = loader.load();
+            MarketPerformanceController marketPerformanceController = loader.getController();
+            marketPerformanceController.initData(loggedInUser);
+            marketPerformanceController.setStock(selectedStock);
+
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+        }
+    }
+}

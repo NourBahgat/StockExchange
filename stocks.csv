@@ -1,6 +1,6 @@
 label,initial price,current price,available stocks,profit
-Adidas,300.0,700.0,20,13.0
-Windows,200.0,1000.0,60,14.0
+Adidas,300.0,1000.0,19,13.0
+Windows,200.0,1100.0,59,14.0
 Apple,300.0,1000.0,37,15.0
 Voxx,400.0,600.0,100,17.0
 Seagate,200.0,1000.0,197,12.0
