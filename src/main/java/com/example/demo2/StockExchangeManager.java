@@ -1,9 +1,7 @@
 package com.example.demo2;
 
-import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ListView;
 import javafx.util.Pair;
 
 import java.io.BufferedReader;
@@ -284,6 +282,11 @@ public static User getLoggedInUser(String username, String password) {
             System.err.println("Error saving stock transaction history: " + e.getMessage());
         }
     }
+    public static void saveAllUsersTransactionHistory() {
+        for (User user : users) {
+            exportStockTransactionHistoryToCSV(user);
+        }
+    }
 
     public static void addTransactionRequest(TransactionRequest request) {
         transactionRequests.add(request);
@@ -375,6 +378,7 @@ public static User getLoggedInUser(String username, String password) {
         saveStockPriceHistoryToCSV("PriceHistory.csv");
         saveAutoBuyList("autoBuy.csv");
         saveCostTrackerList("costTracker.csv");
+        saveAllUsersTransactionHistory();
 //        StockExchangeManager.saveTransactionHistoryToCSV(loggedInUser, "transactionHistory.csv");
     }
 
@@ -534,7 +538,7 @@ public static User getLoggedInUser(String username, String password) {
         loadStockPriceHistoryFromCSV("PriceHistory.csv");
         loadAutoBuyList("autoBuy.csv");
         loadCostTrackerList("costTracker.csv");
-//        StockExchangeManager.loadTransactionHistoryFromCSV(, "transactionHistory.csv");
+        loadAllUsersTransactionHistory();
     }
 
     public void exportUserRequestsToCSV(String filename) throws IOException {
@@ -548,6 +552,7 @@ public static User getLoggedInUser(String username, String password) {
             }
         }
     }
+
     public static void saveStockPriceHistoryToCSV(String filePath) {
         try (FileWriter writer = new FileWriter(filePath)) {
             writer.append("StockLabel,Timestamp,Price\n");
@@ -599,6 +604,32 @@ public static User getLoggedInUser(String username, String password) {
             System.err.println("Error loading stock price history: " + e.getMessage());
         }
     }
+    public static void loadStockTransactionHistory(User user) {
+        String filename = user.getUsername() + "_stock_transaction_history.csv";
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 4) {
+                    String timestamp = parts[0];
+                    String type = parts[1];
+                    String stock = parts[2];
+                    double price = Double.parseDouble(parts[3]);
+                    user.addStockTransaction(timestamp + "," + type + "," + stock + "," + price);
+                }
+            }
+            System.out.println("Stock transaction history loaded successfully for user: " + user.getUsername());
+        } catch (IOException e) {
+            System.err.println("Error loading stock transaction history for user " + user.getUsername() + ": " + e.getMessage());
+        }
+    }
+    public static void loadAllUsersTransactionHistory() {
+        for (User user : users) {
+            loadStockTransactionHistory(user);
+        }
+    }
+
 
     public static void loadUserList() {
         String csvFile = "users.csv";

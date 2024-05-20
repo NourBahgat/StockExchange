@@ -65,7 +65,7 @@ public class TrackStocksController {
                     stockDataList.add(new StockData(stock.getActualLabel(), cost, stock.getActualCurrentPrice()));
                 }
             }
-            stockTableView.setItems(stockDataList);  // Set items to the table view
+            stockTableView.setItems(stockDataList);
         }
     }
 
@@ -124,5 +124,6 @@ public class TrackStocksController {
     public void handleExportButton(){
         User user = loggedInUser;
         StockExchangeManager.exportStockTransactionHistoryToCSV(user);
+
     }
 }
