@@ -31,7 +31,6 @@ public class User {
         this.autoBuyList = new HashMap<>();
         this.costTrackList = new HashMap<>();
         this.stockTransactions = new ArrayList<>();
-//        this.stockTransactions = new ArrayList<>(); // Initialize the list
     }
 
     public User() {
@@ -40,7 +39,6 @@ public class User {
         this.accountBalance = accountBalance;
         this.numOfStocks = numOfStocks;
         this.isPremium = isPremium;
-//        this.stockTransactions = new ArrayList<>();
     }
 
     public double getAccountBalance() {
@@ -88,39 +86,6 @@ public class User {
         costTrackList.put(stock, currentCost);
     }
 
-
-//    public void checkCostChange() {
-//        // Check if the logged-in user is a premium subscriber
-//        if (loggedInUser != null && loggedInUser.isPremium()) {
-//            System.out.println("User is premium, checking for cost changes..."); // Debug statement
-//
-//            for (Map.Entry<Stock, Double> costTracker : costTrackList.entrySet()) {
-//                Stock stock = costTracker.getKey();
-//                double prevPrice = costTracker.getValue();
-//                double currPrice = stock.getActualCurrentPrice();
-//
-//                if (prevPrice != currPrice) {
-//                    costTracker.setValue(currPrice);
-//
-//                    // Run this part of the code on the JavaFX Application Thread
-//                    Platform.runLater(() -> {
-//                        System.out.println("Showing alert for stock: " + stock.getActualLabel());
-//
-//                        Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
-//                        errorAlert.setTitle("Stock " + stock.getActualLabel() + " price change!");
-//                        errorAlert.setHeaderText("Hello, " + loggedInUser.getUsername());
-//                        errorAlert.setContentText("Price changed from " + prevPrice + " to " + currPrice + ".");
-//                        errorAlert.showAndWait();
-//
-//                        System.out.println("Displayed alert for stock: " + stock.getActualLabel()); // Debug statement
-//                    });
-//                    StockExchangeManager.saveCostTrackerList("costTracker.csv");
-//                }
-//            }
-//        } else {
-//            System.out.println("User is not premium or loggedInUser is null."); // Debug statement
-//        }
-//    }
     public void checkCostChange() {
 
         for (Map.Entry<Stock, Double> costTracker : costTrackList.entrySet()) {
@@ -235,15 +200,5 @@ public class User {
     public List<Pair<String, Double>> getTransactionHistory() {
         return transactionHistory;
     }
-
-//    public void addStockTransaction(String stockLabel, double purchasePrice, double sellingPrice) {
-//        stockTransactions.add(new StockTransaction(stockLabel, purchasePrice, sellingPrice));
-//    }
-
-//    public List<StockTransaction> getStockTransactions() {
-//        return stockTransactions;
-//    }
-
-    // Inner class to represent a stock transaction
 
 }

@@ -17,7 +17,6 @@ import static java.lang.Thread.sleep;
 public class StockExchangeManager {
     public static List<User> users = new ArrayList<>();
     private static Map<User, List<String>> userRequests;
-//    private List<Stock.Transaction> transactionHistory;
     public static ArrayList<Stock> stockList = new ArrayList<>();
     private static List<TransactionRequest> transactionRequests = new ArrayList<>();
     private List<Stock> availableStocks;
@@ -28,11 +27,9 @@ public class StockExchangeManager {
 
     public StockExchangeManager() {
         this.userRequests = new HashMap<>();
-//        this.transactionHistory = new ArrayList<>();
         this.availableStocks = new ArrayList<>();
         this.orders = new ArrayList<>();
         this.sessions = new ArrayList<>();
-
         new Thread(this::checkUpdates).start();
     }
 
@@ -40,10 +37,8 @@ public class StockExchangeManager {
         while(true) {
             System.out.println("Checking for updates");
             for (User user : users) {
-//                if (user.isPremium() == true) {
                     user.checkAutoBuy();
                     user.checkCostChange();
-               // }
             }
             try {
                 sleep(1000);
@@ -53,18 +48,10 @@ public class StockExchangeManager {
         }
     }
 
-//    public void addUser(User user) {
-//        users.add(user);
-//        userRequests.put(user, new ArrayList<>());
-//    }
-
     public void addUser(User user) {
         this.users.add(user);
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
 
     public void listUsers() {
         System.out.println("List of Users:");
@@ -73,7 +60,7 @@ public class StockExchangeManager {
         }
     }
     public static void updateUsersFromCSV(String filename) {
-        users.clear(); // Clear the current list of users
+        users.clear();
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             int idx = 0;
@@ -90,17 +77,6 @@ public class StockExchangeManager {
         }
     }
 
-    private static ArrayList<String> getUsernameList() {
-        ArrayList<String> usernames = new ArrayList<>();
-
-        for (User user : users) {
-            usernames.add(user.getUsername());
-        }
-
-        return usernames;
-    }
-
-
     public static User getUserFromUsername(String username) {
         for (User user : users) if (user.getUsername().equals(username)) return user;
         return null;
@@ -111,14 +87,6 @@ public class StockExchangeManager {
         return null;
     }
 
-//    public static User getLoggedInUser(String username, String password) {
-//        for (User user : users) {
-//            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-//                return user;
-//            }
-//        }
-//        return null;
-//    }
 public static User getLoggedInUser(String username, String password) {
     for (User user : users) {
         System.out.println(user.toString());
@@ -127,17 +95,6 @@ public static User getLoggedInUser(String username, String password) {
     }
     return null;
 }
-
-
-    public static void addUserRequest(User user, String request) {
-        if (userRequests.containsKey(user)) {
-            userRequests.get(user).add(request);
-        } else {
-            List<String> requests = new ArrayList<>();
-            requests.add(request);
-            userRequests.put(user, requests);
-        }
-    }
 
     public static void buyStock(User user, Stock stock) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -213,8 +170,6 @@ public static User getLoggedInUser(String username, String password) {
         }
     }
 
-
-
     public static List<Pair<Stock, List<Double>>> getUserBoughtStocks(User user) {
         List<Pair<Stock, List<Double>>> boughtStocksList = new ArrayList<>();
         for (Stock stock : stockList) {
@@ -227,16 +182,6 @@ public static User getLoggedInUser(String username, String password) {
         return boughtStocksList;
     }
 
-
-    public static void removeStockFromUser(User user, String stockLabel, double purchasePrice) {
-        Stock stock = getStockFromLabel(stockLabel);
-        if (stock != null) {
-            stock.removeBuyer(user, purchasePrice);
-//            updateBoughtStocksCSV();
-//            updateStockCSV();
-        }
-    }
-
     public static void createTransactionRequest(User user, RequestType type, Stock stock, Double amount) {
         TransactionRequest newRequest = new TransactionRequest(user, type, stock, amount);
         addTransactionRequest(newRequest);
@@ -246,15 +191,11 @@ public static User getLoggedInUser(String username, String password) {
         infoAlert.setContentText("Your request has been submitted for approval.");
         infoAlert.showAndWait();
     }
-    public static void logTransaction(User user, String type, Double amount) {
-        user.addTransaction(type, amount);
-        transactionHistory.add(new Pair<>(type, amount));
-    }
+
     public static void logStockTransaction(User user, String type, Stock stock, Double price) {
         String transaction = String.format("%s,%s,%s,%.2f", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME), type, stock.getActualLabel(), price);
         user.addStockTransaction(transaction);
     }
-
 
     public static void saveTransactionHistoryToCSV(User user) {
         String filePath = user.getUsername() + "_transaction_history.csv";
@@ -614,26 +555,6 @@ public static User getLoggedInUser(String username, String password) {
             }
         } catch (IOException e) {
             System.err.println("Error loading stock price history: " + e.getMessage());
-        }
-    }
-    public static void loadStockTransactionHistory(User user) {
-        String filename = user.getUsername() + "_stock_transaction_history.csv";
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            reader.readLine();
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 4) {
-                    String timestamp = parts[0];
-                    String type = parts[1];
-                    String stock = parts[2];
-                    double price = Double.parseDouble(parts[3]);
-                    user.addStockTransaction(timestamp + "," + type + "," + stock + "," + price);
-                }
-            }
-            System.out.println("Stock transaction history loaded successfully for user: " + user.getUsername());
-        } catch (IOException e) {
-            System.err.println("Error loading stock transaction history for user " + user.getUsername() + ": " + e.getMessage());
         }
     }
 

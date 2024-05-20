@@ -33,7 +33,7 @@ public class Admin {
     }
 
     public static String[] searchUserInCSV(String username) {
-        String csvFile = "users.csv"; // Replace with the path to your CSV file
+        String csvFile = "users.csv";
         String line;
         String cvsSplitBy = ",";
 
@@ -49,10 +49,7 @@ public class Admin {
         }
         return null;
     }
-    // Method to add a new user
-//  public void addUser(User user, StockExchangeManager stockExchangeManager) {
-//       stockExchangeManager.addUser(user);
-// }
+
     public void removeUser(String username) {
         String csvFile = "users.csv";
         String tempFile = "temp.csv";
@@ -94,17 +91,6 @@ public class Admin {
             System.err.println("Could not delete temp file");
         }
     }
-//    public void addUser(String username, String password, double credit) {
-//        String csvFile = "users.csv";
-//
-//        try (FileWriter writer = new FileWriter(csvFile, true)) {
-//            writer.append(username).append(",").append(password).append(",").append(String.valueOf(credit)).append("\n");
-//            writer.flush();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 
     public void addUser(String username, String password, double credit, boolean type) {
         try {
@@ -119,16 +105,9 @@ public class Admin {
         }
     }
 
-
-    // Method to add a new stock
-    public void addStock(Stock stock, StockExchangeManager stockExchangeManager) {
-        stockExchangeManager.addStock(stock);
-    }
-
-    // Method to remove a stock
     public void removeStock(Stock stock) {
-        String csvFile = "stocks.csv"; // Replace with the path to your CSV file
-        String tempFile = "temp2.csv"; // Replace with the path to a temporary file
+        String csvFile = "stocks.csv";
+        String tempFile = "temp2.csv";
 
         File inputFile = new File(csvFile);
         File tempOutputFile = new File(tempFile);
@@ -162,61 +141,5 @@ public class Admin {
             e.printStackTrace();
         }
     }
-    // Method to update stock information
-//    public void updateStockInfo(Stock stock, String label, double initialPrice, double currentPrice, int availableStocks, double profit) {
-//        stock.setLabel(label);
-//        stock.setInitialPrice(initialPrice);
-//        stock.setCurrentPrice(currentPrice);
-//        stock.setAvailableStocks(availableStocks);
-//        stock.setProfit(profit);
-//    }
 
-    // Method to list orders by label
-    public void listOrdersByLabel(String label, StockExchangeManager stockExchangeManager) {
-        stockExchangeManager.listOrdersByLabel(label);
-    }
-
-    // Method to get stock price history
-//    public void getStockPriceHistory(Stock stock) {
-//        System.out.println("Price history for " + stock.getLabel() + ": " + stock.getPriceHistory());
-//    }
-
-    // Method to list user requests
-    public void listUserRequests(StockExchangeManager stockExchangeManager) {
-        stockExchangeManager.listUserRequests();
-    }
-
-    // Method to approve user requests
-    public void approveRequest(User user, String request, StockExchangeManager stockExchangeManager) {
-        stockExchangeManager.approveRequest(user, request);
-    }
-
-    // Method to disapprove user requests
-    public void disapproveRequest(User user, String request, StockExchangeManager stockExchangeManager) {
-        stockExchangeManager.disapproveRequest(user, request);
-    }
-
-    // Method to add session
-    public void addSession(StockExchangeManager.Session session, StockExchangeManager stockExchangeManager) {
-        stockExchangeManager.addSession(session);
-    }
-
-    // Method to remove session
-    public void removeSession(StockExchangeManager.Session session, StockExchangeManager stockExchangeManager) {
-        stockExchangeManager.removeSession(session);
-    }
-
-    // Method to update session
-    public void updateSession(StockExchangeManager.Session session, StockExchangeManager stockExchangeManager) {
-        stockExchangeManager.updateSession(session);
-    }
-
-    // Method to export user requests to CSV
-    public void exportUserRequestsToCSV(String filename, StockExchangeManager stockExchangeManager) {
-        try {
-            stockExchangeManager.exportUserRequestsToCSV(filename);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

@@ -1,7 +1,7 @@
 label,initial price,current price,available stocks,profit
-Adidas,300.0,900.0,20,13.0
-Windows,200.0,1200.0,60,14.0
-Apple,300.0,900.0,40,15.0
-Voxx,400.0,300.0,100,17.0
-Seagate,200.0,1000.0,200,12.0
-AliBaba,100.0,700.0,200,13.0
+Adidas,300.0,1000.0,16,13.0
+Windows,200.0,1100.0,59,14.0
+Apple,300.0,600.0,37,15.0
+Seagate,200.0,1000.0,196,12.0
+Maybelline,600.0,800.0,60,20.0
+Nike,500.0,500.0,60,20.0

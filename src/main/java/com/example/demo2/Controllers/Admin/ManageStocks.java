@@ -55,8 +55,6 @@ public class ManageStocks {
     private ObservableList<Stock> stocksData = FXCollections.observableArrayList();
 
     public void initialize() {
-        // Set cell value factories to retrieve data from Stock objects
-//        labelColumn.setCellValueFactory(cellData -> cellData.getValue().getLabel());
         if (!isPopulated) {
             labelColumn.setCellValueFactory(cellData -> cellData.getValue().getLabel());
             initialPriceColumn.setCellValueFactory(cellData -> cellData.getValue().initialPriceProperty().asObject());
@@ -70,8 +68,6 @@ public class ManageStocks {
     }
 
     private void loadStocksData() {
-//        stocksData.clear();
-//        stockTableView.getItems().clear();
         stocksData.addAll(stockList);
         stockTableView.setItems(stocksData);
     }
@@ -117,7 +113,6 @@ public class ManageStocks {
         stocksData.add(newStock);
         updateStockCSV();
 
-        // Clear input fields
         labelField.clear();
         initialPriceField.clear();
         availableStocksField.clear();
@@ -141,8 +136,6 @@ public class ManageStocks {
             selectedStock.updatePrice(newPrice);
             stockTableView.refresh();
             updateStockCSV();
-
-            // Clear the current price field
             currentPriceField.clear();
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);

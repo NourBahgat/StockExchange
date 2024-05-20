@@ -42,10 +42,6 @@ public class AdminController implements Initializable {
     private Label label = new Label();
     @FXML
     private Label label1 = new Label();
-    //    @FXML
-//    private Label label2;
-//    @FXML
-//    private Label stcklbl;
     public static boolean StartSession = true;
 
     public static void checkSession(Stage currentStage) {
@@ -74,19 +70,6 @@ public class AdminController implements Initializable {
             e.printStackTrace();
         }
     }
-//    private static void redirectToLogin(Stage stage) throws IOException {
-//        Parent root = FXMLLoader.load(.class.getResource("/Fxml/Login.fxml"));
-//        Scene scene = new Scene(root);
-//        Platform.runLater(() -> stage.setScene(scene));
-//    }
-//    public static void setStartSession(boolean startSession) {
-//        StartSession = startSession;
-//    }
-//
-//    public static boolean isStartSession() {
-//        return StartSession;
-//    }
-
 
     public void handleLogIn(ActionEvent event) throws IOException {
         String username = usernameField.getText();
@@ -161,9 +144,6 @@ public class AdminController implements Initializable {
         System.out.println(numStocks);
         System.out.println(numUsers);
         label.setText(String.valueOf(numUsers));
-        //mesh rady yetba3 gher label bs?????!!!!!!
-//
-//
         label1.setText(String.valueOf(numStocks));
     }
 

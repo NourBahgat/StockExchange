@@ -104,7 +104,6 @@ public class ViewStocks {
     public void BackToUserMain(ActionEvent event) throws IOException {
         User user = loggedInUser;
         System.out.println(user.toString());
-        //root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/UserMain.fxml")));
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
         root = loader.load();
         UserMainController userMainController = loader.getController();
@@ -121,42 +120,31 @@ public class ViewStocks {
         }
     }
 
-    public void handleViewPriceHistoryButton(ActionEvent event) throws IOException {
-        Stock selectedStock = stockTableView.getSelectionModel().getSelectedItem();
-        if (selectedStock == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No Stock Selected");
-            alert.setHeaderText(null);
-            alert.setContentText("Please select a stock to view its price history.");
-            alert.showAndWait();
-            return;
-        }
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/MarketPerformanceCharts.fxml"));
-        Parent root = loader.load();
-
-        MarketPerformanceController controller = loader.getController();
-        controller.setStock(selectedStock);
-        System.out.println(loggedInUser);
-        controller.initData(loggedInUser);
-        controller.initialize(stockList);
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void trackStock(ActionEvent event) {
-        if (selectedstock == null) return;
-        if (!loggedInUser.isPremium()) return;
-        if (loggedInUser.isCostTracked(selectedstock)) {
-            loggedInUser.removeCostTrack(selectedstock);
-        } else {
-            loggedInUser.setCostTracked(selectedstock, selectedstock.getActualCurrentPrice());
-        }
-        updateSelectedInfo();
-    }
+//    public void handleViewPriceHistoryButton(ActionEvent event) throws IOException {
+//        Stock selectedStock = stockTableView.getSelectionModel().getSelectedItem();
+//        if (selectedStock == null) {
+//            Alert alert = new Alert(Alert.AlertType.WARNING);
+//            alert.setTitle("No Stock Selected");
+//            alert.setHeaderText(null);
+//            alert.setContentText("Please select a stock to view its price history.");
+//            alert.showAndWait();
+//            return;
+//        }
+//
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/StandardUser/MarketPerformanceCharts.fxml"));
+//        Parent root = loader.load();
+//
+//        MarketPerformanceController controller = loader.getController();
+//        controller.setStock(selectedStock);
+//        System.out.println(loggedInUser);
+//        controller.initData(loggedInUser);
+//        controller.initialize(stockList);
+//
+//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        Scene scene = new Scene(root);
+//        stage.setScene(scene);
+//        stage.show();
+//    }
 
     public void autoBuyStock(ActionEvent event) {
         if (selectedstock == null) return;
@@ -195,7 +183,7 @@ public class ViewStocks {
                 showAlert(Alert.AlertType.WARNING, "No Stock Selected", "Please select a stock to track.", null);
             }
         } else {
-            // Show alert message
+
             showAlert(Alert.AlertType.WARNING, "Subscription Required", "Subscribe to premium for this feature.", null);
         }
     }
@@ -206,9 +194,6 @@ public class ViewStocks {
             alert.setHeaderText(headerText);
             alert.setContentText(message);
             alert.showAndWait();
-        }
-        public void handleViewChartsButton(ActionEvent event) throws IOException {
-
         }
         }
 

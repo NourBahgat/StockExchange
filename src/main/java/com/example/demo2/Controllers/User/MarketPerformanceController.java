@@ -30,8 +30,6 @@ public class MarketPerformanceController {
     private LineChart<Number, Number> stockChart;
 
     public void initialize(List<Stock> stockList) {
-//        stockChart.getData().clear();
-
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Time (seconds)");
@@ -65,7 +63,6 @@ public class MarketPerformanceController {
     }
 
     public void setStock(Stock stock) {
-//        stockChart.getData().clear();
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName(stock.getActualLabel());
 

@@ -49,7 +49,6 @@ public class ManageUsers {
         stockExchangeManager = App.manager;
         // Get the list of usernames from UserManager
         List<User> users = stockExchangeManager.getUsers();
-
         // Populate the TableView
         for (User user : users) {
             userTableView.getItems().add(user.getUsername());
@@ -70,8 +69,6 @@ public class ManageUsers {
 
     public void handleDeleteButton(ActionEvent event) throws IOException {
         String selected = userTableView.getSelectionModel().selectedItemProperty().getValue();
-//        Admin delete = new Admin();
-//        delete.removeUser(selected);
         stockExchangeManager.removeUser(getUserFromUsername(selected));
         userTableView.refresh();
         userTableView.getItems().clear();
@@ -96,13 +93,11 @@ public class ManageUsers {
         }
         String typeUser=type.getText();
 
-        // Add the user to the CSV file
         Admin admin = new Admin();
         StockExchangeManager userAdd = new StockExchangeManager();
         if (typeUser.equals("Standard")) {
             admin.addUser(username, password, credit,false );
             userTableView.getItems().add(username);
-//            userAdd.updateUsersFromCSV("users.csv");
             User newUser = new User(username, password, credit, 0,false);
             userAdd.addUser(newUser);
             showAlert(Alert.AlertType.INFORMATION, "Success", "User added successfully!", null);
@@ -110,7 +105,6 @@ public class ManageUsers {
             admin.addUser(username, password, credit,true );
             userTableView.getItems().add(username);
 
-//            userAdd.updateUsersFromCSV("users.csv");
             User newUser = new User(username, password, credit, 0,true);
             userAdd.addUser(newUser);
             showAlert(Alert.AlertType.INFORMATION, "Success", "User added successfully!", null);
@@ -119,23 +113,6 @@ public class ManageUsers {
         { showAlert(Alert.AlertType.INFORMATION, "Warning", "Please enter a valid type", null);}
     }
 
-//    @FXML
-//    private void handleAddUserButton() {
-//        String username = usernameTextField.getText();
-//        String password = passwordTextField.getText();
-//        double credit = Double.parseDouble(creditTextField.getText());
-//        StockExchangeManager.updateUsersFromCSV("users.csv");
-//        userTableView.getItems().clear();
-//        List<User> updatedUsernames = stockExchangeManager.getUsers();
-//        for (User user : updatedUsernames) {
-//            userTableView.getItems().add(user.getUsername());
-//        }
-//        Admin admin = new Admin();
-//        admin.addUser(username, password, credit);
-//
-//        showAlert(Alert.AlertType.INFORMATION, "Success", "User added successfully!", null);
-//    }
-
     public static void showAlert(Alert.AlertType alertType, String title, String message, String headerText) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -143,8 +120,6 @@ public class ManageUsers {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-
 
     public void BackToMainAdmin(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Admin/AdminMain.fxml")));

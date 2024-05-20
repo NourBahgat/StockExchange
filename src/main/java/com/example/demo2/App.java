@@ -23,7 +23,6 @@ public class App extends Application {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            // Handle the exception (e.g., show an error message dialog)
         }
 
     }

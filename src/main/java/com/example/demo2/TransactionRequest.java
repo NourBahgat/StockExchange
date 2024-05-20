@@ -13,25 +13,6 @@ public class TransactionRequest {
         this.amount = amount;
     }
 
-    public void approve() {
-        switch (type) {
-            case DEPOSIT:
-                user.deposit(amount);
-                break;
-            case WITHDRAWAL:
-                user.withdraw(amount);
-                break;
-            case BUY_STOCK:
-                StockExchangeManager.buyStock(user, stock);
-                break;
-//            case SELL_STOCK:
-//                StockExchangeManager.sellStock(user, stock);
-//                break;
-            default:
-                break;
-        }
-    }
-
     public String getUsername() { return user.getUsername(); }
     public String getLabel() {
         if (stock == null) return "";

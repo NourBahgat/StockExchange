@@ -1,22 +1,21 @@
 username,password,initial credit,numOfStocks,isPremium
-nour,bahgat,3989.0,16,true
+nour,bahgat,9989.0,10,false
+nour,bahgat,3989.0,16,false
 Omar,123,123.0,0,false
 Nour Bahgat,4567,400.0,0,false
 sawsan badr,3456,9000.0,0,false
 Mohyy El deen,9080,500.0,0,false
-farida,9876,2000.0,0,false
 sally,2345,120.0,0,false
-yasmeen,3456,400.0,0,false
 waleed,4876,344.0,0,false
-shaimaa,4567,300.0,0,false
-nader,4567,10.0,0,false
 manar,1234,495800.0,2,false
 yalahwy,yahyahyaah,400.0,0,false
-dodza,zzz,1700.0,2,true
-hagar,2020,100.0,0,false
 mostaheel,afham,300.0,0,false
 Yehya,5678,3000.0,0,false
 hamada,7890,2000.0,0,false
-gehan,1234,400.0,0,false
-didi,1234,1900.0,0,true
-dodzz,zzz,2900.0,0,true
+didi,1234,1900.0,0,false
+dodzz,zzz,2800.0,0,true
+shalaby,wshwshny,28600.0,1,false
+twisty,1234,4200.0,1,false
+lunna,7890,500.0,0,false
+Farida,9000,4700.0,1,false
+farida,6789,5000.0,0,false

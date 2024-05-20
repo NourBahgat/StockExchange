@@ -18,11 +18,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.example.demo2.Admin.searchUserInCSV;
-//import static com.example.demo2.StockExchangeManager.users;
+
 
 
 public class UserController {
-//    private User loggedInUser;
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -38,21 +37,9 @@ public class UserController {
 
     @FXML
     private Label ExpiredLabel;
-    @FXML
-    private Label test;
+
     public static User loggedInUser;
 
-    @FXML
-    private TextField AccountBalance;
-
-    private User user;
-    @FXML
-    private Label Balance;
-
-//    public void initialize() {
-//        // You can initialize AccountBalance here or in your FXML file
-//        AccountBalance = new TextField();
-//    }
 
     public void handleSignUp(ActionEvent event) throws IOException {
         String username = usernameField.getText();
@@ -60,18 +47,15 @@ public class UserController {
         int numOfStocks=0;
         boolean isPremium=false;
         double credit = Double.parseDouble(creditField.getText());
-//        StockExchangeManapager userAdd= new StockExchangeManager();
 
         if (userExists(username)) {
-            // Username already exists, display an error message or handle it as per your requirement
             System.out.println("Username already exists. Please choose a different username.");
             label.setVisible(true);
             label.setText("Username already exists. Please choose a different username.");
-
-            return; // Exit the method without proceeding further
+            return;
         }
 
-        // Write user information to CSV file
+
             try (PrintWriter writer = new PrintWriter(new FileWriter("users.csv", true))) {
                 writer.println(username + "," + password + "," + credit + "," + numOfStocks + "," + isPremium);
                 label.setVisible(true);
@@ -107,7 +91,7 @@ public class UserController {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            // Handle IO exception
+
         }
         return false; // Username not found
     }
@@ -119,7 +103,7 @@ public class UserController {
         stage.show();
     }
 
-   // AdminController admin = new AdminController();
+
     public void handleLogin(ActionEvent event) throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -127,7 +111,6 @@ public class UserController {
         System.out.println(loggedInUser);
       if(AdminController.StartSession && validateLogin(username, password)) {
 
-          //Parent root = FXMLLoader.load(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
           FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/StandardUser/UserMain.fxml"));
           root=loader.load();
           UserMainController userMainController=loader.getController();
@@ -138,7 +121,7 @@ public class UserController {
           scene = new Scene(root);
           stage.setScene(scene);
           stage.show();
-          // Redirect to the main application or user dashboard
+
         }
       if (!validateLogin(username, password)) {
             ExpiredLabel.setVisible(false);
@@ -164,7 +147,7 @@ public class UserController {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            // Handle IO exception
+
         }
         return false; // Username and password do not match
     }
@@ -174,34 +157,5 @@ public class UserController {
         scene = new Scene(root);
         stage.setScene(scene);
     }
-//    public void switchToViewStocks (ActionEvent event) throws IOException {
-//        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/ViewStocks.fxml")));
-//        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//        scene = new Scene(root);
-//        stage.setScene(scene);
-//
-//    }
-//    public void switchToRequestsPage (ActionEvent event) throws IOException {
-//        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/StandardUser/RequestsPage.fxml")));
-//        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//        scene = new Scene(root);
-//        stage.setScene(scene);
-//
-//    }
-//    public void buyStockHandler(ActionEvent event) {
-//        // Retrieve the selected stock from your view
-//        Stock selectedStock = /* Code to retrieve selected stock */;
-//
-//        // Display confirmation dialog to user
-//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-//        alert.setTitle("Buy Stock");
-//        alert.setHeaderText("Confirm Purchase");
-//        alert.setContentText("Do you want to buy " + selectedStock.getLabel() + "?");
-//        Optional<ButtonType> result = alert.showAndWait();
-//
-//        if (result.isPresent() && result.get() == ButtonType.OK) {
-//            // Call buyStock method with logged-in user and selected stock
-//            buyStock(loggedInUser, selectedStock);
-//        }
 }
 
